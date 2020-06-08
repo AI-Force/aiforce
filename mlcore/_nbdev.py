@@ -32,9 +32,18 @@ index = {"CATEGORY_LABEL_KEY": "dataset.ipynb",
          "split_train_val_data": "dataset.ipynb",
          "input_feedback": "dataset.ipynb",
          "configure_logging": "dataset.ipynb",
-         "build_data_set": "dataset.ipynb"}
+         "build_data_set": "dataset.ipynb",
+         "BUF_SIZE": "tools-check_double_images.ipynb",
+         "FILE_FILTER": "tools-check_double_images.ipynb",
+         "IMAGE_EXTENSION": "tools-check_double_images.ipynb",
+         "DoubleFileChecker": "tools-check_double_images.ipynb",
+         "get_file_sha": "tools-check_double_images.ipynb",
+         "check_double_entries": "tools-check_double_images.ipynb",
+         "remove_entries": "tools-check_double_images.ipynb",
+         "scan_folder": "tools-check_double_images.ipynb"}
 
-modules = ["dataset.py"]
+modules = ["dataset.py",
+           "tools/check_double_images.py"]
 
 doc_url = "https://s-rettig.github.io/mlcore/"
 
