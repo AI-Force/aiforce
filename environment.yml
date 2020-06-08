@@ -2,10 +2,19 @@ name: ML-Core
 channels:
   - defaults
   - conda-forge
+  - pytorch
+  - fastai
 dependencies:
+  - fastai
+  - flask
   - jupyter_conda
+  - optuna
   - pip
   - python=3.7
+  - pytorch
+  - starlette
+  - torchvision
+  - uvicorn
   - pip:
       - nbdev
 prefix: /Users/pdc-s-rettig/miniconda3/envs/ML-Core

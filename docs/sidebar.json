@@ -1,6 +1,7 @@
 {
   "mlcore": {
     "Overview": "/",
-    "module name here": "/core"
+    "module name here": "/core",
+    "Data-Set": "/dataset"
   }
 }
