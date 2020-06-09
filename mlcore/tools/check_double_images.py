@@ -6,7 +6,6 @@ __all__ = ['BUF_SIZE', 'FILE_FILTER', 'IMAGE_EXTENSION', 'DoubleFileChecker', 'g
 # Cell
 
 import hashlib
-import six
 import argparse
 from os import listdir, remove
 from os.path import join, isfile, isdir
@@ -57,7 +56,7 @@ class DoubleFileChecker:
 
         if len(double_entries) > 0:
             print('Using only the first of each double entries.')
-            delete_files = six.moves.input('Will you delete the ignored double files from source? (y/n) ')
+            delete_files = input('Will you delete the ignored double files from source? (y/n) ')
             delete_files = delete_files == 'y'
             for (key, entry) in double_entries.items():
                 entry = list(entry)
