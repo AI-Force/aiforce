@@ -1,1 +1,1 @@
-git subtree push --prefix=docs/ docs master
+git subtree push --prefix=docs/ git@github.com:AI-Force/ML-Core-Docs.git master
