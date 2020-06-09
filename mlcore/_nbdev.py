@@ -41,7 +41,10 @@ index = {"CATEGORY_LABEL_KEY": "dataset.ipynb",
          "check_double_entries": "tools-check_double_images.ipynb",
          "remove_entries": "tools-check_double_images.ipynb",
          "scan_folder": "tools-check_double_images.ipynb",
-         "pascal_voc_palette": "tools-color_palette.ipynb"}
+         "pascal_voc_palette": "tools-color_palette.ipynb",
+         "ade20k_palette": "tools-color_palette.ipynb",
+         "cityscapes_palette": "tools-color_palette.ipynb",
+         "mhp_palette": "tools-color_palette.ipynb"}
 
 modules = ["dataset.py",
            "tools/check_double_images.py",
