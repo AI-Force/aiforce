@@ -12,7 +12,7 @@ import numpy as np
 def pascal_voc_palette(colors=256, normalized=False):
     """
     Generates the PASCAL VOC color palette.
-    Original source taken from https://gist.github.com/wllhf/a4533e0adebe57e3ed06d4b50c8419ae
+    Original source taken from https://gist.github.com/wllhf/a4533e0adebe57e3ed06d4b50c8419ae .
     `colors`: the number of colors to generate
     `normalized`: whether or not the color should be normalized
     return: the generated color palette
