@@ -1,8 +1,0 @@
-{
-  "mlcore": {
-    "Overview": "/",
-    "module name here": "/core",
-    "Data-Set": "/dataset",
-    "Double File Checker": "/tools-check_double_images"
-  }
-}
