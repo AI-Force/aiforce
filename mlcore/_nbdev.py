@@ -40,10 +40,12 @@ index = {"CATEGORY_LABEL_KEY": "dataset.ipynb",
          "get_file_sha": "tools-check_double_images.ipynb",
          "check_double_entries": "tools-check_double_images.ipynb",
          "remove_entries": "tools-check_double_images.ipynb",
-         "scan_folder": "tools-check_double_images.ipynb"}
+         "scan_folder": "tools-check_double_images.ipynb",
+         "pascal_voc_palette": "tools-color_palette.ipynb"}
 
 modules = ["dataset.py",
-           "tools/check_double_images.py"]
+           "tools/check_double_images.py",
+           "tools/color_palette.py"]
 
 doc_url = "https://ai-force.github.io/ML-Core-Docs/"
 
