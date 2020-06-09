@@ -45,8 +45,8 @@ index = {"CATEGORY_LABEL_KEY": "dataset.ipynb",
 modules = ["dataset.py",
            "tools/check_double_images.py"]
 
-doc_url = "https://s-rettig.github.io/mlcore/"
+doc_url = "https://ai-force.github.io/ML-Core-Docs/"
 
-git_url = "https://github.com/s-rettig/mlcore/tree/master/"
+git_url = "https://github.com/ai-force/ML-Core/tree/master/"
 
 def custom_doc_links(name): return None
