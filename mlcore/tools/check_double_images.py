@@ -160,7 +160,7 @@ def scan_folder(folder):
 # Cell
 
 
-if __name__ == '__main__':
+if __name__ == '__main__' and '__file__' in globals():
     parser = argparse.ArgumentParser()
     parser.add_argument("folder", help="The folder to scan.")
     args = parser.parse_args()
