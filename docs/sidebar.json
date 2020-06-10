@@ -3,6 +3,7 @@
     "Overview": "/",
     "module name here": "/core",
     "Data-Set": "/dataset",
+    "Title": "/image-inference",
     "Double File Checker": "/tools-check_double_images",
     "Color Palettes": "/tools-color_palette",
     "Image Tools": "/tools-image"

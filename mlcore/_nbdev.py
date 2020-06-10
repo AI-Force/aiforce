@@ -33,6 +33,9 @@ index = {"CATEGORY_LABEL_KEY": "dataset.ipynb",
          "input_feedback": "dataset.ipynb",
          "configure_logging": "dataset.ipynb",
          "build_data_set": "dataset.ipynb",
+         "setup_learner": "image-inference.ipynb",
+         "fix_odd_sides": "image-inference.ipynb",
+         "SegmentationInference": "image-inference.ipynb",
          "BUF_SIZE": "tools-check_double_images.ipynb",
          "FILE_FILTER": "tools-check_double_images.ipynb",
          "IMAGE_EXTENSION": "tools-check_double_images.ipynb",
@@ -50,6 +53,7 @@ index = {"CATEGORY_LABEL_KEY": "dataset.ipynb",
          "convert_to_base64": "tools-image.ipynb"}
 
 modules = ["dataset.py",
+           "image/inference.py",
            "tools/check_double_images.py",
            "tools/color_palette.py",
            "tools/image.py"]

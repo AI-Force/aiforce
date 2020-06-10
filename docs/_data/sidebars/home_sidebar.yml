@@ -16,6 +16,9 @@ entries:
       title: Data-Set
       url: /dataset
     - output: web,pdf
+      title: Title
+      url: /image-inference
+    - output: web,pdf
       title: Double File Checker
       url: /tools-check_double_images
     - output: web,pdf
