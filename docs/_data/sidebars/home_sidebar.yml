@@ -21,6 +21,9 @@ entries:
     - output: web,pdf
       title: Color Palettes
       url: /tools-color_palette
+    - output: web,pdf
+      title: Image Tools
+      url: /tools-image
     output: web
     title: mlcore
   output: web

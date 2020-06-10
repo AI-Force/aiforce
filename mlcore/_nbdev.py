@@ -44,11 +44,15 @@ index = {"CATEGORY_LABEL_KEY": "dataset.ipynb",
          "pascal_voc_palette": "tools-color_palette.ipynb",
          "ade20k_palette": "tools-color_palette.ipynb",
          "cityscapes_palette": "tools-color_palette.ipynb",
-         "mhp_palette_v1": "tools-color_palette.ipynb"}
+         "mhp_palette_v1": "tools-color_palette.ipynb",
+         "overlay_image": "tools-image.ipynb",
+         "limit_to_max_size": "tools-image.ipynb",
+         "convert_to_base64": "tools-image.ipynb"}
 
 modules = ["dataset.py",
            "tools/check_double_images.py",
-           "tools/color_palette.py"]
+           "tools/color_palette.py",
+           "tools/image.py"]
 
 doc_url = "https://ai-force.github.io/ML-Core-Docs/"
 
