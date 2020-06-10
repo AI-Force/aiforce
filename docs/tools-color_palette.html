@@ -45,7 +45,7 @@ description: "Tools for generating color palettes of various data-sets."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="pascal_voc_palette" class="doc_header"><code>pascal_voc_palette</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tools/color_palette.py#L8" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>pascal_voc_palette</code>(<strong><code>num_cls</code></strong>=<em><code>256</code></em>)</p>
+<h4 id="pascal_voc_palette" class="doc_header"><code>pascal_voc_palette</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tools/color_palette.py#L8" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>pascal_voc_palette</code>(<strong><code>num_cls</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Generates the PASCAL Visual Object Classes (PASCAL VOC) data-set color palette.
 Data-Set URL:
@@ -83,7 +83,7 @@ return: the generated color palette</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="ade20k_palette" class="doc_header"><code>ade20k_palette</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tools/color_palette.py#L38" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ade20k_palette</code>()</p>
+<h4 id="ade20k_palette" class="doc_header"><code>ade20k_palette</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tools/color_palette.py#L41" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ade20k_palette</code>(<strong><code>num_cls</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Generates the ADE20K data-set color palette.
 Data-Set URL:
@@ -92,7 +92,8 @@ Color palette definition:
 <a href="https://docs.google.com/spreadsheets/d/1se8YEtb2detS7OuPE86fXGyD269pMycAWe2mtKUj2W8/edit#gid=0">https://docs.google.com/spreadsheets/d/1se8YEtb2detS7OuPE86fXGyD269pMycAWe2mtKUj2W8/edit#gid=0</a> .
 Original source taken from:
 <a href="https://gluon-cv.mxnet.io/_modules/gluoncv/utils/viz/segmentation.html">https://gluon-cv.mxnet.io/_modules/gluoncv/utils/viz/segmentation.html</a> .</p>
-<p>return: the generated color palette</p>
+<p><code>num_cls</code>: the number of colors to generate
+return: the generated color palette</p>
 
 </div>
 
@@ -122,7 +123,7 @@ Original source taken from:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="cityscapes_palette" class="doc_header"><code>cityscapes_palette</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tools/color_palette.py#L75" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cityscapes_palette</code>()</p>
+<h4 id="cityscapes_palette" class="doc_header"><code>cityscapes_palette</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tools/color_palette.py#L84" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cityscapes_palette</code>(<strong><code>num_cls</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Generates the Cityscapes data-set color palette.
 Data-Set URL:
@@ -131,7 +132,8 @@ Color palette definition:
 <a href="https://github.com/mcordts/cityscapesScripts/blob/master/cityscapesscripts/helpers/labels.py">https://github.com/mcordts/cityscapesScripts/blob/master/cityscapesscripts/helpers/labels.py</a>
 Original source taken from:
 <a href="https://gluon-cv.mxnet.io/_modules/gluoncv/utils/viz/segmentation.html">https://gluon-cv.mxnet.io/_modules/gluoncv/utils/viz/segmentation.html</a> .</p>
-<p>return: the generated color palette</p>
+<p><code>num_cls</code>: the number of colors to generate
+return: the generated color palette</p>
 
 </div>
 
@@ -161,16 +163,16 @@ Original source taken from:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="mhp_palette" class="doc_header"><code>mhp_palette</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tools/color_palette.py#L113" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>mhp_palette</code>(<strong><code>version</code></strong>=<em><code>1.0</code></em>)</p>
+<h4 id="mhp_palette_v1" class="doc_header"><code>mhp_palette_v1</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tools/color_palette.py#L128" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>mhp_palette_v1</code>(<strong><code>num_cls</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
-<p>Generates the Multi-Human Parsing (MHP) data-set color palette.
+<p>Generates the Multi-Human Parsing (MHP) v1.0 data-set color palette.
 Data-Set URL:
 <a href="https://lv-mhp.github.io/">https://lv-mhp.github.io/</a>
 Color palette definition:
 <a href="https://lv-mhp.github.io/human_parsing_task">https://lv-mhp.github.io/human_parsing_task</a>
 Original source taken from:
 <a href="https://gluon-cv.mxnet.io/_modules/gluoncv/utils/viz/segmentation.html">https://gluon-cv.mxnet.io/_modules/gluoncv/utils/viz/segmentation.html</a> .</p>
-<p><code>version</code>: the version of the data-set to generate the colors for
+<p><code>num_cls</code>: the number of colors to generate
 return: the generated color palette</p>
 
 </div>
