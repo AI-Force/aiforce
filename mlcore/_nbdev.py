@@ -33,6 +33,13 @@ index = {"CATEGORY_LABEL_KEY": "dataset.ipynb",
          "input_feedback": "dataset.ipynb",
          "configure_logging": "dataset.ipynb",
          "build_data_set": "dataset.ipynb",
+         "pascal_voc_palette": "image-color_palette.ipynb",
+         "ade20k_palette": "image-color_palette.ipynb",
+         "cityscapes_palette": "image-color_palette.ipynb",
+         "mhp_palette_v1": "image-color_palette.ipynb",
+         "overlay_image": "image-image_tools.ipynb",
+         "limit_to_max_size": "image-image_tools.ipynb",
+         "convert_to_base64": "image-image_tools.ipynb",
          "setup_learner": "image-inference.ipynb",
          "fix_odd_sides": "image-inference.ipynb",
          "SegmentationInference": "image-inference.ipynb",
@@ -43,20 +50,13 @@ index = {"CATEGORY_LABEL_KEY": "dataset.ipynb",
          "get_file_sha": "tools-check_double_images.ipynb",
          "check_double_entries": "tools-check_double_images.ipynb",
          "remove_entries": "tools-check_double_images.ipynb",
-         "scan_folder": "tools-check_double_images.ipynb",
-         "pascal_voc_palette": "tools-color_palette.ipynb",
-         "ade20k_palette": "tools-color_palette.ipynb",
-         "cityscapes_palette": "tools-color_palette.ipynb",
-         "mhp_palette_v1": "tools-color_palette.ipynb",
-         "overlay_image": "tools-image.ipynb",
-         "limit_to_max_size": "tools-image.ipynb",
-         "convert_to_base64": "tools-image.ipynb"}
+         "scan_folder": "tools-check_double_images.ipynb"}
 
 modules = ["dataset.py",
+           "image/color_palette.py",
+           "image/image_tools.py",
            "image/inference.py",
-           "tools/check_double_images.py",
-           "tools/color_palette.py",
-           "tools/image.py"]
+           "tools/check_double_images.py"]
 
 doc_url = "https://ai-force.github.io/ML-Core-Docs/"
 

@@ -6,8 +6,6 @@ __all__ = ['setup_learner', 'fix_odd_sides', 'SegmentationInference']
 
 import asyncio
 import numpy as np
-from ..tools import image as image_tools
-from functools import partial
 from fastai.basic_train import load_learner
 from fastai import vision
 
@@ -55,9 +53,8 @@ def fix_odd_sides(img):
 
 
 class SegmentationInference:
-    def __init__(self, path, max_size=None):
+    def __init__(self, path):
         self.path = path
-        self.max_size = max_size
         loop = asyncio.get_event_loop()
         tasks = [asyncio.ensure_future(setup_learner(path))]
         self.learner = loop.run_until_complete(asyncio.gather(*tasks))[0]
@@ -70,14 +67,12 @@ class SegmentationInference:
         if self.learner:
             self.learner.destroy()
 
-    def predict(self, image):
+    def predict(self, x):
         """
         Predicts an image.
 
-        `image`: the image to predict.
+        `x`: the input to predict.
         """
-        x = vision.open_image(image, after_open=partial(image_tools.limit_to_max_size, max_size=self.max_size))
-
         x = fix_odd_sides(x)
         seg, labels, probs = self.learner.predict(x)
         mask = np.asarray(vision.image2np(seg.data), dtype=np.uint8)

@@ -3,9 +3,9 @@
     "Overview": "/",
     "module name here": "/core",
     "Data-Set": "/dataset",
+    "Color Palettes": "/image-color_palette",
+    "Image Tools": "/image-image_tools",
     "Title": "/image-inference",
-    "Double File Checker": "/tools-check_double_images",
-    "Color Palettes": "/tools-color_palette",
-    "Image Tools": "/tools-image"
+    "Double File Checker": "/tools-check_double_images"
   }
 }

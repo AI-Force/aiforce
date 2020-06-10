@@ -16,17 +16,17 @@ entries:
       title: Data-Set
       url: /dataset
     - output: web,pdf
+      title: Color Palettes
+      url: /image-color_palette
+    - output: web,pdf
+      title: Image Tools
+      url: /image-image_tools
+    - output: web,pdf
       title: Title
       url: /image-inference
     - output: web,pdf
       title: Double File Checker
       url: /tools-check_double_images
-    - output: web,pdf
-      title: Color Palettes
-      url: /tools-color_palette
-    - output: web,pdf
-      title: Image Tools
-      url: /tools-image
     output: web
     title: mlcore
   output: web
