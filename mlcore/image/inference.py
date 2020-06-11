@@ -98,11 +98,10 @@ class ClassificationInference(Inference):
         Predicts an image.
 
         `x`: the input to predict as pytorch tensor.
+        returns: a tuple containing the prediction, labels and probability distribution
         """
-        x = fix_odd_sides(x)
         pred, labels, probs = self.learner.predict(x)
-        mask = np.asarray(vision.image2np(pred.data), dtype=np.uint8)
-        return mask, labels, probs
+        return pred, labels, probs
 
 # Cell
 
@@ -117,6 +116,7 @@ class SegmentationInference(Inference):
         Predicts an image.
 
         `x`: the input to predict as pytorch tensor.
+        returns: a tuple containing the segmentation mask, labels and probability distribution
         """
         x = fix_odd_sides(x)
         pred, labels, probs = self.learner.predict(x)
