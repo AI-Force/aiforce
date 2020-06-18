@@ -662,7 +662,7 @@ class SegmentationDataSet(DataSet):
             if not regions:
                 continue
 
-            with Image.open(join(content_folder, file_name)) as image:
+            with PILImage.open(join(content_folder, file_name)) as image:
                 image_width, image_height = image.size
 
                 delete_regions = {}
@@ -757,7 +757,7 @@ class SegmentationDataSet(DataSet):
             if not regions:
                 continue
 
-            with Image.open(join(content_folder, file_name)) as image:
+            with PILImage.open(join(content_folder, file_name)) as image:
                 image_width, image_height = image.size
 
                 # Convert polygons to a bitmap mask of shape
