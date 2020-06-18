@@ -778,7 +778,7 @@ class SegmentationDataSet(DataSet):
                     mask[rr, cc] = class_id
 
                 # save the semantic mask
-                im = Image.fromarray(mask)
+                im = PILImage.fromarray(mask)
                 mask_path = join(self.semantic_mask_folder, splitext(file_name)[0] + '.png')
                 im.save(mask_path)
 
