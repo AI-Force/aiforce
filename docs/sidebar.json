@@ -6,6 +6,7 @@
     "Color Palettes": "/image-color_palette",
     "Image Tools": "/image-image_tools",
     "Title": "/image-inference",
-    "Double File Checker": "/tools-check_double_images"
+    "Double File Checker": "/tools-check_double_images",
+    "File Downloader": "/tools-downloader"
   }
 }

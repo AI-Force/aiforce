@@ -27,6 +27,9 @@ entries:
     - output: web,pdf
       title: Double File Checker
       url: /tools-check_double_images
+    - output: web,pdf
+      title: File Downloader
+      url: /tools-downloader
     output: web
     title: mlcore
   output: web
