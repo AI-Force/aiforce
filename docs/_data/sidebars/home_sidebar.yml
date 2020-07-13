@@ -30,6 +30,9 @@ entries:
     - output: web,pdf
       title: File Downloader
       url: /tools-downloader
+    - output: web,pdf
+      title: Image Size Calculator
+      url: /tools-image_size_calculator
     output: web
     title: mlcore
   output: web
