@@ -9,6 +9,7 @@ import logging
 import argparse
 import logging.handlers
 import sys
+from functools import reduce
 from PIL import Image as PILImage
 from os import listdir
 from os.path import join, isfile, isdir, splitext
@@ -37,6 +38,7 @@ class ImageSizeCalculator:
     def calculate(self):
         """
         The main logic.
+        return: a dictionary with unique sizes as key and image count as value
         """
 
         images = scan_folder(self.path)
@@ -45,6 +47,7 @@ class ImageSizeCalculator:
 
         for index, image in enumerate(images):
             width, height = get_image_size(image)
+            size_key = "{}x{}".format(width, height)
             logger.info("{} / {} - Handle Image {} with size {}x{}".format(
                 index + 1,
                 all_images,
@@ -52,9 +55,11 @@ class ImageSizeCalculator:
                 width,
                 height,
             ))
-            unique_sizes["{}x{}".format(width, height)] = True
+            if not size_key in unique_sizes:
+                unique_sizes[size_key] = 0
+            unique_sizes[size_key] += 1
 
-        return unique_sizes.keys()
+        return unique_sizes
 
 # Cell
 
@@ -123,8 +128,11 @@ if __name__ == '__main__' and '__file__' in globals():
 
     calculator = ImageSizeCalculator(args.folder)
     sizes = calculator.calculate()
-    logger.info("Unique Image Sizes:")
-    for size in sizes:
-        logger.info(size)
+    image_count = reduce(lambda a, x: a + x, sizes.values())
+    logger.info("Images Analyzed: {}".format(image_count))
+
+    logger.info("Unique Image Sizes and Image Count:")
+    for key, size in sizes.items():
+        logger.info("{}: {}".format(key, size))
 
     print('FINISHED!!!')
