@@ -930,7 +930,7 @@ def configure_logging(logging_level=logging.INFO):
 # Cell
 
 
-def build_data_set(category_file_path, annotation_file_path, split, seed, sample, output):
+def build_data_set(category_file_path, annotation_file_path, split, seed, sample, data_set_type, output, data_set_name):
     """
     Build the data-set for training, Validation and test
     `category_file_path`: the filename of the categories file
@@ -938,7 +938,9 @@ def build_data_set(category_file_path, annotation_file_path, split, seed, sample
     `split`: the size of the validation set as percentage
     `seed`: random seed to reproduce splits
     `sample`: the size of the sample set as percentage
+    `data_set_type`: the type of the data-set, if not set infer from the category file path
     `output`: the dataset base folder to build the dataset in
+    `data_set_name`: the name of the data-set, if not set infer from the category file path
     """
     log_memory_handler = configure_logging()
 
@@ -953,12 +955,12 @@ def build_data_set(category_file_path, annotation_file_path, split, seed, sample
     logger.info('output: {}'.format(output))
 
     path = dirname(category_file_path)
-    data_set_type = basename(dirname(path))
-    annotation_file_name = basename(annotation_file_path) if annotation_file_path else ''
+    # try to infer the data-set type if not explicitly set
+    if data_set_type is None:
+        data_set_type = basename(dirname(path))
 
-    # set the data-set name
-    data_set_name = splitext(annotation_file_name)[0]
-    if annotation_file_name in ['', DEFAULT_SEGMENTATION_ANNOTATIONS_FILE, DEFAULT_CLASSIFICATION_ANNOTATIONS_FILE]:
+    # try to infer the data-set name if not explicitly set
+    if data_set_name is None:
         data_set_name = basename(path)
 
     data_set = None
@@ -976,7 +978,7 @@ def build_data_set(category_file_path, annotation_file_path, split, seed, sample
         logger.info("Finished create the data-set folders at {}".format(data_set.base_path))
 
         # create the build log file
-        log_file_name = datetime.now().strftime('build_%Y.%m.%d-%H.%M.%S.log')
+        log_file_name = datetime.now().strftime("build_%Y.%m.%d-%H.%M.%S.log")
         file_handler = logging.FileHandler(join(data_set.folder, log_file_name), encoding="utf-8")
         log_memory_handler.setTarget(file_handler)
 
@@ -1011,11 +1013,19 @@ if __name__ == '__main__' and '__file__' in globals():
                         help="Percentage of the data which will be copied as a sample set.",
                         type=float,
                         default=0)
+    parser.add_argument("--type",
+                        help="The type of the data-set, if not explicitly set try to infer from categories file path.",
+                        choices=[IMAGE_CLASSIFICATION, IMAGE_SEGMENTATION],
+                        default=None)
     parser.add_argument("--output",
                         help="The path of the data-set folder.",
                         default=DATA_SET_FOLDER)
+    parser.add_argument("--name",
+                        help="The name of the data-set, if not explicitly set try to infer from categories file path.",
+                        default=None)
     args = parser.parse_args()
 
     CATEGORY_LABEL_KEY = args.category_label_key
 
-    build_data_set(args.categories, args.annotation, args.split, args.seed, args.sample, args.output)
+    build_data_set(args.categories, args.annotation, args.split, args.seed, args.sample, args.type, args.output,
+                   args.name)

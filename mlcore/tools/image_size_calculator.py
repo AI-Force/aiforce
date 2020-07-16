@@ -6,8 +6,8 @@ __all__ = ['logger', 'FILE_FILTER', 'IMAGE_EXTENSIONS', 'ImageSizeCalculator', '
 # Cell
 
 import logging
-import argparse
 import logging.handlers
+import argparse
 import sys
 from functools import reduce
 from PIL import Image as PILImage
@@ -55,7 +55,7 @@ class ImageSizeCalculator:
                 width,
                 height,
             ))
-            if not size_key in unique_sizes:
+            if size_key not in unique_sizes:
                 unique_sizes[size_key] = 0
             unique_sizes[size_key] += 1
 
@@ -135,4 +135,4 @@ if __name__ == '__main__' and '__file__' in globals():
     for key, size in sizes.items():
         logger.info("{}: {}".format(key, size))
 
-    print('FINISHED!!!')
+    logger.info('FINISHED!!!')
