@@ -31,10 +31,12 @@ class DoubleFileChecker:
     """
     Checks a given folder and subfolders for double files by calculating the corresponding SHA1.
     `path`: the folder to process
+    `reverse`: if True, order the file reverse
     """
 
-    def __init__(self, path):
+    def __init__(self, path, reverse=False):
         self.path = path
+        self.reverse = reverse
 
     def check(self):
         """
@@ -42,7 +44,7 @@ class DoubleFileChecker:
         """
 
         images = scan_folder(self.path)
-        images.sort(key=len)
+        images.sort(key=len, reverse=self.reverse)
         all_images = len(images)
         contents = []
         delete_entries = []
@@ -188,9 +190,13 @@ if __name__ == '__main__' and '__file__' in globals():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("folder", help="The folder to scan.")
+    parser.add_argument("--reverse-sort",
+                        help="If the double entries should be sorted reverse by length.",
+                        action="store_true")
+    parser.add_argument("folder", help="The folder to scan.")
     args = parser.parse_args()
 
-    checker = DoubleFileChecker(args.folder)
+    checker = DoubleFileChecker(args.folder, args.reverse_sort)
     checker.check()
 
     logger.info('FINISHED!!!')
