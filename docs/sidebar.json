@@ -1,7 +1,7 @@
 {
   "mlcore": {
     "Overview": "/",
-    "module name here": "/core",
+    "Core classes and functions": "/core",
     "Data-Set": "/dataset",
     "Color Palettes": "/image-color_palette",
     "Image Tools": "/image-image_tools",

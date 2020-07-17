@@ -4,9 +4,9 @@ __all__ = ['CATEGORY_LABEL_KEY', 'IMAGE_SET_FOLDER', 'DEFAULT_CATEGORIES_FILE',
            'DEFAULT_CLASSIFICATION_ANNOTATIONS_FILE', 'DEFAULT_SEGMENTATION_ANNOTATIONS_FILE', 'DEFAULT_SPLIT',
            'DATA_SET_FOLDER', 'SEMANTIC_MASK_FOLDER', 'IMAGE_EXTENSIONS', 'FOLDER_FILTER', 'IMAGES_TRAIN_VAL_FOLDER',
            'IMAGES_TEST_FOLDER', 'DATA_SET_TRAIN_FOLDER', 'DATA_SET_VAL_FOLDER', 'DATA_SET_TEST_FOLDER',
-           'IMAGE_SEGMENTATION', 'IMAGE_CLASSIFICATION', 'NOT_CATEGORIZED', 'logger', 'read_categories', 'DataSet',
-           'ClassificationDataSet', 'SegmentationDataSet', 'scan_files', 'scan_path', 'delete_folder', 'create_folder',
-           'split_train_val_data', 'input_feedback', 'configure_logging', 'build_data_set']
+           'NOT_CATEGORIZED', 'logger', 'read_categories', 'DataSet', 'ClassificationDataSet', 'SegmentationDataSet',
+           'scan_files', 'scan_path', 'delete_folder', 'create_folder', 'split_train_val_data', 'input_feedback',
+           'configure_logging', 'build_data_set']
 
 # Cell
 
@@ -16,6 +16,7 @@ from PIL import Image as PILImage
 from functools import partial
 from datetime import datetime
 from logging.handlers import MemoryHandler
+from .core import Type
 import numpy as np
 import shutil
 import json
@@ -41,8 +42,6 @@ IMAGES_TEST_FOLDER = 'test'
 DATA_SET_TRAIN_FOLDER = 'train'
 DATA_SET_VAL_FOLDER = 'val'
 DATA_SET_TEST_FOLDER = 'test'
-IMAGE_SEGMENTATION = 'segmentation'
-IMAGE_CLASSIFICATION = 'classification'
 NOT_CATEGORIZED = '[NOT_CATEGORIZED]'
 
 # Cell
@@ -966,9 +965,9 @@ def build_data_set(category_file_path, annotation_file_path, split, seed, sample
     data_set = None
     logger.info('Start build {} data-set {} at {}'.format(data_set_type, data_set_name, output))
 
-    if data_set_type == IMAGE_CLASSIFICATION:
+    if data_set_type == Type.IMAGE_CLASSIFICATION:
         data_set = ClassificationDataSet(data_set_name, output, path, category_file_path, annotation_file_path)
-    if data_set_type == IMAGE_SEGMENTATION:
+    if data_set_type == Type.IMAGE_SEGMENTATION:
         data_set = SegmentationDataSet(data_set_name, output, path, category_file_path, annotation_file_path)
 
     if data_set:
@@ -1015,7 +1014,7 @@ if __name__ == '__main__' and '__file__' in globals():
                         default=0)
     parser.add_argument("--type",
                         help="The type of the data-set, if not explicitly set try to infer from categories file path.",
-                        choices=[IMAGE_CLASSIFICATION, IMAGE_SEGMENTATION],
+                        choices=[Type.IMAGE_CLASSIFICATION, Type.IMAGE_SEGMENTATION],
                         default=None)
     parser.add_argument("--output",
                         help="The path of the data-set folder.",

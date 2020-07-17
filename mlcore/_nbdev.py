@@ -2,7 +2,8 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"CATEGORY_LABEL_KEY": "dataset.ipynb",
+index = {"Type": "core.ipynb",
+         "CATEGORY_LABEL_KEY": "dataset.ipynb",
          "IMAGE_SET_FOLDER": "dataset.ipynb",
          "DEFAULT_CATEGORIES_FILE": "dataset.ipynb",
          "DEFAULT_CLASSIFICATION_ANNOTATIONS_FILE": "dataset.ipynb",
@@ -17,8 +18,6 @@ index = {"CATEGORY_LABEL_KEY": "dataset.ipynb",
          "DATA_SET_TRAIN_FOLDER": "dataset.ipynb",
          "DATA_SET_VAL_FOLDER": "dataset.ipynb",
          "DATA_SET_TEST_FOLDER": "dataset.ipynb",
-         "IMAGE_SEGMENTATION": "dataset.ipynb",
-         "IMAGE_CLASSIFICATION": "dataset.ipynb",
          "NOT_CATEGORIZED": "dataset.ipynb",
          "logger": "tools-image_size_calculator.ipynb",
          "read_categories": "dataset.ipynb",
@@ -58,7 +57,8 @@ index = {"CATEGORY_LABEL_KEY": "dataset.ipynb",
          "ImageSizeCalculator": "tools-image_size_calculator.ipynb",
          "get_image_size": "tools-image_size_calculator.ipynb"}
 
-modules = ["dataset.py",
+modules = ["core.py",
+           "dataset.py",
            "image/color_palette.py",
            "image/image_tools.py",
            "image/inference.py",
