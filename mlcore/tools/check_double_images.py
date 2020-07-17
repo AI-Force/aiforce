@@ -42,6 +42,7 @@ class DoubleFileChecker:
         """
 
         images = scan_folder(self.path)
+        images.sort(key=len)
         all_images = len(images)
         contents = []
         delete_entries = []
@@ -123,8 +124,8 @@ def check_double_entries(entries):
     for entry in entries:
         h = entry[1]
         if h not in hashes:
-            hashes[h] = set()
-        hashes[h].add(entry)
+            hashes[h] = []
+        hashes[h].append(entry)
 
     double_hashes = dict()
     for (key, entrylist) in hashes.items():
