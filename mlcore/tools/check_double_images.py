@@ -192,8 +192,8 @@ if __name__ == '__main__' and '__file__' in globals():
     parser.add_argument("folder", help="The folder to scan.")
     parser.add_argument("--reverse-sort",
                         help="If the double entries should be sorted reverse by length.",
+                        default=False,
                         action="store_true")
-    parser.add_argument("folder", help="The folder to scan.")
     args = parser.parse_args()
 
     checker = DoubleFileChecker(args.folder, args.reverse_sort)
