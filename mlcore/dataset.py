@@ -275,7 +275,7 @@ class ClassificationDataSet(DataSet):
             if sub_folder:
                 create_folder(target_folder)
             shutil.copy2(join(train_val_image_folder, filename + ".jpg"), target_folder)
-            self.logger.info('Copied {}'.format(join(target_folder, filename + ".jpg")))
+            self.logger.info('Copied {}'.format(join(self.train_folder, filename + ".jpg")))
             annotation = [join(train_folder_name, filename)] + self.annotations[index][1:] + [False]
             annotations.append(annotation)
 
@@ -287,7 +287,7 @@ class ClassificationDataSet(DataSet):
             if sub_folder:
                 create_folder(target_folder)
             shutil.copy2(join(train_val_image_folder, filename + ".jpg"), target_folder)
-            self.logger.info('Copied {}'.format(join(target_folder, filename + ".jpg")))
+            self.logger.info('Copied {}'.format(join(self.val_folder, filename + ".jpg")))
             annotation = [join(val_folder_name, filename)] + self.annotations[index][1:] + [True]
             annotations.append(annotation)
 
@@ -943,6 +943,20 @@ def build_data_set(category_file_path, annotation_file_path, split, seed, sample
     """
     log_memory_handler = configure_logging()
 
+    path = dirname(category_file_path)
+    # try to infer the data-set type if not explicitly set
+    if data_set_type is None:
+        try:
+            data_set_type_from_path = basename(dirname(path))
+            data_set_type = Type(data_set_type_from_path)
+        except ValueError as e:
+            logger.error("Error, unsupported data-set type: {}".format(data_set_type_from_path))
+            return
+
+    # try to infer the data-set name if not explicitly set
+    if data_set_name is None:
+        data_set_name = basename(path)
+
     logger.info('Build parameters:')
     logger.info(' '.join(sys.argv[1:]))
     logger.info('Build configuration:')
@@ -951,23 +965,16 @@ def build_data_set(category_file_path, annotation_file_path, split, seed, sample
     logger.info('split: {}'.format(split))
     logger.info('seed: {}'.format(seed))
     logger.info('sample: {}'.format(sample))
+    logger.info('type: {}'.format(data_set_type))
     logger.info('output: {}'.format(output))
-
-    path = dirname(category_file_path)
-    # try to infer the data-set type if not explicitly set
-    if data_set_type is None:
-        data_set_type = basename(dirname(path))
-
-    # try to infer the data-set name if not explicitly set
-    if data_set_name is None:
-        data_set_name = basename(path)
+    logger.info('name: {}'.format(data_set_name))
 
     data_set = None
     logger.info('Start build {} data-set {} at {}'.format(data_set_type, data_set_name, output))
 
     if data_set_type == Type.IMAGE_CLASSIFICATION:
         data_set = ClassificationDataSet(data_set_name, output, path, category_file_path, annotation_file_path)
-    if data_set_type == Type.IMAGE_SEGMENTATION:
+    elif data_set_type == Type.IMAGE_SEGMENTATION:
         data_set = SegmentationDataSet(data_set_name, output, path, category_file_path, annotation_file_path)
 
     if data_set:
@@ -1014,7 +1021,8 @@ if __name__ == '__main__' and '__file__' in globals():
                         default=0)
     parser.add_argument("--type",
                         help="The type of the data-set, if not explicitly set try to infer from categories file path.",
-                        choices=[Type.IMAGE_CLASSIFICATION, Type.IMAGE_SEGMENTATION],
+                        choices=list(Type),
+                        type=Type,
                         default=None)
     parser.add_argument("--output",
                         help="The path of the data-set folder.",

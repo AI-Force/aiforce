@@ -94,7 +94,7 @@ The <code>imagesets</code> folder contains the following folder structure:</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Category names of an image-set or data-set are written in plain text, separated by a <em>new line</em> and stored in a file <code>categories.txt</code>.
-The order of the category names is important and reflects the index of the result vector for easy mapping.</p>
+The order of the category names is important and reflects the index of the result vector from the model for easy mapping.</p>
 
 </div>
 </div>
@@ -603,12 +603,14 @@ return: the splittet train, validation images</p>
 <p>The following parameters are supported:</p>
 <ul>
 <li><code>[categories]</code>: The path to the categories file. (e.g.: <em>categories.txt</em>)</li>
-<li><code>--annotation</code>: The path to the annotation file, the data-set is build from. (e.g.: <em>imagesets/classification/car_damage/annotations.csv</em> for classification, <em>imagesets/segmentation/car_damage/via_region_data.json</em> for segmentation)</li>
+<li><code>--annotation</code>: The path to the image-set annotation file, the data-set is build from. (e.g.: <em>imagesets/classification/car_damage/annotations.csv</em> for classification, <em>imagesets/segmentation/car_damage/via_region_data.json</em> for segmentation)</li>
 <li><code>--split</code>: The percentage of the data which belongs to validation set, default to <em>0.2</em> (=20%)</li>
 <li><code>--seed</code>: A random seed to reproduce splits, default to None</li>
 <li><code>--category-label-key</code>: The key, the category name can be found in the annotation file, default to <em>category</em>.</li>
 <li><code>--sample</code>: The percentage of the data which will be copied as a sample set with in a separate folder with "_sample" suffix. If not set, no sample data-set will be created.</li>
+<li><code>--type</code>: The type of the data-set, if not explicitly set try to infer from categories file path.</li>
 <li><code>--output</code>: The path of the dataset folder, default to <em>../datasets</em>.</li>
+<li><code>--name</code>: The name of the data-set, if not explicitly set try to infer from categories file path.</li>
 </ul>
 
 </div>

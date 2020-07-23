@@ -12,6 +12,8 @@ dependencies:
   - pip
   - python=3.7
   - pytorch
+  - scikit-learn
+  - scikit-image
   - starlette
   - torchvision
   - uvicorn

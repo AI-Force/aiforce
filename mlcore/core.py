@@ -8,9 +8,13 @@ from enum import Enum
 
 # Cell
 
+
 class Type(Enum):
     """
     Currently supported Machine Learning Types.
     """
     IMAGE_CLASSIFICATION = 'classification'
     IMAGE_SEGMENTATION = 'segmentation'
+
+    def __str__(self):
+        return self.value
