@@ -13,8 +13,9 @@ class Type(Enum):
     """
     Currently supported Machine Learning Types.
     """
-    IMAGE_CLASSIFICATION = 'classification'
-    IMAGE_SEGMENTATION = 'segmentation'
+    IMAGE_CLASSIFICATION = 'image_classification'
+    IMAGE_SEGMENTATION = 'image_segmentation'
+    IMAGE_GENERATION = 'image_generation'
 
     def __str__(self):
         return self.value
