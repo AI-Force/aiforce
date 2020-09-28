@@ -10,6 +10,9 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
+      title: Category File Tools
+      url: /category_tools
+    - output: web,pdf
       title: Core classes and functions
       url: /core
     - output: web,pdf
@@ -25,6 +28,9 @@ entries:
       title: Title
       url: /image-inference
     - output: web,pdf
+      title: Tensorflow TFRecord Builder
+      url: /tensorflow-tfrecord_builder
+    - output: web,pdf
       title: Double File Checker
       url: /tools-check_double_images
     - output: web,pdf
@@ -33,6 +39,9 @@ entries:
     - output: web,pdf
       title: Image Size Calculator
       url: /tools-image_size_calculator
+    - output: web,pdf
+      title: VIA Annotation Tool Converter
+      url: /via-converter
     output: web
     title: mlcore
   output: web

@@ -87,56 +87,6 @@ The <code>imagesets</code> folder contains the following folder structure:</p>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Categories-(Classes)">Categories (Classes)<a class="anchor-link" href="#Categories-(Classes)"> </a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Category names of an image-set or data-set are written in plain text, separated by a <em>new line</em> and stored in a file <code>categories.txt</code>.
-The order of the category names is important and reflects the index of the result vector from the model for easy mapping.</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_categories" class="doc_header"><code>read_categories</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L54" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_categories</code>(<strong><code>categories_file</code></strong>)</p>
-</blockquote>
-<p>Reads the categories from a categories file.
-If the optional <code>categories_file</code> is not given, the file name <em>categories.txt</em> is used by default
-<code>path</code>: The folder, the categories file is stored in
-<code>categories_file</code>: the categories file name, if not the default
-return: a list of the category names</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Data-Set-Folders">Data-Set Folders<a class="anchor-link" href="#Data-Set-Folders"> </a></h2>
 </div>
 </div>
@@ -184,7 +134,7 @@ where <code>[data_set_type]</code> is the same as the corresponding <code>[image
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DataSet" class="doc_header"><code>class</code> <code>DataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L72" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>)</p>
+<h2 id="DataSet" class="doc_header"><code>class</code> <code>DataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L56" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -229,7 +179,52 @@ All images are validated, if they belong to one of the given categories. If cate
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ClassificationDataSet" class="doc_header"><code>class</code> <code>ClassificationDataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L142" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ClassificationDataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>annotations_path</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/dataset#DataSet"><code>DataSet</code></a></p>
+<h2 id="ClassificationDataSet" class="doc_header"><code>class</code> <code>ClassificationDataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L126" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ClassificationDataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>, <strong><code>annotations_path</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/dataset#DataSet"><code>DataSet</code></a></p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Create-a-object-detection-data-set">Create a object detection data-set<a class="anchor-link" href="#Create-a-object-detection-data-set"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Object detection data-set can be created from a segmentation or object-detection image-set.
+All images are validated against the annotations, if they contain at least one annotation and that the annotation category belongs to one of the given categories. The annotations have to be in <a href="http://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.5.html">VIA v1</a> json format. Polygon annotations are converted into rectangle annotations for unique bounding-box generation.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="ObjectDetectionDataSet" class="doc_header"><code>class</code> <code>ObjectDetectionDataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L393" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ObjectDetectionDataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>, <strong><code>annotations_path</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/dataset#DataSet"><code>DataSet</code></a></p>
 </blockquote>
 
 </div>
@@ -274,7 +269,7 @@ All images are validated against the annotations, if they contain at least one a
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="SegmentationDataSet" class="doc_header"><code>class</code> <code>SegmentationDataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L409" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SegmentationDataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>annotations_path</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/dataset#DataSet"><code>DataSet</code></a></p>
+<h2 id="SegmentationDataSet" class="doc_header"><code>class</code> <code>SegmentationDataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L693" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SegmentationDataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>, <strong><code>annotations_path</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/dataset#ObjectDetectionDataSet"><code>ObjectDetectionDataSet</code></a></p>
 </blockquote>
 
 </div>
@@ -311,7 +306,7 @@ All images are validated against the annotations, if they contain at least one a
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="scan_files" class="doc_header"><code>scan_files</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L803" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scan_files</code>(<strong><code>folder</code></strong>, <strong><code>file_extensions</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="scan_files" class="doc_header"><code>scan_files</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L882" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scan_files</code>(<strong><code>folder</code></strong>, <strong><code>file_extensions</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Scan the folder for files and filter files by file extension.
 If the optional <code>file_extension</code> is not set, <strong>.jpg</strong> as file extension is used by default.
@@ -347,7 +342,7 @@ return: the file path list</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="scan_path" class="doc_header"><code>scan_path</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L829" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scan_path</code>(<strong><code>path</code></strong>)</p>
+<h4 id="scan_path" class="doc_header"><code>scan_path</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L908" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scan_path</code>(<strong><code>path</code></strong>)</p>
 </blockquote>
 <p>Scan a folder and subfolders until the file level.
 <code>path</code>: the current directory to parse for folders
@@ -381,7 +376,7 @@ return: a list of folders prefixed with base directory</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="delete_folder" class="doc_header"><code>delete_folder</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L850" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>delete_folder</code>(<strong><code>path</code></strong>)</p>
+<h4 id="delete_folder" class="doc_header"><code>delete_folder</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L929" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>delete_folder</code>(<strong><code>path</code></strong>)</p>
 </blockquote>
 <p>Deletes a Folder, if exist.
 <code>path</code>: the folder path including the folder name
@@ -415,7 +410,7 @@ return: the created folder path</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="create_folder" class="doc_header"><code>create_folder</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L863" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_folder</code>(<strong><code>path</code></strong>, <strong><code>clear</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="create_folder" class="doc_header"><code>create_folder</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L942" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_folder</code>(<strong><code>path</code></strong>, <strong><code>clear</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Creates a Folder, if not exist.
 <code>path</code>: the folder path including the folder name
@@ -450,7 +445,7 @@ return: the created folder path</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="split_train_val_data" class="doc_header"><code>split_train_val_data</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L883" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>split_train_val_data</code>(<strong><code>data</code></strong>, <strong><code>val_size</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="split_train_val_data" class="doc_header"><code>split_train_val_data</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L962" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>split_train_val_data</code>(<strong><code>data</code></strong>, <strong><code>val_size</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Splits the images in train and validation set
 <code>data</code>: the data to split
@@ -486,7 +481,7 @@ return: the splittet train, validation images</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="input_feedback" class="doc_header"><code>input_feedback</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L899" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>input_feedback</code>(<strong><code>msg</code></strong>, <strong><code>choice</code></strong>, <strong><code>choices</code></strong>)</p>
+<h4 id="input_feedback" class="doc_header"><code>input_feedback</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L978" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>input_feedback</code>(<strong><code>msg</code></strong>, <strong><code>choice</code></strong>, <strong><code>choices</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -517,7 +512,7 @@ return: the splittet train, validation images</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L912" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L991" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 
@@ -562,7 +557,7 @@ return: the splittet train, validation images</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="build_data_set" class="doc_header"><code>build_data_set</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L932" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>build_data_set</code>(<strong><code>category_file_path</code></strong>, <strong><code>annotation_file_path</code></strong>, <strong><code>split</code></strong>, <strong><code>seed</code></strong>, <strong><code>sample</code></strong>, <strong><code>data_set_type</code></strong>, <strong><code>output</code></strong>, <strong><code>data_set_name</code></strong>)</p>
+<h4 id="build_data_set" class="doc_header"><code>build_data_set</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L1011" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>build_data_set</code>(<strong><code>category_file_path</code></strong>, <strong><code>annotation_file_path</code></strong>, <strong><code>split</code></strong>, <strong><code>seed</code></strong>, <strong><code>sample</code></strong>, <strong><code>data_set_type</code></strong>, <strong><code>output</code></strong>, <strong><code>data_set_name</code></strong>)</p>
 </blockquote>
 <p>Build the data-set for training, Validation and test
 <code>category_file_path</code>: the filename of the categories file

@@ -4,9 +4,9 @@ __all__ = ['CATEGORY_LABEL_KEY', 'IMAGE_SET_FOLDER', 'DEFAULT_CATEGORIES_FILE',
            'DEFAULT_CLASSIFICATION_ANNOTATIONS_FILE', 'DEFAULT_SEGMENTATION_ANNOTATIONS_FILE', 'DEFAULT_SPLIT',
            'DATA_SET_FOLDER', 'SEMANTIC_MASK_FOLDER', 'IMAGE_EXTENSIONS', 'FOLDER_FILTER', 'IMAGES_TRAIN_VAL_FOLDER',
            'IMAGES_TEST_FOLDER', 'DATA_SET_TRAIN_FOLDER', 'DATA_SET_VAL_FOLDER', 'DATA_SET_TEST_FOLDER',
-           'NOT_CATEGORIZED', 'logger', 'read_categories', 'DataSet', 'ClassificationDataSet', 'SegmentationDataSet',
-           'scan_files', 'scan_path', 'delete_folder', 'create_folder', 'split_train_val_data', 'input_feedback',
-           'configure_logging', 'build_data_set']
+           'NOT_CATEGORIZED', 'logger', 'DataSet', 'ClassificationDataSet', 'ObjectDetectionDataSet',
+           'SegmentationDataSet', 'scan_files', 'scan_path', 'delete_folder', 'create_folder', 'split_train_val_data',
+           'input_feedback', 'configure_logging', 'build_data_set']
 
 # Cell
 
@@ -16,7 +16,9 @@ from PIL import Image as PILImage
 from functools import partial
 from datetime import datetime
 from logging.handlers import MemoryHandler
-from .core import Type
+from .core import Type, infer_type
+from .via import converter as via_converter
+from mlcore import category_tools
 import numpy as np
 import shutil
 import json
@@ -51,32 +53,14 @@ logger = logging.getLogger(__name__)
 # Cell
 
 
-def read_categories(categories_file):
-    """
-    Reads the categories from a categories file.
-    If the optional `categories_file` is not given, the file name *categories.txt* is used by default
-    `path`: The folder, the categories file is stored in
-    `categories_file`: the categories file name, if not the default
-    return: a list of the category names
-    """
-    if categories_file is None:
-        categories_file = DEFAULT_CATEGORIES_FILE
-
-    with open(categories_file) as f:
-        categories = f.read().strip().split('\n')
-    return categories
-
-# Cell
-
-
 class DataSet:
-    def __init__(self, name, base_path, image_set_path, categories_path):
+    def __init__(self, name, base_path, image_set_path, categories_path, data_set_type):
         self.name = name
         self.base_path = base_path
         self.image_set_path = image_set_path
         self.categories_path = categories_path
-        self.categories = read_categories(categories_path)
-        self.type = basename(dirname(image_set_path))
+        self.categories = category_tools.read_categories(categories_path, data_set_type)
+        self.type = data_set_type
         self.folder = None
         self.train_folder = None
         self.val_folder = None
@@ -89,7 +73,7 @@ class DataSet:
         """
 
         # create data-set folder and remove previous data if exist
-        self.folder = create_folder(join(self.base_path, self.type, self.name), clear=True)
+        self.folder = create_folder(join(self.base_path, str(self.type), self.name), clear=True)
         self.logger.info("Created folder {}".format(self.folder))
         self.train_folder = create_folder(join(self.folder, DATA_SET_TRAIN_FOLDER))
         self.logger.info("Created folder {}".format(self.train_folder))
@@ -140,8 +124,8 @@ class DataSet:
 
 
 class ClassificationDataSet(DataSet):
-    def __init__(self, name, base_path, image_set_path, categories_path, annotations_path=None):
-        super().__init__(name, base_path, image_set_path, categories_path)
+    def __init__(self, name, base_path, image_set_path, categories_path, data_set_type, annotations_path=None):
+        super().__init__(name, base_path, image_set_path, categories_path, data_set_type)
         self.annotations_path = annotations_path
         self.annotations = self._read_annotations(annotations_path) if annotations_path else []
 
@@ -354,8 +338,8 @@ class ClassificationDataSet(DataSet):
 
         if sample:
             # create the sample data-set
-            sample_data_set = ClassificationDataSet("{}_sample".format(self.name), self.base_path, self.image_set_path,
-                                                    self.categories_path)
+            sample_data_set = self.__class__("{}_sample".format(self.name), self.base_path, self.image_set_path,
+                                             self.categories_path, self.type)
             # assign the annotations
             sample_data_set.annotations = self.annotations
             # create the data set folders
@@ -406,23 +390,22 @@ class ClassificationDataSet(DataSet):
 # Cell
 
 
-class SegmentationDataSet(DataSet):
-    def __init__(self, name, base_path, image_set_path, categories_path, annotations_path=None):
-        super().__init__(name, base_path, image_set_path, categories_path)
+class ObjectDetectionDataSet(DataSet):
+    def __init__(self, name, base_path, image_set_path, categories_path, data_set_type, annotations_path=None):
+        super().__init__(name, base_path, image_set_path, categories_path, data_set_type)
         self.annotations_path = annotations_path
-        self.annotations = self._read_annotations(annotations_path) if annotations_path else {}
-        self.semantic_mask_folder = None
+        self.annotations = via_converter.read_annotations(annotations_path) if annotations_path else {}
 
     def validate(self):
         """
-        Validates, that each file has corresponding segmentation annotation with at least one region is set.
+        Validates, that each file has corresponding annotation with at least one region is set.
         """
 
         # validate only the trainval images, the test images have no annotations to validate
         content_folder = join(self.image_set_path, IMAGES_TRAIN_VAL_FOLDER)
 
         # convert the annotations before doing validation
-        self._convert_annotation()
+        self.convert_annotation()
 
         self.logger.info('Start validate image set at {}'.format(content_folder))
 
@@ -473,20 +456,9 @@ class SegmentationDataSet(DataSet):
 
         self.logger.info('Finished validate image set at {}'.format(content_folder))
 
-    def create_folders(self):
-        """
-        Creates the data-set folder structure, if not exist
-        """
-        super().create_folders()
-
-        # create semantic mask file folder and remove previous data if exist
-        self.semantic_mask_folder = create_folder(join(self.folder, SEMANTIC_MASK_FOLDER), clear=True)
-        self.logger.info("Created folder {}".format(self.semantic_mask_folder))
-
     def copy(self, train_files, val_files, test_files=None):
         """
-        Copy the images to the data-set, generate the annotations for train and val images
-        and generate the semantic masks.
+        Copy the images to the data-set, generate the annotations for train and val images.
         `train_files`: The list of training images
         `val_files`: The list of validation images
         `test_files`: The list of test images
@@ -500,9 +472,6 @@ class SegmentationDataSet(DataSet):
         # copy the categories files
         self.logger.info('Copy file {} to {}'.format(self.categories_path, self.folder))
         shutil.copy2(self.categories_path, join(self.folder, DEFAULT_CATEGORIES_FILE))
-
-        # save semantic annotations
-        self._save_semantic_masks(train_files + val_files)
 
         annotations_train = {}
         annotations_val = {}
@@ -563,7 +532,6 @@ class SegmentationDataSet(DataSet):
         This method validates the images against the annotations,
         split the image-set into train and val on given split percentage,
         creates the data-set folders and copies the image.
-        A segmentation mask per image is also generated.
         If a sample percentage is given, a sub-set is created as sample.
         `split`: The percentage of images which will be copied into the validation set
         `seed`: A random seed to reproduce splits
@@ -601,8 +569,8 @@ class SegmentationDataSet(DataSet):
                                                                                              self.base_path))
 
             # create the sample data-set
-            sample_data_set = SegmentationDataSet(sample_name, self.base_path, self.image_set_path,
-                                                  self.categories_path)
+            sample_data_set = self.__class__(sample_name, self.base_path, self.image_set_path, self.categories_path,
+                                             self.type)
             # assign the converted annotations
             sample_data_set.annotations = self.annotations
 
@@ -615,7 +583,142 @@ class SegmentationDataSet(DataSet):
                                                                                                 int(sample * 100),
                                                                                                 self.base_path))
 
-    def _convert_annotation(self):
+    def convert_annotation(self):
+        """
+        Converts segmentation regions from polygon to rectangle, if exist
+        """
+
+        # only the trainval images have annotation, not the test images
+        content_folder = join(self.image_set_path, IMAGES_TRAIN_VAL_FOLDER)
+
+        steps = [
+            {
+                'name': 'position',
+                'choices': {
+                    's': 'Skip',  # just delete the annotation
+                    'S': 'Skip All',
+                    't': 'Trim',  # transform the annotation
+                    'T': 'Trim All',
+                },
+                'choice': None,
+                'condition': lambda p_min, p_max, size: p_min < 0 or p_max >= size,
+                'message': '{} -> {} : {}Exceeds image {}. \n Box \n x: {} \n y: {} \n x_max: {} \n y_max: {}',
+                'transform': lambda p, size=0: max(min(p, size - 1), 0),
+            },
+            {
+                'name': 'size',
+                'choices': {
+                    's': 'Skip',  # just delete the annotation
+                    'S': 'Skip All',
+                    'k': 'Keep',  # transform the annotation (in this case do nothing)
+                    'K': 'Keep All',
+                },
+                'choice': None,
+                'condition': lambda p_min, p_max, _: p_max - p_min <= 1,
+                'message': '{} -> {} : {}Shape {} is <= 1 pixel. \n Box \n x: {} \n y: {} \n x_max: {} \n y_max: {}',
+                'transform': lambda p, size=0: p,
+            }
+        ]
+
+        self.logger.info('Start convert image annotations from {}'.format(self.annotations_path))
+
+        for annotation_index, annotation in self.annotations.items():
+            file_name = annotation['filename']
+            regions = annotation['regions']
+
+            if not regions:
+                continue
+
+            with PILImage.open(join(content_folder, file_name)) as image:
+                image_width, image_height = image.size
+
+                delete_regions = {}
+                for region_index, region in regions.items():
+                    # convert from polygon to rect if needed
+                    region = via_converter.region_polygon_to_rect(region)
+                    shape_attributes = region['shape_attributes']
+
+                    for step in steps:
+                        # validate the shape size
+                        x_min = shape_attributes['x']
+                        x_max = shape_attributes['x'] + shape_attributes['width']
+                        y_min = shape_attributes['y']
+                        y_max = shape_attributes['y'] + shape_attributes['height']
+
+                        width_condition = step['condition'](x_min, x_max, image_width)
+                        height_condition = step['condition'](y_min, y_max, image_height)
+                        if width_condition or height_condition:
+                            size_message = ['width'] if width_condition else []
+                            size_message.extend(['height'] if height_condition else [])
+                            message = step['message'].format(annotation_index, region_index, ' ',
+                                                             ' and '.join(size_message),
+                                                             x_min, y_min, x_max, y_max)
+
+                            step['choice'] = input_feedback(message, step['choice'], step['choices'])
+
+                            choice_op = step['choice'].lower()
+                            # if skip the shapes
+                            if choice_op == 's':
+                                delete_regions[region_index] = True
+                                message = step['message'].format(annotation_index, region_index,
+                                                                 '{} '.format(step['choices'][choice_op]),
+                                                                 ' and '.join(size_message),
+                                                                 x_min, y_min, x_max, y_max)
+                                self.logger.info(message)
+
+                                break
+                            else:
+                                x_min, x_max = tuple(map(partial(step['transform'], size=image_width), [x_min, x_max]))
+                                y_min, y_max = tuple(map(partial(step['transform'], size=image_height), [y_min, y_max]))
+                                shape_attributes['x'] = x_min
+                                shape_attributes['width'] = x_max - x_min
+                                shape_attributes['y'] = y_min
+                                shape_attributes['height'] = y_max - y_min
+
+                                message = step['message'].format(annotation_index, region_index,
+                                                                 '{} '.format(step['choices'][choice_op]),
+                                                                 ' and '.join(size_message),
+                                                                 x_min, y_min, x_max, y_max)
+                                self.logger.info(message)
+
+                # delete regions after iteration is finished
+                for region_index in delete_regions.keys():
+                    del regions[region_index]
+
+        print('Finished convert image annotations from {}'.format(self.annotations_path))
+
+# Cell
+
+
+class SegmentationDataSet(ObjectDetectionDataSet):
+    def __init__(self, name, base_path, image_set_path, categories_path, data_set_type, annotations_path=None):
+        super().__init__(name, base_path, image_set_path, categories_path, data_set_type, annotations_path)
+        self.semantic_mask_folder = None
+
+    def create_folders(self):
+        """
+        Creates the data-set folder structure, if not exist
+        """
+        super().create_folders()
+
+        # create semantic mask file folder and remove previous data if exist
+        self.semantic_mask_folder = create_folder(join(self.folder, SEMANTIC_MASK_FOLDER), clear=True)
+        self.logger.info("Created folder {}".format(self.semantic_mask_folder))
+
+    def copy(self, train_files, val_files, test_files=None):
+        """
+        Copy the images to the data-set, generate the annotations for train and val images
+        and generate the semantic masks.
+        `train_files`: The list of training images
+        `val_files`: The list of validation images
+        `test_files`: The list of test images
+        """
+        super().copy(train_files, val_files, test_files)
+
+        # save semantic annotations
+        self._save_semantic_masks(train_files + val_files)
+
+    def convert_annotation(self):
         """
         Converts segmentation regions from rectangle to polygon, if exist
         """
@@ -666,21 +769,9 @@ class SegmentationDataSet(DataSet):
 
                 delete_regions = {}
                 for region_index, region in regions.items():
-                    shape_attributes = region['shape_attributes']
-                    shape_type = shape_attributes['name']
-
                     # convert from rect to polygon if needed
-                    if shape_type == 'rect':
-                        x = max(shape_attributes["x"], 0)
-                        y = max(shape_attributes["y"], 0)
-                        max_x = min(x + shape_attributes["width"], image_width - 1)
-                        max_y = min(y + shape_attributes["height"], image_height - 1)
-                        shape_attributes = {
-                            "name": "polygon",
-                            "all_points_x": [x, x, max_x, max_x, x],
-                            "all_points_y": [y, max_y, max_y, y, y],
-                        }
-                        region['shape_attributes'] = shape_attributes
+                    region = via_converter.region_rect_to_polygon(region)
+                    shape_attributes = region['shape_attributes']
 
                     for step in steps:
                         # validate the shape size
@@ -784,18 +875,6 @@ class SegmentationDataSet(DataSet):
                 self.logger.info('{} / {} - Created segmentation mask {}'.format(index + 1, num_masks, mask_path))
 
         self.logger.info('Finish create {} segmentation masks in {}'.format(num_masks, self.semantic_mask_folder))
-
-    def _read_annotations(self, annotations_file):
-        """
-        Reads an VIA annotation file
-        `annotations_file`: the path to the annotation file to read
-        return: the annotations
-        """
-        with open(annotations_file) as json_file:
-            annotations = json.load(json_file)
-            self.logger.info('Found {} annotations at {}'.format(len(annotations), annotations_file))
-
-        return annotations
 
 # Cell
 
@@ -943,15 +1022,15 @@ def build_data_set(category_file_path, annotation_file_path, split, seed, sample
     """
     log_memory_handler = configure_logging()
 
-    path = dirname(category_file_path)
     # try to infer the data-set type if not explicitly set
     if data_set_type is None:
         try:
-            data_set_type_from_path = basename(dirname(path))
-            data_set_type = Type(data_set_type_from_path)
+            data_set_type = infer_type(category_file_path)
         except ValueError as e:
-            logger.error("Error, unsupported data-set type: {}".format(data_set_type_from_path))
+            logger.error(e)
             return
+
+    path = dirname(category_file_path)
 
     # try to infer the data-set name if not explicitly set
     if data_set_name is None:
@@ -973,9 +1052,14 @@ def build_data_set(category_file_path, annotation_file_path, split, seed, sample
     logger.info('Start build {} data-set {} at {}'.format(data_set_type, data_set_name, output))
 
     if data_set_type == Type.IMAGE_CLASSIFICATION:
-        data_set = ClassificationDataSet(data_set_name, output, path, category_file_path, annotation_file_path)
+        data_set = ClassificationDataSet(data_set_name, output, path, category_file_path, data_set_type,
+                                         annotation_file_path)
     elif data_set_type == Type.IMAGE_SEGMENTATION:
-        data_set = SegmentationDataSet(data_set_name, output, path, category_file_path, annotation_file_path)
+        data_set = SegmentationDataSet(data_set_name, output, path, category_file_path, data_set_type,
+                                       annotation_file_path)
+    elif data_set_type == Type.IMAGE_OBJECT_DETECTION:
+        data_set = ObjectDetectionDataSet(data_set_name, output, path, category_file_path, data_set_type,
+                                          annotation_file_path)
 
     if data_set:
         # create the data set folders

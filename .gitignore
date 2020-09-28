@@ -133,6 +133,9 @@ docs_src/.last_checked
 docs_src/fastai
 tools/fastai
 
+# nbdev temp
+.virtual_documents
+
 # link checker
 checklink/cookies.txt
 

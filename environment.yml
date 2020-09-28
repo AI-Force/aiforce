@@ -19,5 +19,6 @@ dependencies:
   - uvicorn
   - pip:
       - nbdev
+      - tensorflow
 prefix: /Users/pdc-s-rettig/miniconda3/envs/ML-Core
 
