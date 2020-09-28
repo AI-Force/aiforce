@@ -28,6 +28,9 @@ entries:
       title: Title
       url: /image-inference
     - output: web,pdf
+      title: Tensorflow Lite Model Converter
+      url: /tensorflow-tflite_converter
+    - output: web,pdf
       title: Tensorflow TFRecord Builder
       url: /tensorflow-tfrecord_builder
     - output: web,pdf
