@@ -10,6 +10,9 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
+      title: VIA Annotation Tools
+      url: /annotation-via
+    - output: web,pdf
       title: Category File Tools
       url: /category_tools
     - output: web,pdf
@@ -22,11 +25,17 @@ entries:
       title: Color Palettes
       url: /image-color_palette
     - output: web,pdf
-      title: Image Tools
-      url: /image-image_tools
-    - output: web,pdf
       title: Title
       url: /image-inference
+    - output: web,pdf
+      title: Image Tools for OpenCV
+      url: /image-opencv_tools
+    - output: web,pdf
+      title: Image Tools for Pillow
+      url: /image-pillow_tools
+    - output: web,pdf
+      title: IO Core functions
+      url: /io-core
     - output: web,pdf
       title: Tensorflow Lite Model Converter
       url: /tensorflow-tflite_converter
@@ -42,6 +51,9 @@ entries:
     - output: web,pdf
       title: Image Size Calculator
       url: /tools-image_size_calculator
+    - output: web,pdf
+      title: VIA Annotation Viewer
+      url: /via-annotation_viewer
     - output: web,pdf
       title: VIA Annotation Tool Converter
       url: /via-converter

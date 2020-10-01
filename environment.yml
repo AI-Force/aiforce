@@ -19,6 +19,7 @@ dependencies:
   - uvicorn
   - pip:
       - nbdev
+      - opencv-python==4.1.2.30
       - tensorflow
 prefix: /Users/pdc-s-rettig/miniconda3/envs/ML-Core
 

@@ -2,22 +2,22 @@
 
 __all__ = ['CATEGORY_LABEL_KEY', 'IMAGE_SET_FOLDER', 'DEFAULT_CATEGORIES_FILE',
            'DEFAULT_CLASSIFICATION_ANNOTATIONS_FILE', 'DEFAULT_SEGMENTATION_ANNOTATIONS_FILE', 'DEFAULT_SPLIT',
-           'DATA_SET_FOLDER', 'SEMANTIC_MASK_FOLDER', 'IMAGE_EXTENSIONS', 'FOLDER_FILTER', 'IMAGES_TRAIN_VAL_FOLDER',
-           'IMAGES_TEST_FOLDER', 'DATA_SET_TRAIN_FOLDER', 'DATA_SET_VAL_FOLDER', 'DATA_SET_TEST_FOLDER',
-           'NOT_CATEGORIZED', 'logger', 'DataSet', 'ClassificationDataSet', 'ObjectDetectionDataSet',
-           'SegmentationDataSet', 'scan_files', 'scan_path', 'delete_folder', 'create_folder', 'split_train_val_data',
+           'DATA_SET_FOLDER', 'SEMANTIC_MASK_FOLDER', 'IMAGES_TRAIN_VAL_FOLDER', 'IMAGES_TEST_FOLDER',
+           'DATA_SET_TRAIN_FOLDER', 'DATA_SET_VAL_FOLDER', 'DATA_SET_TEST_FOLDER', 'NOT_CATEGORIZED', 'logger',
+           'DataSet', 'ClassificationDataSet', 'ObjectDetectionDataSet', 'SegmentationDataSet', 'split_train_val_data',
            'input_feedback', 'configure_logging', 'build_data_set']
 
 # Cell
 
-from os import listdir, makedirs
-from os.path import join, isfile, isdir, dirname, normpath, basename, sep, splitext, split
+from os.path import join, isdir, dirname, normpath, basename, sep, splitext, split
 from PIL import Image as PILImage
 from functools import partial
 from datetime import datetime
 from logging.handlers import MemoryHandler
 from .core import Type, infer_type
-from .via import converter as via_converter
+from .io.core import create_folder, scan_files
+from .via.converter import region_polygon_to_rect, region_rect_to_polygon
+from .via.core import read_annotations
 from mlcore import category_tools
 import numpy as np
 import shutil
@@ -37,8 +37,6 @@ DEFAULT_SEGMENTATION_ANNOTATIONS_FILE = 'via_region_data.json'
 DEFAULT_SPLIT = 0.2
 DATA_SET_FOLDER = 'datasets'
 SEMANTIC_MASK_FOLDER = 'semantic_masks'
-IMAGE_EXTENSIONS = ['.jpg']
-FOLDER_FILTER = ['.DS_Store']
 IMAGES_TRAIN_VAL_FOLDER = 'trainval'
 IMAGES_TEST_FOLDER = 'test'
 DATA_SET_TRAIN_FOLDER = 'train'
@@ -394,7 +392,7 @@ class ObjectDetectionDataSet(DataSet):
     def __init__(self, name, base_path, image_set_path, categories_path, data_set_type, annotations_path=None):
         super().__init__(name, base_path, image_set_path, categories_path, data_set_type)
         self.annotations_path = annotations_path
-        self.annotations = via_converter.read_annotations(annotations_path) if annotations_path else {}
+        self.annotations = read_annotations(annotations_path) if annotations_path else {}
 
     def validate(self):
         """
@@ -635,7 +633,7 @@ class ObjectDetectionDataSet(DataSet):
                 delete_regions = {}
                 for region_index, region in regions.items():
                     # convert from polygon to rect if needed
-                    region = via_converter.region_polygon_to_rect(region)
+                    region = region_polygon_to_rect(region)
                     shape_attributes = region['shape_attributes']
 
                     for step in steps:
@@ -770,7 +768,7 @@ class SegmentationDataSet(ObjectDetectionDataSet):
                 delete_regions = {}
                 for region_index, region in regions.items():
                     # convert from rect to polygon if needed
-                    region = via_converter.region_rect_to_polygon(region)
+                    region = region_rect_to_polygon(region)
                     shape_attributes = region['shape_attributes']
 
                     for step in steps:
@@ -875,86 +873,6 @@ class SegmentationDataSet(ObjectDetectionDataSet):
                 self.logger.info('{} / {} - Created segmentation mask {}'.format(index + 1, num_masks, mask_path))
 
         self.logger.info('Finish create {} segmentation masks in {}'.format(num_masks, self.semantic_mask_folder))
-
-# Cell
-
-
-def scan_files(folder, file_extensions=None):
-    """
-    Scan the folder for files and filter files by file extension.
-    If the optional `file_extension` is not set, **.jpg** as file extension is used by default.
-    `folder`: the folder to scan for files
-    `file_extensions`: the allowed file extensions
-    return: the file path list
-    """
-    if file_extensions is None:
-        file_extensions = IMAGE_EXTENSIONS
-
-    results = []
-    if isdir(folder):
-        files = listdir(folder)
-        for file in files:
-            file_path = join(folder, file)
-            filename, file_extension = splitext(file_path)
-            if isfile(file_path) and (file_extension in file_extensions):
-                results.append(file_path)
-            elif isdir(file_path):
-                results.extend(scan_files(file_path, file_extensions))
-    return results
-
-# Cell
-
-
-def scan_path(path):
-    """
-    Scan a folder and subfolders until the file level.
-    `path`: the current directory to parse for folders
-    return: a list of folders prefixed with base directory
-    """
-    has_sub_folders = False
-    results = []
-    names = listdir(path)
-    for name in names:
-        subfolder_path = join(path, name)
-        if isdir(subfolder_path) and name not in FOLDER_FILTER:
-            has_sub_folders = True
-            results = results + scan_path(subfolder_path)
-    if not has_sub_folders:
-        results.append(path)
-    return results
-
-# Cell
-
-
-def delete_folder(path):
-    """
-    Deletes a Folder, if exist.
-    `path`: the folder path including the folder name
-    return: the created folder path
-    """
-    if isdir(path):
-        shutil.rmtree(path)
-    return path
-
-# Cell
-
-
-def create_folder(path, clear=False):
-    """
-    Creates a Folder, if not exist.
-    `path`: the folder path including the folder name
-    `clear`: wherether or not the created folder should be empty
-    return: the created folder path
-    """
-
-    if clear:
-        # remove previous data-set folder, if exist to clear the contents
-        delete_folder(path)
-
-    if not isdir(path):
-        makedirs(path)
-
-    return path
 
 # Cell
 
