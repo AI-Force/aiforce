@@ -15,7 +15,7 @@ from os import environ
 from os.path import join
 from ..core import Type, infer_type
 from ..via import converter as via_converter
-from ..image import image_tools
+from ..image.pillow_tools import get_image_size
 from mlcore import category_tools
 
 # Cell
@@ -31,7 +31,7 @@ def create_tfrecord_entry(source_path, categories, annotation):
     file_name = annotation['filename']
     with tf.io.gfile.GFile(join(source_path, file_name), 'rb') as fid:
         encoded_jpg = fid.read()
-    width, height = image_tools.get_image_size(io.BytesIO(encoded_jpg))
+    width, height = get_image_size(io.BytesIO(encoded_jpg))
 
     file_name = file_name.encode('utf8')
     image_format = b'jpg'

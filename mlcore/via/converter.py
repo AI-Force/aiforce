@@ -8,7 +8,7 @@ __all__ = ['DEFAULT_ANNOTATIONS_FILE', 'logger', 'region_rect_to_polygon', 'regi
 import sys
 import argparse
 import logging
-from .core import read_annotations
+from ..annotation.via import read_annotations
 
 # Cell
 
