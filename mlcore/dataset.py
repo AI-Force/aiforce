@@ -17,7 +17,7 @@ from logging.handlers import MemoryHandler
 from .core import Type, infer_type
 from .io.core import create_folder, scan_files
 from .via.converter import region_polygon_to_rect, region_rect_to_polygon
-from .via.core import read_annotations
+from .annotation.via import read_annotations
 from mlcore import category_tools
 import numpy as np
 import shutil
