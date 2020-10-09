@@ -436,7 +436,7 @@ return: the splittet train, validation images</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="build_data_set" class="doc_header"><code>build_data_set</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L1004" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>build_data_set</code>(<strong><code>category_file_path</code></strong>, <strong><code>output</code></strong>, <strong><code>annotation_file_path</code></strong>=<em><code>None</code></em>, <strong><code>split</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>0</code></em>, <strong><code>data_set_type</code></strong>=<em><code>None</code></em>, <strong><code>image_width</code></strong>=<em><code>None</code></em>, <strong><code>image_height</code></strong>=<em><code>None</code></em>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>, <strong><code>iou_join_thresh</code></strong>=<em><code>None</code></em>, <strong><code>data_set_name</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="build_data_set" class="doc_header"><code>build_data_set</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L1004" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>build_data_set</code>(<strong><code>category_file_path</code></strong>, <strong><code>output</code></strong>, <strong><code>annotation_file_path</code></strong>=<em><code>None</code></em>, <strong><code>split</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>0</code></em>, <strong><code>data_set_type</code></strong>=<em><code>None</code></em>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>, <strong><code>iou_join_thresh</code></strong>=<em><code>None</code></em>, <strong><code>data_set_name</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Build the data-set for training, Validation and test
 <code>category_file_path</code>: the filename of the categories file
@@ -446,8 +446,6 @@ return: the splittet train, validation images</p>
 <code>seed</code>: random seed to reproduce splits
 <code>sample</code>: the size of the sample set as percentage
 <code>data_set_type</code>: the type of the data-set, if not set infer from the category file path
-<code>image_width</code>: The image-width used for training to validate the annotations against.
-<code>image_height</code>: The image-height used for training to validate the annotations against.
 <code>create_tfrecord</code>: Also create .tfrecord files.
 <code>iou-join-thresh</code>: The IoU threshold from where overlapping annotations gets joined.
 <code>data_set_name</code>: the name of the data-set, if not set infer from the category file path</p>
@@ -487,8 +485,6 @@ return: the splittet train, validation images</p>
 <li><code>--category-label-key</code>: The key, the category name can be found in the annotation file, default to <em>category</em>.</li>
 <li><code>--sample</code>: The percentage of the data which will be copied as a sample set with in a separate folder with "_sample" suffix. If not set, no sample data-set will be created.</li>
 <li><code>--type</code>: The type of the data-set, if not explicitly set try to infer from categories file path.</li>
-<li><code>--image-width</code>: The image-width used for training to validate the annotations against.</li>
-<li><code>--image-height</code>: The image-height used for training to validate the annotations against.</li>
 <li><code>--tfrecord</code>: Also create .tfrecord files.</li>
 <li><code>--iou-join-thresh</code>: The IoU threshold from where overlapping annotations gets joined.</li>
 <li><code>--output</code>: The path of the dataset folder, default to <em>../datasets</em>.</li>
