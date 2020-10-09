@@ -9,16 +9,6 @@ __all__ = ['CATEGORY_LABEL_KEY', 'IMAGE_SET_FOLDER', 'DEFAULT_CATEGORIES_FILE',
 
 # Cell
 
-from os.path import join, isdir, dirname, normpath, basename, sep, splitext, split
-from PIL import Image as PILImage
-from functools import partial
-from datetime import datetime
-from logging.handlers import MemoryHandler
-from .core import Type, infer_type
-from .io.core import create_folder, scan_files
-from .via.converter import region_polygon_to_rect, region_rect_to_polygon
-from .annotation.via import read_annotations
-from mlcore import category_tools
 import numpy as np
 import shutil
 import json
@@ -26,6 +16,17 @@ import sys
 import csv
 import argparse
 import logging
+from os.path import join, isdir, dirname, normpath, basename, sep, splitext, split
+from PIL import Image as PILImage
+from functools import partial
+from datetime import datetime
+from logging.handlers import MemoryHandler
+from .core import Type, infer_type
+from .io.core import create_folder, scan_files
+from .annotation.via import Shape, read_annotations, get_regions, set_regions, get_region_attributes, get_region_category, get_shape_attributes, get_points, set_points, get_shape_type, convert_region_polygon_to_rect, convert_region_rect_to_polygon
+from .tensorflow.tfrecord_builder import create_tfrecord_file, create_labelmap_file
+from .evaluation.core import intersection_over_union
+from .category_tools import read_categories
 
 # Cell
 
@@ -57,7 +58,7 @@ class DataSet:
         self.base_path = base_path
         self.image_set_path = image_set_path
         self.categories_path = categories_path
-        self.categories = category_tools.read_categories(categories_path, data_set_type)
+        self.categories = read_categories(categories_path, data_set_type)
         self.type = data_set_type
         self.folder = None
         self.train_folder = None
@@ -389,10 +390,25 @@ class ClassificationDataSet(DataSet):
 
 
 class ObjectDetectionDataSet(DataSet):
-    def __init__(self, name, base_path, image_set_path, categories_path, data_set_type, annotations_path=None):
+    """
+    Object detection data-set.
+    `name`: The name of the data-set.
+    `base_path`: The data-set base-path.
+    `image_set_path`: The image-set source path.
+    `categories_path`: The path to the categories.txt file.
+    `data_set_type`: The type of the data-set.
+    `annotations_path`: The path to the annotations-file.
+    `create_tfrecord`: Also create .tfrecord files.
+    `iou-join-thresh`: The IoU threshold from where overlapping annotations gets joined.
+    """
+
+    def __init__(self, name, base_path, image_set_path, categories_path, data_set_type, annotations_path=None,
+                 create_tfrecord=False, iou_join_thresh=None):
         super().__init__(name, base_path, image_set_path, categories_path, data_set_type)
         self.annotations_path = annotations_path
         self.annotations = read_annotations(annotations_path) if annotations_path else {}
+        self.create_tfrecord = create_tfrecord
+        self.iou_join_thresh = iou_join_thresh
 
     def validate(self):
         """
@@ -415,7 +431,7 @@ class ObjectDetectionDataSet(DataSet):
 
         for annotation_index, annotation in self.annotations.items():
             file_name = annotation['filename']
-            regions = annotation['regions']
+            regions = get_regions(annotation)
 
             file_path = join(content_folder, file_name)
 
@@ -471,6 +487,13 @@ class ObjectDetectionDataSet(DataSet):
         self.logger.info('Copy file {} to {}'.format(self.categories_path, self.folder))
         shutil.copy2(self.categories_path, join(self.folder, DEFAULT_CATEGORIES_FILE))
 
+        # if create tfrecord, create a labelmap.pbtxt file containing the categories
+        if self.create_tfrecord:
+            labelmap_file_name = 'label_map.pbtxt'
+            labelmap_output_file = join(self.folder, labelmap_file_name)
+            self.logger.info('Generate file {} to {}'.format(labelmap_file_name, self.folder))
+            create_labelmap_file(labelmap_output_file, self.categories[1:], 1)
+
         annotations_train = {}
         annotations_val = {}
 
@@ -503,6 +526,12 @@ class ObjectDetectionDataSet(DataSet):
             self.logger.info('Write annotations to {}'.format(annotations_target_path))
             with open(annotations_target_path, 'w') as outfile:
                 json.dump(annotations_train, outfile)
+            # if creating a .tfrecord
+            if self.create_tfrecord:
+                tfrecord_file_name = '{}.record'.format(normpath(basename(self.train_folder)))
+                tfrecord_output_file = join(self.folder, tfrecord_file_name)
+                self.logger.info('Generate file {} to {}'.format(labelmap_file_name, self.folder))
+                create_tfrecord_file(tfrecord_output_file, self.train_folder, self.categories, annotations_train)
 
         # write the split val annotations
         if annotations_val:
@@ -510,6 +539,12 @@ class ObjectDetectionDataSet(DataSet):
             self.logger.info('Write annotations to {}'.format(annotations_target_path))
             with open(annotations_target_path, 'w') as outfile:
                 json.dump(annotations_val, outfile)
+            # if creating a .tfrecord
+            if self.create_tfrecord:
+                tfrecord_file_name = '{}.record'.format(normpath(basename(self.val_folder)))
+                tfrecord_output_file = join(self.folder, tfrecord_file_name)
+                self.logger.info('Generate file {} to {}'.format(labelmap_file_name, self.folder))
+                create_tfrecord_file(tfrecord_output_file, self.val_folder, self.categories, annotations_val)
 
         # copy test_files, if exist
         if test_files:
@@ -568,7 +603,7 @@ class ObjectDetectionDataSet(DataSet):
 
             # create the sample data-set
             sample_data_set = self.__class__(sample_name, self.base_path, self.image_set_path, self.categories_path,
-                                             self.type)
+                                             self.type, create_tfrecord=self.create_tfrecord)
             # assign the converted annotations
             sample_data_set.annotations = self.annotations
 
@@ -622,7 +657,7 @@ class ObjectDetectionDataSet(DataSet):
 
         for annotation_index, annotation in self.annotations.items():
             file_name = annotation['filename']
-            regions = annotation['regions']
+            regions = get_regions(annotation)
 
             if not regions:
                 continue
@@ -633,7 +668,7 @@ class ObjectDetectionDataSet(DataSet):
                 delete_regions = {}
                 for region_index, region in regions.items():
                     # convert from polygon to rect if needed
-                    region = region_polygon_to_rect(region)
+                    region = convert_region_polygon_to_rect(region)
                     shape_attributes = region['shape_attributes']
 
                     for step in steps:
@@ -683,7 +718,46 @@ class ObjectDetectionDataSet(DataSet):
                 for region_index in delete_regions.keys():
                     del regions[region_index]
 
-        print('Finished convert image annotations from {}'.format(self.annotations_path))
+                # if an IoU threshold is set, try to join regions
+                if self.iou_join_thresh is not None:
+                    set_regions(annotation, self.join_regions(regions))
+        self.logger.info('Finished convert image annotations from {}'.format(self.annotations_path))
+
+    def join_regions(self, regions):
+        """
+        Join regions which exceed the overlapping theshold `iou_join_thresh`.
+        `regions`: the regions to analyze to join
+        return: the joined regions
+        """
+        region_values = list(regions.values())
+        index_left = 0
+        while index_left < len(region_values):
+            regions_joined = []
+            region_left = region_values[index_left]
+            region_left_category = get_region_category(get_region_attributes(region_left), CATEGORY_LABEL_KEY)
+            region_left_shape_attributes = get_shape_attributes(region_left)
+            region_left_shape_type = get_shape_type(region_left_shape_attributes)
+            for index_right in range(len(region_values))[index_left+1:]:
+                region_right = region_values[index_right]
+                region_right_category = get_region_category(get_region_attributes(region_right), CATEGORY_LABEL_KEY)
+                region_right_shape_attributes = get_shape_attributes(region_right)
+                region_right_shape_type = get_shape_type(region_right_shape_attributes)
+                if region_left_category == region_right_category and region_left_shape_type == Shape.RECTANGLE and region_left_shape_type == region_right_shape_type:
+                    left_points = get_points(region_left_shape_attributes)
+                    right_points = get_points(region_right_shape_attributes)
+                    iou = intersection_over_union(left_points, right_points)
+                    if iou >= self.iou_join_thresh:
+                        x_points = left_points[0] + right_points[0]
+                        y_points = left_points[1] + right_points[1]
+                        x_points = (min(x_points), max(x_points))
+                        y_points = (min(y_points), max(y_points))
+                        set_points(region_left_shape_attributes, x_points, y_points)
+                        regions_joined.append(index_right)
+            for index in regions_joined[::-1]:
+                del region_values[index]
+            if not regions_joined:
+                index_left += 1
+        return {str(k): v for k, v in enumerate(region_values)}
 
 # Cell
 
@@ -768,7 +842,7 @@ class SegmentationDataSet(ObjectDetectionDataSet):
                 delete_regions = {}
                 for region_index, region in regions.items():
                     # convert from rect to polygon if needed
-                    region = region_rect_to_polygon(region)
+                    region = convert_region_rect_to_polygon(region)
                     shape_attributes = region['shape_attributes']
 
                     for step in steps:
@@ -926,16 +1000,19 @@ def configure_logging(logging_level=logging.INFO):
 # Cell
 
 
-def build_data_set(category_file_path, annotation_file_path, split, seed, sample, data_set_type, output, data_set_name):
+def build_data_set(category_file_path, output, annotation_file_path=None, split=DEFAULT_SPLIT, seed=None, sample=0,
+                   data_set_type=None, create_tfrecord=False, iou_join_thresh=None, data_set_name=None):
     """
     Build the data-set for training, Validation and test
     `category_file_path`: the filename of the categories file
+    `output`: the dataset base folder to build the dataset in
     `annotation_file_path`: the file path to the annotation file
     `split`: the size of the validation set as percentage
     `seed`: random seed to reproduce splits
     `sample`: the size of the sample set as percentage
     `data_set_type`: the type of the data-set, if not set infer from the category file path
-    `output`: the dataset base folder to build the dataset in
+    `create_tfrecord`: Also create .tfrecord files.
+    `iou-join-thresh`: The IoU threshold from where overlapping annotations gets joined.
     `data_set_name`: the name of the data-set, if not set infer from the category file path
     """
     log_memory_handler = configure_logging()
@@ -977,7 +1054,7 @@ def build_data_set(category_file_path, annotation_file_path, split, seed, sample
                                        annotation_file_path)
     elif data_set_type == Type.IMAGE_OBJECT_DETECTION:
         data_set = ObjectDetectionDataSet(data_set_name, output, path, category_file_path, data_set_type,
-                                          annotation_file_path)
+                                          annotation_file_path, create_tfrecord, iou_join_thresh)
 
     if data_set:
         # create the data set folders
@@ -1026,6 +1103,13 @@ if __name__ == '__main__' and '__file__' in globals():
                         choices=list(Type),
                         type=Type,
                         default=None)
+    parser.add_argument("--tfrecord",
+                        help="Also create .tfrecord files.",
+                        action="store_true")
+    parser.add_argument("--iou-join-thresh",
+                        help="The IoU threshold from where overlapping annotations gets joined.",
+                        type=float,
+                        default=None)
     parser.add_argument("--output",
                         help="The path of the data-set folder.",
                         default=DATA_SET_FOLDER)
@@ -1036,5 +1120,5 @@ if __name__ == '__main__' and '__file__' in globals():
 
     CATEGORY_LABEL_KEY = args.category_label_key
 
-    build_data_set(args.categories, args.annotation, args.split, args.seed, args.sample, args.type, args.output,
-                   args.name)
+    build_data_set(args.categories, args.output, args.annotation, args.split, args.seed, args.sample, args.type,
+                   args.tfrecord, args.iou_join_thresh, args.name)

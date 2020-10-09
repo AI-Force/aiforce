@@ -66,7 +66,7 @@ description: "VIA Annotation Tools Notes."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Shape" class="doc_header"><code>class</code> <code>Shape</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L28" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Shape</code>(<strong><code>value</code></strong>, <strong><code>names</code></strong>=<em><code>None</code></em>, <strong><code>module</code></strong>=<em><code>None</code></em>, <strong><code>qualname</code></strong>=<em><code>None</code></em>, <strong><code>type</code></strong>=<em><code>None</code></em>, <strong><code>start</code></strong>=<em><code>1</code></em>) :: <code>Enum</code></p>
+<h2 id="Shape" class="doc_header"><code>class</code> <code>Shape</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Shape</code>(<strong><code>value</code></strong>, <strong><code>names</code></strong>=<em><code>None</code></em>, <strong><code>module</code></strong>=<em><code>None</code></em>, <strong><code>qualname</code></strong>=<em><code>None</code></em>, <strong><code>type</code></strong>=<em><code>None</code></em>, <strong><code>start</code></strong>=<em><code>1</code></em>) :: <code>Enum</code></p>
 </blockquote>
 <p>The supported VIA shape types</p>
 
@@ -98,7 +98,7 @@ description: "VIA Annotation Tools Notes."
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_annotations" class="doc_header"><code>read_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L41" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_annotations</code>(<strong><code>annotations_file</code></strong>)</p>
+<h4 id="read_annotations" class="doc_header"><code>read_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L42" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_annotations</code>(<strong><code>annotations_file</code></strong>)</p>
 </blockquote>
 <p>Reads an VIA annotation file
 <code>annotations_file</code>: the path to the annotation file to read
@@ -132,7 +132,7 @@ return: the annotations</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="create_annotation_id" class="doc_header"><code>create_annotation_id</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L56" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_annotation_id</code>(<strong><code>file_path</code></strong>)</p>
+<h4 id="create_annotation_id" class="doc_header"><code>create_annotation_id</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L57" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_annotation_id</code>(<strong><code>file_path</code></strong>)</p>
 </blockquote>
 <p>Creates a VIA annotation ID
 <code>file_path</code>: the file_path to create the ID from
@@ -166,7 +166,7 @@ return: the ID if file exist, else None</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_annotation_for_file" class="doc_header"><code>get_annotation_for_file</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L72" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_annotation_for_file</code>(<strong><code>annotations</code></strong>, <strong><code>file_path</code></strong>)</p>
+<h4 id="get_annotation_for_file" class="doc_header"><code>get_annotation_for_file</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L73" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_annotation_for_file</code>(<strong><code>annotations</code></strong>, <strong><code>file_path</code></strong>)</p>
 </blockquote>
 <p>Finds VIA annotation to a file_path
 <code>annotations</code>: the annotations to search in
@@ -201,7 +201,7 @@ return: the annotation if found, else None</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_regions" class="doc_header"><code>get_regions</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L85" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_regions</code>(<strong><code>annotation</code></strong>)</p>
+<h4 id="get_regions" class="doc_header"><code>get_regions</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L86" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_regions</code>(<strong><code>annotation</code></strong>)</p>
 </blockquote>
 <p>Get the regions information from an annotation.
 <a href="/ML-Core-Docs/annotation"><code>annotation</code></a>: annotation to get the regions from
@@ -235,7 +235,41 @@ return: a dictionary of the annotation regions</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_region_attributes" class="doc_header"><code>get_region_attributes</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L96" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_region_attributes</code>(<strong><code>region</code></strong>)</p>
+<h4 id="set_regions" class="doc_header"><code>set_regions</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L97" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>set_regions</code>(<strong><code>annotation</code></strong>, <strong><code>regions</code></strong>)</p>
+</blockquote>
+<p>Set the regions information to an annotation.
+<a href="/ML-Core-Docs/annotation"><code>annotation</code></a>: annotation to set the regions
+<code>regions</code>: the regions to set</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="get_region_attributes" class="doc_header"><code>get_region_attributes</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L109" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_region_attributes</code>(<strong><code>region</code></strong>)</p>
 </blockquote>
 <p>Get the region attributes information from a region.
 <code>region</code>: region to get the shape attributes for
@@ -269,7 +303,7 @@ return: a dictionary of the region attributes or None if no region attributes ex
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_region_category" class="doc_header"><code>get_region_category</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L107" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_region_category</code>(<strong><code>region_attributes</code></strong>, <strong><code>key</code></strong>=<em><code>'category'</code></em>)</p>
+<h4 id="get_region_category" class="doc_header"><code>get_region_category</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L120" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_region_category</code>(<strong><code>region_attributes</code></strong>, <strong><code>key</code></strong>=<em><code>'category'</code></em>)</p>
 </blockquote>
 <p>Get the region category from a region attributes.
 <code>region_attributes</code>: region_attributes to get the category from
@@ -304,7 +338,7 @@ return: the region category if exist, else none</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_shape_attributes" class="doc_header"><code>get_shape_attributes</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L119" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_shape_attributes</code>(<strong><code>region</code></strong>)</p>
+<h4 id="get_shape_attributes" class="doc_header"><code>get_shape_attributes</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L132" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_shape_attributes</code>(<strong><code>region</code></strong>)</p>
 </blockquote>
 <p>Get the shape attributes information from a region.
 <code>region</code>: region to get the shape attributes for
@@ -338,7 +372,7 @@ return: a dictionary of the shape attributes or None if no shape attributes exis
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_shape_type" class="doc_header"><code>get_shape_type</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L130" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_shape_type</code>(<strong><code>shape_attributes</code></strong>)</p>
+<h4 id="get_shape_type" class="doc_header"><code>get_shape_type</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L143" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_shape_type</code>(<strong><code>shape_attributes</code></strong>)</p>
 </blockquote>
 <p>Get the shape type from shape attributes.
 <code>shape_attributes</code>: shape_attributes to get the shape type for
@@ -372,11 +406,114 @@ return: The supported shape type if exist, else None</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_points" class="doc_header"><code>get_points</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L147" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_points</code>(<strong><code>shape_attributes</code></strong>)</p>
+<h4 id="get_points" class="doc_header"><code>get_points</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L160" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_points</code>(<strong><code>shape_attributes</code></strong>)</p>
 </blockquote>
 <p>Get the points of a shape.
-<code>shape_attributes</code>: shape_attributes to get the shape type for
+<code>shape_attributes</code>: shape_attributes to get the points for
 return: a tuple of arrays of x-points and y-points</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="set_points" class="doc_header"><code>set_points</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L184" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>set_points</code>(<strong><code>shape_attributes</code></strong>, <strong><code>x_points</code></strong>, <strong><code>y_points</code></strong>)</p>
+</blockquote>
+<p>Set the points of a shape.
+<code>shape_attributes</code>: shape_attributes to set the points
+<code>x-points</code>: the x_points to set
+<code>y-points</code>: the y_points to set</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="convert_region_rect_to_polygon" class="doc_header"><code>convert_region_rect_to_polygon</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L204" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>convert_region_rect_to_polygon</code>(<strong><code>region</code></strong>)</p>
+</blockquote>
+<p>Converts a region from rectangle to polygon.
+<code>region</code>: region to convert
+return: the converted region</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="convert_region_polygon_to_rect" class="doc_header"><code>convert_region_polygon_to_rect</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L228" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>convert_region_polygon_to_rect</code>(<strong><code>region</code></strong>)</p>
+</blockquote>
+<p>Converts a region from polygon to rectangle.
+<code>region</code>: region to convert
+return: the converted region</p>
 
 </div>
 
@@ -412,7 +549,7 @@ return: a tuple of arrays of x-points and y-points</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L171" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via.py#L254" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 <p>:param logging_level: The logging level to use.</p>

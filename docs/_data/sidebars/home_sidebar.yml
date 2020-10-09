@@ -22,6 +22,9 @@ entries:
       title: Data-Set
       url: /dataset
     - output: web,pdf
+      title: Evaluation Core functions
+      url: /evaluation-core
+    - output: web,pdf
       title: Color Palettes
       url: /image-color_palette
     - output: web,pdf
@@ -54,9 +57,6 @@ entries:
     - output: web,pdf
       title: VIA Annotation Viewer
       url: /via-annotation_viewer
-    - output: web,pdf
-      title: VIA Annotation Tool Converter
-      url: /via-converter
     output: web
     title: mlcore
   output: web

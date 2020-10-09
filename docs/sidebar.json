@@ -5,6 +5,7 @@
     "Category File Tools": "/category_tools",
     "Core classes and functions": "/core",
     "Data-Set": "/dataset",
+    "Evaluation Core functions": "/evaluation-core",
     "Color Palettes": "/image-color_palette",
     "Title": "/image-inference",
     "Image Tools for OpenCV": "/image-opencv_tools",
@@ -15,7 +16,6 @@
     "Double File Checker": "/tools-check_double_images",
     "File Downloader": "/tools-downloader",
     "Image Size Calculator": "/tools-image_size_calculator",
-    "VIA Annotation Viewer": "/via-annotation_viewer",
-    "VIA Annotation Tool Converter": "/via-converter"
+    "VIA Annotation Viewer": "/via-annotation_viewer"
   }
 }
