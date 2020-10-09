@@ -37,6 +37,9 @@ entries:
       title: Image Tools for Pillow
       url: /image-pillow_tools
     - output: web,pdf
+      title: Image Tools
+      url: /image-tools
+    - output: web,pdf
       title: IO Core functions
       url: /io-core
     - output: web,pdf

@@ -678,6 +678,7 @@ class ObjectDetectionDataSet(DataSet):
                         y_min = shape_attributes['y']
                         y_max = shape_attributes['y'] + shape_attributes['height']
 
+
                         width_condition = step['condition'](x_min, x_max, image_width)
                         height_condition = step['condition'](y_min, y_max, image_height)
                         if width_condition or height_condition:
@@ -1001,7 +1002,8 @@ def configure_logging(logging_level=logging.INFO):
 
 
 def build_data_set(category_file_path, output, annotation_file_path=None, split=DEFAULT_SPLIT, seed=None, sample=0,
-                   data_set_type=None, create_tfrecord=False, iou_join_thresh=None, data_set_name=None):
+                   data_set_type=None, image_width=None, image_height=None, create_tfrecord=False, iou_join_thresh=None,
+                   data_set_name=None):
     """
     Build the data-set for training, Validation and test
     `category_file_path`: the filename of the categories file
@@ -1011,6 +1013,8 @@ def build_data_set(category_file_path, output, annotation_file_path=None, split=
     `seed`: random seed to reproduce splits
     `sample`: the size of the sample set as percentage
     `data_set_type`: the type of the data-set, if not set infer from the category file path
+    `image_width`: The image-width used for training to validate the annotations against.
+    `image_height`: The image-height used for training to validate the annotations against.
     `create_tfrecord`: Also create .tfrecord files.
     `iou-join-thresh`: The IoU threshold from where overlapping annotations gets joined.
     `data_set_name`: the name of the data-set, if not set infer from the category file path
@@ -1102,6 +1106,14 @@ if __name__ == '__main__' and '__file__' in globals():
                         help="The type of the data-set, if not explicitly set try to infer from categories file path.",
                         choices=list(Type),
                         type=Type,
+                        default=None)
+    parser.add_argument("--image-width",
+                        help="The image-width used for training to validate the annotations against.",
+                        type=int,
+                        default=None)
+    parser.add_argument("--image-height",
+                        help="The image-height used for training to validate the annotations against.",
+                        type=int,
                         default=None)
     parser.add_argument("--tfrecord",
                         help="Also create .tfrecord files.",

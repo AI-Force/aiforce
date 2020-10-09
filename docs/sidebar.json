@@ -10,6 +10,7 @@
     "Title": "/image-inference",
     "Image Tools for OpenCV": "/image-opencv_tools",
     "Image Tools for Pillow": "/image-pillow_tools",
+    "Image Tools": "/image-tools",
     "IO Core functions": "/io-core",
     "Tensorflow Lite Model Converter": "/tensorflow-tflite_converter",
     "Tensorflow TFRecord Builder": "/tensorflow-tfrecord_builder",
