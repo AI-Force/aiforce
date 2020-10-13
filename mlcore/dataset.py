@@ -16,7 +16,7 @@ import sys
 import csv
 import argparse
 import logging
-from os.path import join, isdir, dirname, normpath, basename, sep, splitext, split
+from os.path import join, isdir, isfile, dirname, normpath, basename, sep, splitext, split
 from PIL import Image as PILImage
 from functools import partial
 from datetime import datetime
@@ -25,7 +25,7 @@ from .core import Type, infer_type
 from .io.core import create_folder, scan_files
 from .annotation.via import Shape, read_annotations, get_regions, set_regions, get_region_attributes, get_region_category, get_shape_attributes, get_points, set_points, get_shape_type, convert_region_polygon_to_rect, convert_region_rect_to_polygon
 from .tensorflow.tfrecord_builder import create_tfrecord_file, create_labelmap_file
-from .evaluation.core import intersection_over_union
+from .evaluation.core import box_area, intersection_box, union_box
 from .category_tools import read_categories
 
 # Cell
@@ -399,16 +399,18 @@ class ObjectDetectionDataSet(DataSet):
     `data_set_type`: The type of the data-set.
     `annotations_path`: The path to the annotations-file.
     `create_tfrecord`: Also create .tfrecord files.
-    `iou-join-thresh`: The IoU threshold from where overlapping annotations gets joined.
+    `join_overlapping_annotations`: Whether overlapping bounding boxes of same category should be joined.
+    `annotation_area_threshold`: Keep only annotations with minimum size (width or height) related to image size
     """
 
     def __init__(self, name, base_path, image_set_path, categories_path, data_set_type, annotations_path=None,
-                 create_tfrecord=False, iou_join_thresh=None):
+                 create_tfrecord=False, join_overlapping_annotations=False, annotation_area_threshold=None):
         super().__init__(name, base_path, image_set_path, categories_path, data_set_type)
         self.annotations_path = annotations_path
         self.annotations = read_annotations(annotations_path) if annotations_path else {}
         self.create_tfrecord = create_tfrecord
-        self.iou_join_thresh = iou_join_thresh
+        self.join_overlapping_annotations = join_overlapping_annotations
+        self.annotation_area_threshold = annotation_area_threshold
 
     def validate(self):
         """
@@ -488,8 +490,8 @@ class ObjectDetectionDataSet(DataSet):
         shutil.copy2(self.categories_path, join(self.folder, DEFAULT_CATEGORIES_FILE))
 
         # if create tfrecord, create a labelmap.pbtxt file containing the categories
+        labelmap_file_name = 'label_map.pbtxt'
         if self.create_tfrecord:
-            labelmap_file_name = 'label_map.pbtxt'
             labelmap_output_file = join(self.folder, labelmap_file_name)
             self.logger.info('Generate file {} to {}'.format(labelmap_file_name, self.folder))
             create_labelmap_file(labelmap_output_file, self.categories[1:], 1)
@@ -623,6 +625,7 @@ class ObjectDetectionDataSet(DataSet):
 
         # only the trainval images have annotation, not the test images
         content_folder = join(self.image_set_path, IMAGES_TRAIN_VAL_FOLDER)
+        area_threshold = self.annotation_area_threshold
 
         steps = [
             {
@@ -650,6 +653,19 @@ class ObjectDetectionDataSet(DataSet):
                 'condition': lambda p_min, p_max, _: p_max - p_min <= 1,
                 'message': '{} -> {} : {}Shape {} is <= 1 pixel. \n Box \n x: {} \n y: {} \n x_max: {} \n y_max: {}',
                 'transform': lambda p, size=0: p,
+            },
+            {
+                'name': 'area',
+                'choices': {
+                    's': 'Skip',  # just delete the annotation
+                    'S': 'Skip All',
+                    'k': 'Keep',  # transform the annotation (in this case do nothing)
+                    'K': 'Keep All',
+                },
+                'choice': None,
+                'condition': lambda p_min, p_max, size: area_threshold and (p_max - p_min) / size <= area_threshold,
+                'message': '{} <= {} percent. {}'.format('{} -> {} : {}Shape {} is', (area_threshold or 0) * 100, ' \n Box \n x: {} \n y: {} \n x_max: {} \n y_max: {}'),
+                'transform': lambda p, size=0: p,
             }
         ]
 
@@ -662,23 +678,40 @@ class ObjectDetectionDataSet(DataSet):
             if not regions:
                 continue
 
-            with PILImage.open(join(content_folder, file_name)) as image:
-                image_width, image_height = image.size
+            # convert from polygon to rect if needed
+            for region in regions.values():
+                convert_region_polygon_to_rect(region)
+            set_regions(annotation, regions)
 
+            # try to join regions
+            if self.join_overlapping_annotations:
+                regions = self.join_regions(regions)
+                set_regions(annotation, regions)
+
+            file_path = join(content_folder, file_name)
+            if not isfile(file_path):
+                continue
+
+            with PILImage.open(file_path) as image:
+                image_width, image_height = image.size
                 delete_regions = {}
                 for region_index, region in regions.items():
-                    # convert from polygon to rect if needed
-                    region = convert_region_polygon_to_rect(region)
                     shape_attributes = region['shape_attributes']
+                    # validate the shape size
+                    x_min = shape_attributes['x']
+                    x_max = shape_attributes['x'] + shape_attributes['width']
+                    y_min = shape_attributes['y']
+                    y_max = shape_attributes['y'] + shape_attributes['height']
+#                     shape_area = box_area(((x_min, x_max), (y_min, y_max)))
+#                     if self.skip_annotation_size is not None and shape_area / image_area <= self.skip_annotation_size:
+#                         delete_regions[region_index] = True
+#                         message = '{} -> {} : Skip Shape size {} <= {} percent. \n Box \n x: {} \n y: {} \n x_max: {} \n y_max: {}'
+#                         message = message.format(annotation_index, region_index,
+#                                                  shape_area, self.skip_annotation_size,
+#                                                  x_min, y_min, x_max, y_max)
 
+#                     else:
                     for step in steps:
-                        # validate the shape size
-                        x_min = shape_attributes['x']
-                        x_max = shape_attributes['x'] + shape_attributes['width']
-                        y_min = shape_attributes['y']
-                        y_max = shape_attributes['y'] + shape_attributes['height']
-
-
                         width_condition = step['condition'](x_min, x_max, image_width)
                         height_condition = step['condition'](y_min, y_max, image_height)
                         if width_condition or height_condition:
@@ -719,18 +752,16 @@ class ObjectDetectionDataSet(DataSet):
                 for region_index in delete_regions.keys():
                     del regions[region_index]
 
-                # if an IoU threshold is set, try to join regions
-                if self.iou_join_thresh is not None:
-                    set_regions(annotation, self.join_regions(regions))
         self.logger.info('Finished convert image annotations from {}'.format(self.annotations_path))
 
     def join_regions(self, regions):
         """
-        Join regions which exceed the overlapping theshold `iou_join_thresh`.
+        Join regions which overlaps.
         `regions`: the regions to analyze to join
         return: the joined regions
         """
         region_values = list(regions.values())
+        len_before = len(region_values)
         index_left = 0
         while index_left < len(region_values):
             regions_joined = []
@@ -738,7 +769,9 @@ class ObjectDetectionDataSet(DataSet):
             region_left_category = get_region_category(get_region_attributes(region_left), CATEGORY_LABEL_KEY)
             region_left_shape_attributes = get_shape_attributes(region_left)
             region_left_shape_type = get_shape_type(region_left_shape_attributes)
-            for index_right in range(len(region_values))[index_left+1:]:
+            for index_right in range(len(region_values)):
+                if index_left == index_right:
+                    continue
                 region_right = region_values[index_right]
                 region_right_category = get_region_category(get_region_attributes(region_right), CATEGORY_LABEL_KEY)
                 region_right_shape_attributes = get_shape_attributes(region_right)
@@ -746,18 +779,16 @@ class ObjectDetectionDataSet(DataSet):
                 if region_left_category == region_right_category and region_left_shape_type == Shape.RECTANGLE and region_left_shape_type == region_right_shape_type:
                     left_points = get_points(region_left_shape_attributes)
                     right_points = get_points(region_right_shape_attributes)
-                    iou = intersection_over_union(left_points, right_points)
-                    if iou >= self.iou_join_thresh:
-                        x_points = left_points[0] + right_points[0]
-                        y_points = left_points[1] + right_points[1]
-                        x_points = (min(x_points), max(x_points))
-                        y_points = (min(y_points), max(y_points))
+                    inter_area = box_area(intersection_box(left_points, right_points))
+                    if inter_area > 0:
+                        x_points, y_points = union_box(left_points, right_points)
                         set_points(region_left_shape_attributes, x_points, y_points)
                         regions_joined.append(index_right)
             for index in regions_joined[::-1]:
                 del region_values[index]
             if not regions_joined:
                 index_left += 1
+        self.logger.info('Joined overlapping annotations from {} -> {} regions'.format(len_before, len(region_values)))
         return {str(k): v for k, v in enumerate(region_values)}
 
 # Cell
@@ -1002,8 +1033,8 @@ def configure_logging(logging_level=logging.INFO):
 
 
 def build_data_set(category_file_path, output, annotation_file_path=None, split=DEFAULT_SPLIT, seed=None, sample=0,
-                   data_set_type=None, create_tfrecord=False, iou_join_thresh=None,
-                   data_set_name=None):
+                   data_set_type=None, create_tfrecord=False, join_overlapping_annotations=False,
+                   annotation_area_threshold=None, data_set_name=None):
     """
     Build the data-set for training, Validation and test
     `category_file_path`: the filename of the categories file
@@ -1014,7 +1045,8 @@ def build_data_set(category_file_path, output, annotation_file_path=None, split=
     `sample`: the size of the sample set as percentage
     `data_set_type`: the type of the data-set, if not set infer from the category file path
     `create_tfrecord`: Also create .tfrecord files.
-    `iou-join-thresh`: The IoU threshold from where overlapping annotations gets joined.
+    `join_overlapping_annotations`: Whether overlapping bounding boxes of same category should be joined.
+    `annotation_area_threshold`: Keep only annotations with minimum size (width or height) related to image size
     `data_set_name`: the name of the data-set, if not set infer from the category file path
     """
     log_memory_handler = configure_logging()
@@ -1043,6 +1075,8 @@ def build_data_set(category_file_path, output, annotation_file_path=None, split=
     logger.info('sample: {}'.format(sample))
     logger.info('type: {}'.format(data_set_type))
     logger.info('output: {}'.format(output))
+    logger.info('join_overlapping_annotations: {}'.format(join_overlapping_annotations))
+    logger.info('annotation_area_threshold: {}'.format(annotation_area_threshold))
     logger.info('name: {}'.format(data_set_name))
 
     data_set = None
@@ -1056,7 +1090,8 @@ def build_data_set(category_file_path, output, annotation_file_path=None, split=
                                        annotation_file_path)
     elif data_set_type == Type.IMAGE_OBJECT_DETECTION:
         data_set = ObjectDetectionDataSet(data_set_name, output, path, category_file_path, data_set_type,
-                                          annotation_file_path, create_tfrecord, iou_join_thresh)
+                                          annotation_file_path, create_tfrecord, join_overlapping_annotations,
+                                          annotation_area_threshold)
 
     if data_set:
         # create the data set folders
@@ -1108,8 +1143,11 @@ if __name__ == '__main__' and '__file__' in globals():
     parser.add_argument("--tfrecord",
                         help="Also create .tfrecord files.",
                         action="store_true")
-    parser.add_argument("--iou-join-thresh",
-                        help="The IoU threshold from where overlapping annotations gets joined.",
+    parser.add_argument("--join-overlapping-annotations",
+                        help="Whether overlapping bounding boxes of same category should be joined.",
+                        action="store_true")
+    parser.add_argument("--annotation-area-thresh",
+                        help="Keep only annotations with minimum size (width or height) related to image size.",
                         type=float,
                         default=None)
     parser.add_argument("--output",
@@ -1123,4 +1161,4 @@ if __name__ == '__main__' and '__file__' in globals():
     CATEGORY_LABEL_KEY = args.category_label_key
 
     build_data_set(args.categories, args.output, args.annotation, args.split, args.seed, args.sample, args.type,
-                   args.tfrecord, args.iou_join_thresh, args.name)
+                   args.tfrecord, args.join_overlapping_annotations, args.annotation_area_thresh, args.name)
