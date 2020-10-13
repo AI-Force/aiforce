@@ -4,7 +4,7 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"DEFAULT_ANNOTATIONS_FILE": "annotation-via.ipynb",
          "DEFAULT_CATEGORY_LABEL_KEY": "annotation-via.ipynb",
-         "logger": "via-annotation_viewer.ipynb",
+         "logger": "tools-image_size_calculator.ipynb",
          "Shape": "annotation-via.ipynb",
          "read_annotations": "annotation-via.ipynb",
          "create_annotation_id": "annotation-via.ipynb",
@@ -19,7 +19,8 @@ index = {"DEFAULT_ANNOTATIONS_FILE": "annotation-via.ipynb",
          "set_points": "annotation-via.ipynb",
          "convert_region_rect_to_polygon": "annotation-via.ipynb",
          "convert_region_polygon_to_rect": "annotation-via.ipynb",
-         "configure_logging": "via-annotation_viewer.ipynb",
+         "configure_logging": "tools-image_size_calculator.ipynb",
+         "show_annotated_images": "annotation-viewer.ipynb",
          "DEFAULT_CATEGORIES_FILE": "dataset.ipynb",
          "NOT_CATEGORIZED": "dataset.ipynb",
          "BACKGROUND_CLASS": "category_tools.ipynb",
@@ -91,10 +92,10 @@ index = {"DEFAULT_ANNOTATIONS_FILE": "annotation-via.ipynb",
          "Downloader": "tools-downloader.ipynb",
          "SaveToDirectory": "tools-downloader.ipynb",
          "IMAGE_EXTENSIONS": "tools-image_size_calculator.ipynb",
-         "ImageSizeCalculator": "tools-image_size_calculator.ipynb",
-         "show_annotated_images": "via-annotation_viewer.ipynb"}
+         "ImageSizeCalculator": "tools-image_size_calculator.ipynb"}
 
 modules = ["annotation/via.py",
+           "annotation/viewer.py",
            "category_tools.py",
            "core.py",
            "dataset.py",
@@ -109,8 +110,7 @@ modules = ["annotation/via.py",
            "tensorflow/tfrecord_builder.py",
            "tools/check_double_images.py",
            "tools/downloader.py",
-           "tools/image_size_calculator.py",
-           "annotation/viewer.py"]
+           "tools/image_size_calculator.py"]
 
 doc_url = "https://ai-force.github.io/ML-Core-Docs/"
 

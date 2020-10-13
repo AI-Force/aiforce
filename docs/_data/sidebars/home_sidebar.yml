@@ -11,55 +11,55 @@ entries:
       url: /
     - output: web,pdf
       title: VIA Annotation Tools
-      url: /annotation-via
-    - output: web,pdf
-      title: Category File Tools
-      url: /category_tools
-    - output: web,pdf
-      title: Core classes and functions
-      url: /core
-    - output: web,pdf
-      title: Data-Set
-      url: /dataset
-    - output: web,pdf
-      title: Evaluation Core functions
-      url: /evaluation-core
-    - output: web,pdf
-      title: Color Palettes
-      url: /image-color_palette
-    - output: web,pdf
-      title: Title
-      url: /image-inference
-    - output: web,pdf
-      title: Image Tools for OpenCV
-      url: /image-opencv_tools
-    - output: web,pdf
-      title: Image Tools for Pillow
-      url: /image-pillow_tools
-    - output: web,pdf
-      title: Image Tools
-      url: /image-tools
-    - output: web,pdf
-      title: IO Core functions
-      url: /io-core
-    - output: web,pdf
-      title: Tensorflow Lite Model Converter
-      url: /tensorflow-tflite_converter
-    - output: web,pdf
-      title: Tensorflow TFRecord Builder
-      url: /tensorflow-tfrecord_builder
-    - output: web,pdf
-      title: Double File Checker
-      url: /tools-check_double_images
-    - output: web,pdf
-      title: File Downloader
-      url: /tools-downloader
-    - output: web,pdf
-      title: Image Size Calculator
-      url: /tools-image_size_calculator
+      url: annotation-via.html
     - output: web,pdf
       title: VIA Annotation Viewer
-      url: /via-annotation_viewer
+      url: annotation-viewer.html
+    - output: web,pdf
+      title: Category File Tools
+      url: category_tools.html
+    - output: web,pdf
+      title: Core classes and functions
+      url: core.html
+    - output: web,pdf
+      title: Data-Set
+      url: dataset.html
+    - output: web,pdf
+      title: Evaluation Core functions
+      url: evaluation-core.html
+    - output: web,pdf
+      title: Color Palettes
+      url: image-color_palette.html
+    - output: web,pdf
+      title: Title
+      url: image-inference.html
+    - output: web,pdf
+      title: Image Tools for OpenCV
+      url: image-opencv_tools.html
+    - output: web,pdf
+      title: Image Tools for Pillow
+      url: image-pillow_tools.html
+    - output: web,pdf
+      title: Image Tools
+      url: image-tools.html
+    - output: web,pdf
+      title: IO Core functions
+      url: io-core.html
+    - output: web,pdf
+      title: Tensorflow Lite Model Converter
+      url: tensorflow-tflite_converter.html
+    - output: web,pdf
+      title: Tensorflow TFRecord Builder
+      url: tensorflow-tfrecord_builder.html
+    - output: web,pdf
+      title: Double File Checker
+      url: tools-check_double_images.html
+    - output: web,pdf
+      title: File Downloader
+      url: tools-downloader.html
+    - output: web,pdf
+      title: Image Size Calculator
+      url: tools-image_size_calculator.html
     output: web
     title: mlcore
   output: web
