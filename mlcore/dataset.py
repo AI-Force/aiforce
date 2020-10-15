@@ -5,7 +5,7 @@ __all__ = ['CATEGORY_LABEL_KEY', 'IMAGE_SET_FOLDER', 'DEFAULT_CATEGORIES_FILE',
            'DATA_SET_FOLDER', 'SEMANTIC_MASK_FOLDER', 'IMAGES_TRAIN_VAL_FOLDER', 'IMAGES_TEST_FOLDER',
            'DATA_SET_TRAIN_FOLDER', 'DATA_SET_VAL_FOLDER', 'DATA_SET_TEST_FOLDER', 'NOT_CATEGORIZED', 'logger',
            'DataSet', 'ClassificationDataSet', 'ObjectDetectionDataSet', 'SegmentationDataSet', 'split_train_val_data',
-           'input_feedback', 'configure_logging', 'build_data_set']
+           'copy_image_and_assign_orientation', 'input_feedback', 'configure_logging', 'build_data_set']
 
 # Cell
 
@@ -22,6 +22,7 @@ from functools import partial
 from datetime import datetime
 from logging.handlers import MemoryHandler
 from .core import Type, infer_type
+from .image.pillow_tools import assign_exif_orientation, write_exif_metadata
 from .io.core import create_folder, scan_files
 from .annotation.via import Shape, read_annotations, get_regions, set_regions, get_region_attributes, get_region_category, get_shape_attributes, get_points, set_points, get_shape_type, convert_region_polygon_to_rect, convert_region_rect_to_polygon
 from .tensorflow.tfrecord_builder import create_tfrecord_file, create_labelmap_file
@@ -257,7 +258,8 @@ class ClassificationDataSet(DataSet):
             target_folder = join(self.train_folder, sub_folder)
             if sub_folder:
                 create_folder(target_folder)
-            shutil.copy2(join(train_val_image_folder, filename + ".jpg"), target_folder)
+            copy_image_and_assign_orientation(train_val_image_folder, filename + ".jpg", target_folder)
+
             self.logger.info('Copied {}'.format(join(self.train_folder, filename + ".jpg")))
             annotation = [join(train_folder_name, filename)] + self.annotations[index][1:] + [False]
             annotations.append(annotation)
@@ -269,7 +271,8 @@ class ClassificationDataSet(DataSet):
             target_folder = join(self.val_folder, sub_folder)
             if sub_folder:
                 create_folder(target_folder)
-            shutil.copy2(join(train_val_image_folder, filename + ".jpg"), target_folder)
+            copy_image_and_assign_orientation(train_val_image_folder, filename + ".jpg", target_folder)
+
             self.logger.info('Copied {}'.format(join(self.val_folder, filename + ".jpg")))
             annotation = [join(val_folder_name, filename)] + self.annotations[index][1:] + [True]
             annotations.append(annotation)
@@ -284,7 +287,7 @@ class ClassificationDataSet(DataSet):
         # copy test_files, if exist
         if test_files:
             for filename in test_files:
-                shutil.copy2(join(test_image_folder, filename), self.test_folder)
+                copy_image_and_assign_orientation(test_image_folder, filename, self.test_folder)
                 self.logger.info('Copied {}'.format(join(self.test_folder, filename)))
 
     def build(self, split=DEFAULT_SPLIT, seed=None, sample=None):
@@ -505,7 +508,9 @@ class ObjectDetectionDataSet(DataSet):
         for key in train_files:
             # copy image
             annotation = self.annotations[key]
-            shutil.copy2(join(train_val_image_folder, annotation['filename']), self.train_folder)
+            file_name = annotation['filename']
+            copy_image_and_assign_orientation(train_val_image_folder, file_name, self.train_folder)
+
             # add annotation
             annotations_train[key] = annotation
         self.logger.info('Finished copy {} files to {}'.format(num_files, self.train_folder))
@@ -516,7 +521,9 @@ class ObjectDetectionDataSet(DataSet):
         for key in val_files:
             # copy image
             annotation = self.annotations[key]
-            shutil.copy2(join(train_val_image_folder, annotation['filename']), self.val_folder)
+            file_name = annotation['filename']
+            copy_image_and_assign_orientation(train_val_image_folder, file_name, self.val_folder)
+
             # add annotation
             annotations_val[key] = annotation
 
@@ -554,8 +561,8 @@ class ObjectDetectionDataSet(DataSet):
             num_files = len(test_files)
             self.logger.info('Start copy {} files to {}'.format(num_files, self.test_folder))
 
-            for filename in test_files:
-                shutil.copy2(join(test_image_folder, filename), self.test_folder)
+            for file_name in test_files:
+                copy_image_and_assign_orientation(test_image_folder, file_name, self.test_folder)
 
             self.logger.info('Finished copy {} files to {}'.format(num_files, self.test_folder))
 
@@ -692,16 +699,16 @@ class ObjectDetectionDataSet(DataSet):
             if not isfile(file_path):
                 continue
 
-            with PILImage.open(file_path) as image:
-                image_width, image_height = image.size
-                delete_regions = {}
-                for region_index, region in regions.items():
-                    shape_attributes = region['shape_attributes']
-                    # validate the shape size
-                    x_min = shape_attributes['x']
-                    x_max = shape_attributes['x'] + shape_attributes['width']
-                    y_min = shape_attributes['y']
-                    y_max = shape_attributes['y'] + shape_attributes['height']
+            image, _, __ = assign_exif_orientation(file_path)
+            image_width, image_height = image.size
+            delete_regions = {}
+            for region_index, region in regions.items():
+                shape_attributes = region['shape_attributes']
+                # validate the shape size
+                x_min = shape_attributes['x']
+                x_max = shape_attributes['x'] + shape_attributes['width']
+                y_min = shape_attributes['y']
+                y_max = shape_attributes['y'] + shape_attributes['height']
 #                     shape_area = box_area(((x_min, x_max), (y_min, y_max)))
 #                     if self.skip_annotation_size is not None and shape_area / image_area <= self.skip_annotation_size:
 #                         delete_regions[region_index] = True
@@ -711,42 +718,42 @@ class ObjectDetectionDataSet(DataSet):
 #                                                  x_min, y_min, x_max, y_max)
 
 #                     else:
-                    for step in steps:
-                        width_condition = step['condition'](x_min, x_max, image_width)
-                        height_condition = step['condition'](y_min, y_max, image_height)
-                        if width_condition or height_condition:
-                            size_message = ['width'] if width_condition else []
-                            size_message.extend(['height'] if height_condition else [])
-                            message = step['message'].format(annotation_index, region_index, ' ',
+                for step in steps:
+                    width_condition = step['condition'](x_min, x_max, image_width)
+                    height_condition = step['condition'](y_min, y_max, image_height)
+                    if width_condition or height_condition:
+                        size_message = ['width'] if width_condition else []
+                        size_message.extend(['height'] if height_condition else [])
+                        message = step['message'].format(annotation_index, region_index, ' ',
+                                                         ' and '.join(size_message),
+                                                         x_min, y_min, x_max, y_max)
+
+                        step['choice'] = input_feedback(message, step['choice'], step['choices'])
+
+                        choice_op = step['choice'].lower()
+                        # if skip the shapes
+                        if choice_op == 's':
+                            delete_regions[region_index] = True
+                            message = step['message'].format(annotation_index, region_index,
+                                                             '{} '.format(step['choices'][choice_op]),
                                                              ' and '.join(size_message),
                                                              x_min, y_min, x_max, y_max)
+                            self.logger.info(message)
 
-                            step['choice'] = input_feedback(message, step['choice'], step['choices'])
+                            break
+                        else:
+                            x_min, x_max = tuple(map(partial(step['transform'], size=image_width), [x_min, x_max]))
+                            y_min, y_max = tuple(map(partial(step['transform'], size=image_height), [y_min, y_max]))
+                            shape_attributes['x'] = x_min
+                            shape_attributes['width'] = x_max - x_min
+                            shape_attributes['y'] = y_min
+                            shape_attributes['height'] = y_max - y_min
 
-                            choice_op = step['choice'].lower()
-                            # if skip the shapes
-                            if choice_op == 's':
-                                delete_regions[region_index] = True
-                                message = step['message'].format(annotation_index, region_index,
-                                                                 '{} '.format(step['choices'][choice_op]),
-                                                                 ' and '.join(size_message),
-                                                                 x_min, y_min, x_max, y_max)
-                                self.logger.info(message)
-
-                                break
-                            else:
-                                x_min, x_max = tuple(map(partial(step['transform'], size=image_width), [x_min, x_max]))
-                                y_min, y_max = tuple(map(partial(step['transform'], size=image_height), [y_min, y_max]))
-                                shape_attributes['x'] = x_min
-                                shape_attributes['width'] = x_max - x_min
-                                shape_attributes['y'] = y_min
-                                shape_attributes['height'] = y_max - y_min
-
-                                message = step['message'].format(annotation_index, region_index,
-                                                                 '{} '.format(step['choices'][choice_op]),
-                                                                 ' and '.join(size_message),
-                                                                 x_min, y_min, x_max, y_max)
-                                self.logger.info(message)
+                            message = step['message'].format(annotation_index, region_index,
+                                                             '{} '.format(step['choices'][choice_op]),
+                                                             ' and '.join(size_message),
+                                                             x_min, y_min, x_max, y_max)
+                            self.logger.info(message)
 
                 # delete regions after iteration is finished
                 for region_index in delete_regions.keys():
@@ -868,60 +875,60 @@ class SegmentationDataSet(ObjectDetectionDataSet):
             if not regions:
                 continue
 
-            with PILImage.open(join(content_folder, file_name)) as image:
-                image_width, image_height = image.size
+            image, _, __ = assign_exif_orientation(join(content_folder, file_name))
+            image_width, image_height = image.size
 
-                delete_regions = {}
-                for region_index, region in regions.items():
-                    # convert from rect to polygon if needed
-                    region = convert_region_rect_to_polygon(region)
-                    shape_attributes = region['shape_attributes']
+            delete_regions = {}
+            for region_index, region in regions.items():
+                # convert from rect to polygon if needed
+                region = convert_region_rect_to_polygon(region)
+                shape_attributes = region['shape_attributes']
 
-                    for step in steps:
-                        # validate the shape size
-                        x_min = min(shape_attributes['all_points_x'])
-                        x_max = max(shape_attributes['all_points_x'])
-                        y_min = min(shape_attributes['all_points_y'])
-                        y_max = max(shape_attributes['all_points_y'])
+                for step in steps:
+                    # validate the shape size
+                    x_min = min(shape_attributes['all_points_x'])
+                    x_max = max(shape_attributes['all_points_x'])
+                    y_min = min(shape_attributes['all_points_y'])
+                    y_max = max(shape_attributes['all_points_y'])
 
-                        width_condition = step['condition'](x_min, x_max, image_width)
-                        height_condition = step['condition'](y_min, y_max, image_height)
-                        if width_condition or height_condition:
-                            size_message = ['width'] if width_condition else []
-                            size_message.extend(['height'] if height_condition else [])
-                            message = step['message'].format(annotation_index, region_index, ' ',
+                    width_condition = step['condition'](x_min, x_max, image_width)
+                    height_condition = step['condition'](y_min, y_max, image_height)
+                    if width_condition or height_condition:
+                        size_message = ['width'] if width_condition else []
+                        size_message.extend(['height'] if height_condition else [])
+                        message = step['message'].format(annotation_index, region_index, ' ',
+                                                         ' and '.join(size_message),
+                                                         shape_attributes['all_points_x'],
+                                                         shape_attributes['all_points_y'])
+
+                        step['choice'] = input_feedback(message, step['choice'], step['choices'])
+
+                        choice_op = step['choice'].lower()
+                        # if skip the shapes
+                        if choice_op == 's':
+                            delete_regions[region_index] = True
+                            message = step['message'].format(annotation_index, region_index,
+                                                             '{} '.format(step['choices'][choice_op]),
                                                              ' and '.join(size_message),
                                                              shape_attributes['all_points_x'],
                                                              shape_attributes['all_points_y'])
+                            self.logger.info(message)
 
-                            step['choice'] = input_feedback(message, step['choice'], step['choices'])
+                            break
+                        else:
+                            shape_attributes['all_points_x'] = list(map(partial(step['transform'],
+                                                                                size=image_width),
+                                                                        shape_attributes['all_points_x']))
+                            shape_attributes['all_points_y'] = list(map(partial(step['transform'],
+                                                                                size=image_height),
+                                                                        shape_attributes['all_points_y']))
 
-                            choice_op = step['choice'].lower()
-                            # if skip the shapes
-                            if choice_op == 's':
-                                delete_regions[region_index] = True
-                                message = step['message'].format(annotation_index, region_index,
-                                                                 '{} '.format(step['choices'][choice_op]),
-                                                                 ' and '.join(size_message),
-                                                                 shape_attributes['all_points_x'],
-                                                                 shape_attributes['all_points_y'])
-                                self.logger.info(message)
-
-                                break
-                            else:
-                                shape_attributes['all_points_x'] = list(map(partial(step['transform'],
-                                                                                    size=image_width),
-                                                                            shape_attributes['all_points_x']))
-                                shape_attributes['all_points_y'] = list(map(partial(step['transform'],
-                                                                                    size=image_height),
-                                                                            shape_attributes['all_points_y']))
-
-                                message = step['message'].format(annotation_index, region_index,
-                                                                 '{} '.format(step['choices'][choice_op]),
-                                                                 ' and '.join(size_message),
-                                                                 shape_attributes['all_points_x'],
-                                                                 shape_attributes['all_points_y'])
-                                self.logger.info(message)
+                            message = step['message'].format(annotation_index, region_index,
+                                                             '{} '.format(step['choices'][choice_op]),
+                                                             ' and '.join(size_message),
+                                                             shape_attributes['all_points_x'],
+                                                             shape_attributes['all_points_y'])
+                            self.logger.info(message)
 
                 # delete regions after iteration is finished
                 for region_index in delete_regions.keys():
@@ -999,7 +1006,35 @@ def split_train_val_data(data, val_size=0.2, seed=None):
 # Cell
 
 
+def copy_image_and_assign_orientation(source_folder, file_name, target_folder):
+    """
+    Copy an image file from source to target and assign the EXIF metadata orientation.
+    `source_folder`: the source folder of the image file
+    `file_name`: the image file name to copy
+    `target_folder`: the target folder to copy the image file to
+    return: `True` if modified EXIF metadata could be saved, else `False`
+    """
+
+    shutil.copy2(join(source_folder, file_name), target_folder)
+
+    # rotate image by EXIF orientation metadata and remove them
+    target_file = join(target_folder, file_name)
+    image, exif_data, rotated = assign_exif_orientation(target_file)
+    if rotated:
+        write_exif_metadata(image, exif_data, target_file)
+
+# Cell
+
+
 def input_feedback(msg, choice, choices):
+    """
+    User input request wrapper.
+    `msg`: the message to dosplay
+    `choice`: if previous choice exist
+    `choices`: the possible choices
+    :return: the choice input
+    """
+
     # if decision is already made for all contents, skip feedback
     if not (choice and choice.isupper()):
         prompt = '{} \n choices: {} '.format(msg, ', '.join(['{} ({})'.format(k, v) for k, v in choices.items()]))

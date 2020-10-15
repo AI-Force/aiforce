@@ -119,7 +119,7 @@ def write_exif_metadata(image, exif_data, fname):
     `fname`: a file path to store the image
     :return: `True` if EXIF metadata saved, else `False`
     """
-    if image:
+    if image and exif_data:
         piexif.dump(exif_data)
         exif_bytes = piexif.dump(exif_data)
         image.save(fname, exif=exif_bytes)
@@ -134,9 +134,12 @@ def assign_exif_orientation(fname):
     Parses the EXIF orientation metadata from the image,
     rotate the image accordingly and remove the image EXIF orientation metadata.
     `fname`: the file path
-    :return: `True` if EXIF metadata saved, else `False`.
+    :return: The eventually rotated Pillow image, EXIF metadata with orientation information stripped
+    and `True` if image rotated, else `False`
     """
     image, exif_data = read_exif_metadata(fname)
+
+    orientation = ImageOrientation.TOP
 
     if exif_data and piexif.ImageIFD.Orientation in exif_data["0th"]:
         orientation = exif_data["0th"].pop(piexif.ImageIFD.Orientation)
@@ -144,7 +147,6 @@ def assign_exif_orientation(fname):
             orientation = ImageOrientation(orientation)
         except ValueError as e:
             logger.error(e)
-            orientation = ImageOrientation.TOP
 
         if orientation == ImageOrientation.TOP_FLIPPED:
             image = image.transpose(PILImage.FLIP_LEFT_RIGHT)
@@ -161,7 +163,9 @@ def assign_exif_orientation(fname):
         elif orientation == ImageOrientation.LEFT:
             image = image.rotate(90, expand=True)
 
-    return write_exif_metadata(image, exif_data, fname)
+    rotated = orientation != ImageOrientation.TOP
+
+    return image, exif_data, rotated
 
 # Cell
 
