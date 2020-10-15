@@ -9,6 +9,7 @@ dependencies:
   - flask
   - jupyter_conda
   - optuna
+  - piexif
   - pip
   - python=3.7
   - pytorch

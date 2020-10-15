@@ -14,7 +14,7 @@ def limit_to_max_size(img, max_size):
     if max size exceeded.
     `img`: The image to validate as OpenCV image.
     `max_size`: The max allowed image size.
-    :return: The eventually resized image.
+    :return: The eventually resized opencv image.
     """
     biggest_size = max(img.shape[:2])
     if max_size and biggest_size > max_size:
@@ -32,7 +32,7 @@ def fit_to_max_size(img, max_width, max_height):
     `img`: The image to validate as OpenCV Image.
     `max_width`: The max allowed image width.
     `max_height`: The max allowed image height.
-    :return: The eventually resized image.
+    :return: The eventually resized OpenCV image.
     """
     h, w = img.shape[:2]
     scale_delta = max(w - max_width, h - max_height)
@@ -48,8 +48,8 @@ def get_image_size(fname):
     """
     Calculates image size of a given image file.
     `fname`: the file path
-    return: the image width and height
+    return: the OpenCV image, image width and height
     """
     img = cv2.imread(fname)
     h, w = img.shape[:2]
-    return w, h
+    return img, w, h

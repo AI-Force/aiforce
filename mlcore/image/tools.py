@@ -13,8 +13,12 @@ class ImageOrientation(Enum):
     Image EXIF orientations.
     """
     TOP = 1
+    TOP_FLIPPED = 2
     BOTTOM = 3
+    BOTTOM_FLIPPED = 4
+    RIGHT_FLIPPED = 5
     RIGHT = 6
+    LEFT_FLIPPED = 7
     LEFT = 8
 
     def __str__(self):

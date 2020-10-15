@@ -38,7 +38,7 @@ def create_tfrecord_entry(source_path, categories, annotation):
     file_name = annotation['filename']
     with tf.io.gfile.GFile(join(source_path, file_name), 'rb') as fid:
         encoded_jpg = fid.read()
-    width, height = get_image_size(io.BytesIO(encoded_jpg))
+    _, width, height = get_image_size(io.BytesIO(encoded_jpg))
 
     file_name = file_name.encode('utf8')
     image_format = b'jpg'
