@@ -539,7 +539,7 @@ class ObjectDetectionDataSet(DataSet):
             if self.create_tfrecord:
                 tfrecord_file_name = '{}.record'.format(normpath(basename(self.train_folder)))
                 tfrecord_output_file = join(self.folder, tfrecord_file_name)
-                self.logger.info('Generate file {} to {}'.format(labelmap_file_name, self.folder))
+                self.logger.info('Generate file {} to {}'.format(tfrecord_file_name, self.folder))
                 create_tfrecord_file(tfrecord_output_file, self.train_folder, self.categories, annotations_train)
 
         # write the split val annotations
@@ -552,7 +552,7 @@ class ObjectDetectionDataSet(DataSet):
             if self.create_tfrecord:
                 tfrecord_file_name = '{}.record'.format(normpath(basename(self.val_folder)))
                 tfrecord_output_file = join(self.folder, tfrecord_file_name)
-                self.logger.info('Generate file {} to {}'.format(labelmap_file_name, self.folder))
+                self.logger.info('Generate file {} to {}'.format(tfrecord_file_name, self.folder))
                 create_tfrecord_file(tfrecord_output_file, self.val_folder, self.categories, annotations_val)
 
         # copy test_files, if exist
