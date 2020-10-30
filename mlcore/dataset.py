@@ -680,9 +680,11 @@ class ObjectDetectionDataSet(DataSet):
 
         for annotation_index, annotation in self.annotations.items():
             file_name = annotation['filename']
+            file_path = join(content_folder, file_name)
             regions = get_regions(annotation)
 
-            if not regions:
+            # skip file, if regions are empty or file do not exist
+            if not (regions and isfile(file_path)):
                 continue
 
             # convert from polygon to rect if needed
@@ -694,10 +696,6 @@ class ObjectDetectionDataSet(DataSet):
             if self.join_overlapping_annotations:
                 regions = self.join_regions(regions)
                 set_regions(annotation, regions)
-
-            file_path = join(content_folder, file_name)
-            if not isfile(file_path):
-                continue
 
             image, _, __ = assign_exif_orientation(file_path)
             image_width, image_height = image.size
@@ -870,9 +868,11 @@ class SegmentationDataSet(ObjectDetectionDataSet):
 
         for annotation_index, annotation in self.annotations.items():
             file_name = annotation['filename']
+            file_path = join(content_folder, file_name)
             regions = annotation['regions']
 
-            if not regions:
+            # skip file, if regions are empty or file do not exist
+            if not (regions and isfile(file_path)):
                 continue
 
             image, _, __ = assign_exif_orientation(join(content_folder, file_name))
