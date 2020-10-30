@@ -8,7 +8,7 @@
     "Data-Set": "dataset.html",
     "Evaluation Core functions": "evaluation-core.html",
     "Color Palettes": "image-color_palette.html",
-    "Title": "image-inference.html",
+    "Image Inference": "image-inference.html",
     "Image Tools for OpenCV": "image-opencv_tools.html",
     "Image Tools for Pillow": "image-pillow_tools.html",
     "Image Tools": "image-tools.html",

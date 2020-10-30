@@ -31,7 +31,7 @@ entries:
       title: Color Palettes
       url: image-color_palette.html
     - output: web,pdf
-      title: Title
+      title: Image Inference
       url: image-inference.html
     - output: web,pdf
       title: Image Tools for OpenCV
