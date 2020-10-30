@@ -755,9 +755,9 @@ class ObjectDetectionDataSet(DataSet):
                                                              x_min, y_min, x_max, y_max)
                             self.logger.info(message)
 
-                # delete regions after iteration is finished
-                for region_index in delete_regions.keys():
-                    del regions[region_index]
+            # delete regions after iteration is finished
+            for region_index in delete_regions.keys():
+                del regions[region_index]
 
         self.logger.info('Finished convert image annotations from {}'.format(self.annotations_path))
 
@@ -930,9 +930,9 @@ class SegmentationDataSet(ObjectDetectionDataSet):
                                                              shape_attributes['all_points_y'])
                             self.logger.info(message)
 
-                # delete regions after iteration is finished
-                for region_index in delete_regions.keys():
-                    del regions[region_index]
+            # delete regions after iteration is finished
+            for region_index in delete_regions.keys():
+                del regions[region_index]
 
         print('Finished convert image annotations from {}'.format(self.annotations_path))
 
