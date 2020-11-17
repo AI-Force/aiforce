@@ -49,6 +49,9 @@ entries:
       title: Tensorflow Lite Model Converter
       url: tensorflow-tflite_converter.html
     - output: web,pdf
+      title: Tensorflow Lite Metadata
+      url: tensorflow-tflite_metadata.html
+    - output: web,pdf
       title: Tensorflow TFRecord Builder
       url: tensorflow-tfrecord_builder.html
     - output: web,pdf

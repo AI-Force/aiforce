@@ -14,6 +14,7 @@
     "Image Tools": "image-tools.html",
     "IO Core functions": "io-core.html",
     "Tensorflow Lite Model Converter": "tensorflow-tflite_converter.html",
+    "Tensorflow Lite Metadata": "tensorflow-tflite_metadata.html",
     "Tensorflow TFRecord Builder": "tensorflow-tfrecord_builder.html",
     "Double File Checker": "tools-check_double_images.html",
     "File Downloader": "tools-downloader.html",
