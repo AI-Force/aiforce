@@ -10,7 +10,10 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: VIA Annotation Tools
+      title: Annotation
+      url: annotation-core.html
+    - output: web,pdf
+      title: VIA Annotation
       url: annotation-via.html
     - output: web,pdf
       title: VIA Annotation Viewer
@@ -27,6 +30,9 @@ entries:
     - output: web,pdf
       title: Evaluation Core functions
       url: evaluation-core.html
+    - output: web,pdf
+      title: Geometry toolbox
+      url: geometry.html
     - output: web,pdf
       title: Color Palettes
       url: image-color_palette.html

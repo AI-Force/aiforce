@@ -15,6 +15,7 @@ dependencies:
   - pytorch
   - scikit-learn
   - scikit-image
+  - shapely
   - starlette
   - torchvision
   - uvicorn

@@ -27,20 +27,18 @@ logger = logging.getLogger(__name__)
 # Cell
 
 
-def create_tfrecord_entry(source_path, categories, annotation):
+def create_tfrecord_entry(categories, file_annotation):
     """
     Create tfrecord entry with annotations for one file / image.
-    `source_path`: the path the files / images are located
     `categories`: the categories used
-    `annotation`: the annotation of a file / image
+    `file_annotation`: the annotation of a file / image
     return: the tfrecord entry
     """
-    file_name = annotation['filename']
-    with tf.io.gfile.GFile(join(source_path, file_name), 'rb') as fid:
+    with tf.io.gfile.GFile(file_annotation.file_path, 'rb') as fid:
         encoded_jpg = fid.read()
     _, width, height = get_image_size(io.BytesIO(encoded_jpg))
 
-    file_name = file_name.encode('utf8')
+    file_name = file_annotation.file_name.encode('utf8')
     image_format = b'jpg'
     xmins = []
     xmaxs = []
@@ -49,21 +47,17 @@ def create_tfrecord_entry(source_path, categories, annotation):
     classes_text = []
     classes = []
 
-    regions = annotation['regions']
-    for index, region in regions.items():
-        shape_attributes = region['shape_attributes']
-        region_attributes = region['region_attributes']
+    for index, annotation in enumerate(file_annotation.annotations):
+        x_min = min(annotation.points_x)
+        y_min = min(annotation.points_y)
+        x_max = max(annotation.points_x)
+        y_max = max(annotation.points_y)
+        category = annotation.labels[0] if len(annotation.labels) else ''
 
-        x = shape_attributes["x"]
-        y = shape_attributes["y"]
-        max_x = x + shape_attributes["width"]
-        max_y = y + shape_attributes["height"]
-        category = region_attributes['category']
-
-        xmins.append(x / width)
-        xmaxs.append(max_x / width)
-        ymins.append(y / height)
-        ymaxs.append(max_y / height)
+        xmins.append(x_min / width)
+        xmaxs.append(x_max / width)
+        ymins.append(y_min / height)
+        ymaxs.append(y_max / height)
         classes_text.append(category.encode('utf8'))
         classes.append(categories.index(category))
 
@@ -86,17 +80,16 @@ def create_tfrecord_entry(source_path, categories, annotation):
 # Cell
 
 
-def create_tfrecord_file(output_path, source_path, categories, annotations):
+def create_tfrecord_file(output_path, categories, annotations):
     """
     Create a tfrecord file for a sub-data-set, which can be one of the following: training, validation, test
     `output_path`: the path including the filename of the tfrecord file
-    `source_path`: the path the files / images are located
     `categories`: the categories used
     `annotations`: the annotations of the files / images
     """
     writer = tf.io.TFRecordWriter(output_path)
     for annotation in annotations.values():
-        tf_example = create_tfrecord_entry(source_path, categories, annotation)
+        tf_example = create_tfrecord_entry(categories, annotation)
         writer.write(tf_example.SerializeToString())
     writer.close()
     logger.info('Successfully created the TFRecord file: {}'.format(output_path))
@@ -206,8 +199,8 @@ if __name__ == '__main__' and '__file__' in globals():
             sys.exit(1)
 
     categories = category_tools.read_categories(category_file_path, data_set_type)
-    annotations = read_annotations(args.annotation)
+    annotations = read_annotations(args.annotation, args.source)
 
-    create_tfrecord_file(args.output, args.source, categories, annotations)
+    create_tfrecord_file(args.output, categories, annotations)
 
     logger.info('FINISHED!!!')

@@ -1,12 +1,14 @@
 {
   "mlcore": {
     "Overview": "/",
-    "VIA Annotation Tools": "annotation-via.html",
+    "Annotation": "annotation-core.html",
+    "VIA Annotation": "annotation-via.html",
     "VIA Annotation Viewer": "annotation-viewer.html",
     "Category File Tools": "category_tools.html",
     "Core classes and functions": "core.html",
     "Data-Set": "dataset.html",
     "Evaluation Core functions": "evaluation-core.html",
+    "Geometry toolbox": "geometry.html",
     "Color Palettes": "image-color_palette.html",
     "Image Inference": "image-inference.html",
     "Image Tools for OpenCV": "image-opencv_tools.html",
