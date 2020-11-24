@@ -237,8 +237,6 @@ class ClassificationDataSet(DataSet):
         train_folder_name = basename(self.train_folder)
         val_folder_name = basename(self.val_folder)
 
-        test_image_folder = join(self.image_set_path, TEST_FOLDER)
-
         # copy the categories files
         shutil.copy2(self.categories_path, join(self.folder, DEFAULT_CATEGORIES_FILE))
 
@@ -282,7 +280,7 @@ class ClassificationDataSet(DataSet):
         # copy test_files, if exist
         if test_files:
             for filename in test_files:
-                copy_image_and_assign_orientation(test_image_folder, filename, self.test_target_folder)
+                copy_image_and_assign_orientation(self.test_source_folder, filename, self.test_target_folder)
                 self.logger.info('Copied {}'.format(join(self.test_target_folder, filename)))
 
     def build(self, split=DEFAULT_SPLIT, seed=None, sample=None):

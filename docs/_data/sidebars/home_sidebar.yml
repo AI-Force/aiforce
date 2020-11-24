@@ -13,10 +13,10 @@ entries:
       title: Annotation
       url: annotation-core.html
     - output: web,pdf
-      title: VIA Annotation
-      url: annotation-via.html
+      title: VIA Annotation Adapter
+      url: annotation-via_adapter.html
     - output: web,pdf
-      title: VIA Annotation Viewer
+      title: Annotation Viewer
       url: annotation-viewer.html
     - output: web,pdf
       title: Category File Tools

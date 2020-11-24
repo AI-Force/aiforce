@@ -10,8 +10,8 @@ import logging
 import cv2
 import numpy as np
 from ..image.opencv_tools import fit_to_max_size
-from ..io.core import scan_files
-from .via import Shape, DEFAULT_CATEGORY_LABEL_KEY, read_annotations, get_annotation_for_file, get_regions, get_shape_attributes, get_shape_type, get_region_attributes, get_region_category, get_points
+from .core import AnnotationShape
+from .via_adapter import read_annotations
 
 # Cell
 
@@ -20,47 +20,60 @@ logger = logging.getLogger(__name__)
 # Cell
 
 
-def show_annotated_images(images, annotations, category_label_key=DEFAULT_CATEGORY_LABEL_KEY,
-                          max_width=0, max_height=0):
+def show_annotated_images(annotations, max_width=0, max_height=0):
     """
     Show images with corresponding annotations.
     Images are shown one at a time with switching by using the arrow left/right keys.
-    `images`: The list of images to view
     `annotations`: The annotations for the images
-    `category_label_key`: The category label key used
     `max_width`: The maximum width to scale the image for visibility.
     `max_height`: The maximum height to scale the image for visibility.
     """
-    image_index = 0
-    len_images = len(images)
+    len_annotations = len(annotations)
+
+    if len_annotations == 0:
+        logger.error("No Annotations found")
+        return
+
+    index = 0
+    annotation_keys = list(annotations.keys())
+
     logger.info("Keys to use:")
     logger.info("n = Next Image")
     logger.info("b = Previous Image")
     logger.info("q = Quit")
 
-    logger.info("Images to view: {}".format(len_images))
+    logger.info("Annotations to view: {}".format(len_annotations))
 
     while True:
-        image_path = images[image_index]
-        logger.info("View Image {}/{}: {}".format(image_index + 1, len_images, image_path))
-        img = cv2.imread(image_path, cv2.IMREAD_COLOR)
-        annotation = get_annotation_for_file(annotations, image_path)
-        regions = get_regions(annotation)
-        if regions is not None:
-            logger.info("Found Annotation with {} regions".format(len(regions)))
-            for region_index, region in regions.items():
-                shape_attributes = get_shape_attributes(region)
-                shape_type = get_shape_type(shape_attributes)
-                x_points, y_points = get_points(shape_attributes)
-                category = get_region_category(get_region_attributes(region), category_label_key)
-                points = list(zip(x_points, y_points))
-                logger.info("Found {} of category {} with {} points: {}".format(shape_type, category, len(points), points))
-                if shape_type == Shape.RECTANGLE:
-                    img = cv2.rectangle(img, points[0], points[1], (0, 255, 0), 2)
-                elif shape_type == Shape.POLYGON:
+        file_id = annotation_keys[index]
+        file_annotation = annotations[file_id]
+        logger.info("View Image {}/{}: {}".format(index + 1, len_annotations, file_annotation.file_path))
+        img = cv2.imread(file_annotation.file_path, cv2.IMREAD_COLOR)
+
+        if img is None:
+            logger.info("Image not found at {}".format(file_annotation.file_path))
+            img = np.zeros(shape=(1, 1, 3))
+
+        if file_annotation.annotations:
+            logger.info("Found {} annotations".format(len(file_annotation.annotations)))
+            for annotation_index, annotation in enumerate(file_annotation.annotations):
+                points = list(zip(annotation.points_x, annotation.points_y))
+                logger.info("Found {} of category {} with {} points: {}".format(annotation.shape,
+                                                                                ','.join(annotation.labels),
+                                                                                len(points), points))
+                if annotation.shape == AnnotationShape.CIRCLE:
+                    img = cv2.circle(img, points[0], annotation.radius_x, (0, 255, 255), 2)
+                elif annotation.shape == AnnotationShape.ELLIPSE:
+                    img = cv2.ellipse(img, points[0], (annotation.radius_x, annotation.radius_y), 0, 0, 360,
+                                      (0, 255, 255), 2)
+                elif annotation.shape == AnnotationShape.POINT:
+                    img = cv2.circle(img, points[0], 1, (0, 255, 255), 2)
+                elif annotation.shape == AnnotationShape.POLYGON:
                     pts = np.array(points, np.int32)
                     pts = pts.reshape((-1, 1, 2))
-                    img = cv2.polylines(img, [pts], True, (0, 255, 255))
+                    img = cv2.polylines(img, [pts], True, (0, 255, 255), 2)
+                elif annotation.shape == AnnotationShape.RECTANGLE:
+                    img = cv2.rectangle(img, points[0], points[1], (0, 255, 255), 2)
 
         if max_width and max_height:
             img = fit_to_max_size(img, max_width, max_height)
@@ -70,9 +83,9 @@ def show_annotated_images(images, annotations, category_label_key=DEFAULT_CATEGO
         if k == ord('q'):    # 'q' key to stop
             break
         elif k == ord('b'):
-            image_index = max(0, image_index - 1)
+            index = max(0, index - 1)
         elif k == ord('n'):
-            image_index = min(len_images - 1, image_index + 1)
+            index = min(len_annotations - 1, index + 1)
 
     cv2.destroyAllWindows()
 
@@ -105,10 +118,6 @@ if __name__ == '__main__' and '__file__' in globals():
     parser.add_argument("-a",
                         "--annotation",
                         help="The path to the VIA annotation file.")
-    parser.add_argument("-k",
-                        "--category-label-key",
-                        help="The category label key used.",
-                        default=DEFAULT_CATEGORY_LABEL_KEY)
     parser.add_argument("--max-width",
                         help="The maximum width to scale the image for visibility.",
                         type=int,
@@ -120,6 +129,5 @@ if __name__ == '__main__' and '__file__' in globals():
 
     args = parser.parse_args()
 
-    files = scan_files(args.path)
-    annotations = read_annotations(args.annotation)
-    show_annotated_images(files, annotations, args.category_label_key, args.max_width, args.max_height)
+    annotations = read_annotations(args.annotation, args.path)
+    show_annotated_images(annotations, args.max_width, args.max_height)
