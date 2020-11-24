@@ -10,20 +10,18 @@ __all__ = ['CATEGORY_LABEL_KEY', 'DEFAULT_CATEGORIES_FILE', 'DEFAULT_CLASSIFICAT
 
 import numpy as np
 import shutil
-import json
 import sys
 import csv
 import argparse
 import logging
 from os.path import join, isdir, isfile, dirname, normpath, basename, sep, splitext, split
-from PIL import Image as PILImage
 from functools import partial
 from datetime import datetime
 from logging.handlers import MemoryHandler
 from .core import Type, infer_type
-from .image.pillow_tools import assign_exif_orientation, write_exif_metadata
+from .image.pillow_tools import assign_exif_orientation, write_exif_metadata, get_image_size, write_mask
 from .io.core import create_folder, scan_files
-from .annotation.core import AnnotationShape, convert_annotation
+from .annotation.core import AnnotationShape, convert_annotation, annotation_bounding_box
 from .annotation.via import read_annotations, write_annotations
 from .tensorflow.tfrecord_builder import create_tfrecord_file, create_labelmap_file
 from .evaluation.core import box_area, intersection_box, union_box
@@ -813,73 +811,59 @@ class SegmentationDataSet(ObjectDetectionDataSet):
 
         self.logger.info('Start convert image annotations from {}'.format(self.annotations_path))
 
-        for annotation_index, annotation in self.annotations.items():
-            file_name = annotation['filename']
-            file_path = join(content_folder, file_name)
-            regions = annotation['regions']
-
+        for file_id, file_annotation in self.annotations.items():
             # skip file, if regions are empty or file do not exist
-            if not (regions and isfile(file_path)):
+            if not (file_annotation.annotations and isfile(file_annotation.file_path)):
                 continue
 
-            image, _, __ = assign_exif_orientation(join(self.train_val_folder, file_name))
+            image, _, __ = assign_exif_orientation(file_annotation.file_path)
             image_width, image_height = image.size
 
-            delete_regions = {}
-            for region_index, region in regions.items():
+            delete_annotations = {}
+            for index, annotation in enumerate(file_annotation.annotations):
                 # convert from rect to polygon if needed
-                region = convert_region_rect_to_polygon(region)
-                shape_attributes = region['shape_attributes']
+                convert_annotation(annotation, AnnotationShape.POLYGON)
 
                 for step in steps:
                     # validate the shape size
-                    x_min = min(shape_attributes['all_points_x'])
-                    x_max = max(shape_attributes['all_points_x'])
-                    y_min = min(shape_attributes['all_points_y'])
-                    y_max = max(shape_attributes['all_points_y'])
+                    (x_min, x_max), (y_min, y_max) = annotation_bounding_box(annotation)
 
                     width_condition = step['condition'](x_min, x_max, image_width)
                     height_condition = step['condition'](y_min, y_max, image_height)
                     if width_condition or height_condition:
                         size_message = ['width'] if width_condition else []
                         size_message.extend(['height'] if height_condition else [])
-                        message = step['message'].format(annotation_index, region_index, ' ',
-                                                         ' and '.join(size_message),
-                                                         shape_attributes['all_points_x'],
-                                                         shape_attributes['all_points_y'])
+                        message = step['message'].format(file_id, index, ' ', ' and '.join(size_message),
+                                                         annotation.points_x, annotation.points_y)
 
                         step['choice'] = input_feedback(message, step['choice'], step['choices'])
 
                         choice_op = step['choice'].lower()
                         # if skip the shapes
                         if choice_op == 's':
-                            delete_regions[region_index] = True
-                            message = step['message'].format(annotation_index, region_index,
+                            delete_annotations[index] = True
+                            message = step['message'].format(file_id, index,
                                                              '{} '.format(step['choices'][choice_op]),
                                                              ' and '.join(size_message),
-                                                             shape_attributes['all_points_x'],
-                                                             shape_attributes['all_points_y'])
+                                                             annotation.points_x, annotation.points_y)
                             self.logger.info(message)
 
                             break
                         else:
-                            shape_attributes['all_points_x'] = list(map(partial(step['transform'],
-                                                                                size=image_width),
-                                                                        shape_attributes['all_points_x']))
-                            shape_attributes['all_points_y'] = list(map(partial(step['transform'],
-                                                                                size=image_height),
-                                                                        shape_attributes['all_points_y']))
+                            annotation.points_x = list(map(partial(step['transform'], size=image_width),
+                                                           annotation.points_x))
+                            annotation.points_y = list(map(partial(step['transform'], size=image_height),
+                                                           annotation.points_y))
 
-                            message = step['message'].format(annotation_index, region_index,
+                            message = step['message'].format(file_id, index,
                                                              '{} '.format(step['choices'][choice_op]),
                                                              ' and '.join(size_message),
-                                                             shape_attributes['all_points_x'],
-                                                             shape_attributes['all_points_y'])
+                                                             annotation.points_x, annotation.points_y)
                             self.logger.info(message)
 
             # delete regions after iteration is finished
-            for region_index in delete_regions.keys():
-                del regions[region_index]
+            for index in sorted(list(delete_annotations.keys()), reverse=True):
+                del file_annotation.annotations[index]
 
         print('Finished convert image annotations from {}'.format(self.annotations_path))
 
@@ -896,39 +880,31 @@ class SegmentationDataSet(ObjectDetectionDataSet):
 
         # only the trainval images have annotation, not the test images
         for index, key in enumerate(keys):
-            annotation = self.annotations[key]
-            file_name = annotation['filename']
-            regions = annotation['regions']
+            file_annotation = self.annotations[key]
 
-            if not regions:
+            if not file_annotation.annotations:
                 continue
 
-            with PILImage.open(join(self.train_val_folder, file_name)) as image:
-                image_width, image_height = image.size
+            image, image_width, image_height = get_image_size(file_annotation.file_path)
 
-                # Convert polygons to a bitmap mask of shape
-                # [height, width]
-                mask = np.zeros((image_height, image_width), dtype=np.uint8)
+            # Convert polygons to a bitmap mask of shape
+            # [height, width]
+            mask = np.zeros((image_height, image_width), dtype=np.uint8)
 
-                # sort the regions by category priority for handling pixels which are assigned to more than one category
-                # the category with higher index overpaint the category with lower index
-                for region in sorted(regions.values(),
-                                     key=lambda r: self.categories.index(r['region_attributes'][CATEGORY_LABEL_KEY])):
-                    shape_attributes = region['shape_attributes']
-                    region_attributes = region['region_attributes']
-                    category = region_attributes[CATEGORY_LABEL_KEY]
-                    class_id = self.categories.index(category) + 1
+            # sort the regions by category priority for handling pixels which are assigned to more than one category
+            # the category with higher index overpaint the category with lower index
+            for annotation in sorted(file_annotation.annotations(), key=lambda a: self.categories.index(a.labels[0])):
+                class_id = self.categories.index(annotation.labels[0]) + 1
 
-                    # Get indexes of pixels inside the polygon and set them to 1
-                    rr, cc = draw.polygon(shape_attributes['all_points_y'], shape_attributes['all_points_x'])
-                    mask[rr, cc] = class_id
+                # Get indexes of pixels inside the polygon and set them to 1
+                rr, cc = draw.polygon(annotation.points_y, annotation.points_x)
+                mask[rr, cc] = class_id
 
-                # save the semantic mask
-                im = PILImage.fromarray(mask)
-                mask_path = join(self.semantic_mask_folder, splitext(file_name)[0] + '.png')
-                im.save(mask_path)
+            # save the semantic mask
+            mask_path = join(self.semantic_mask_folder, splitext(file_annotation.file_name)[0] + '.png')
+            write_mask(mask, mask_path)
 
-                self.logger.info('{} / {} - Created segmentation mask {}'.format(index + 1, num_masks, mask_path))
+            self.logger.info('{} / {} - Created segmentation mask {}'.format(index + 1, num_masks, mask_path))
 
         self.logger.info('Finish create {} segmentation masks in {}'.format(num_masks, self.semantic_mask_folder))
 

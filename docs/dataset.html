@@ -129,7 +129,7 @@ where <code>[data_set_type]</code> is the same as the corresponding <code>[image
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DataSet" class="doc_header"><code>class</code> <code>DataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L54" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>)</p>
+<h2 id="DataSet" class="doc_header"><code>class</code> <code>DataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L52" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -174,7 +174,7 @@ All images are validated, if they belong to one of the given categories. If cate
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ClassificationDataSet" class="doc_header"><code>class</code> <code>ClassificationDataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L126" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ClassificationDataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>, <strong><code>annotations_path</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/dataset.html#DataSet"><code>DataSet</code></a></p>
+<h2 id="ClassificationDataSet" class="doc_header"><code>class</code> <code>ClassificationDataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L124" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ClassificationDataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>, <strong><code>annotations_path</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/dataset.html#DataSet"><code>DataSet</code></a></p>
 </blockquote>
 
 </div>
@@ -219,7 +219,7 @@ All images are validated against the annotations, if they contain at least one a
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ObjectDetectionDataSet" class="doc_header"><code>class</code> <code>ObjectDetectionDataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L391" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ObjectDetectionDataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>, <strong><code>annotations_path</code></strong>=<em><code>None</code></em>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>, <strong><code>join_overlapping_annotations</code></strong>=<em><code>False</code></em>, <strong><code>annotation_area_threshold</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/dataset.html#DataSet"><code>DataSet</code></a></p>
+<h2 id="ObjectDetectionDataSet" class="doc_header"><code>class</code> <code>ObjectDetectionDataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L389" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ObjectDetectionDataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>, <strong><code>annotations_path</code></strong>=<em><code>None</code></em>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>, <strong><code>join_overlapping_annotations</code></strong>=<em><code>False</code></em>, <strong><code>annotation_area_threshold</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/dataset.html#DataSet"><code>DataSet</code></a></p>
 </blockquote>
 <p>Object detection data-set.
 <code>name</code>: The name of the data-set.
@@ -274,7 +274,7 @@ All images are validated against the annotations, if they contain at least one a
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="SegmentationDataSet" class="doc_header"><code>class</code> <code>SegmentationDataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L751" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SegmentationDataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>, <strong><code>annotations_path</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/dataset.html#ObjectDetectionDataSet"><code>ObjectDetectionDataSet</code></a></p>
+<h2 id="SegmentationDataSet" class="doc_header"><code>class</code> <code>SegmentationDataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L749" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SegmentationDataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>, <strong><code>annotations_path</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/dataset.html#ObjectDetectionDataSet"><code>ObjectDetectionDataSet</code></a></p>
 </blockquote>
 <p>Object detection data-set.
 <code>name</code>: The name of the data-set.
@@ -321,7 +321,7 @@ All images are validated against the annotations, if they contain at least one a
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="split_train_val_data" class="doc_header"><code>split_train_val_data</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L938" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>split_train_val_data</code>(<strong><code>data</code></strong>, <strong><code>val_size</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="split_train_val_data" class="doc_header"><code>split_train_val_data</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L914" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>split_train_val_data</code>(<strong><code>data</code></strong>, <strong><code>val_size</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Splits the images in train and validation set
 <code>data</code>: the data to split
@@ -357,7 +357,7 @@ return: the splittet train, validation images</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="copy_image_and_assign_orientation" class="doc_header"><code>copy_image_and_assign_orientation</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L954" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>copy_image_and_assign_orientation</code>(<strong><code>source_folder</code></strong>, <strong><code>file_name</code></strong>, <strong><code>target_folder</code></strong>)</p>
+<h4 id="copy_image_and_assign_orientation" class="doc_header"><code>copy_image_and_assign_orientation</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L930" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>copy_image_and_assign_orientation</code>(<strong><code>source_folder</code></strong>, <strong><code>file_name</code></strong>, <strong><code>target_folder</code></strong>)</p>
 </blockquote>
 <p>Copy an image file from source to target and assign the EXIF metadata orientation.
 <code>source_folder</code>: the source folder of the image file
@@ -393,7 +393,7 @@ return: <code>True</code> if modified EXIF metadata could be saved, else <code>F
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="input_feedback" class="doc_header"><code>input_feedback</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L974" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>input_feedback</code>(<strong><code>msg</code></strong>, <strong><code>choice</code></strong>, <strong><code>choices</code></strong>)</p>
+<h4 id="input_feedback" class="doc_header"><code>input_feedback</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L950" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>input_feedback</code>(<strong><code>msg</code></strong>, <strong><code>choice</code></strong>, <strong><code>choices</code></strong>)</p>
 </blockquote>
 <p>User input request wrapper.
 <code>msg</code>: the message to dosplay
@@ -429,7 +429,7 @@ return: <code>True</code> if modified EXIF metadata could be saved, else <code>F
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L995" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L971" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 
@@ -474,7 +474,7 @@ return: <code>True</code> if modified EXIF metadata could be saved, else <code>F
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="build_data_set" class="doc_header"><code>build_data_set</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L1015" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>build_data_set</code>(<strong><code>category_file_path</code></strong>, <strong><code>output</code></strong>, <strong><code>annotation_file_path</code></strong>=<em><code>None</code></em>, <strong><code>split</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>0</code></em>, <strong><code>data_set_type</code></strong>=<em><code>None</code></em>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>, <strong><code>join_overlapping_annotations</code></strong>=<em><code>False</code></em>, <strong><code>annotation_area_threshold</code></strong>=<em><code>None</code></em>, <strong><code>data_set_name</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="build_data_set" class="doc_header"><code>build_data_set</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset.py#L991" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>build_data_set</code>(<strong><code>category_file_path</code></strong>, <strong><code>output</code></strong>, <strong><code>annotation_file_path</code></strong>=<em><code>None</code></em>, <strong><code>split</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>0</code></em>, <strong><code>data_set_type</code></strong>=<em><code>None</code></em>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>, <strong><code>join_overlapping_annotations</code></strong>=<em><code>False</code></em>, <strong><code>annotation_area_threshold</code></strong>=<em><code>None</code></em>, <strong><code>data_set_name</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Build the data-set for training, Validation and test
 <code>category_file_path</code>: the filename of the categories file

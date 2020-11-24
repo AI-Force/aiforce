@@ -2,7 +2,7 @@
 
 __all__ = ['EXIF_ORIENTATION_TAG', 'logger', 'limit_to_max_size', 'fit_to_max_size', 'get_image_size',
            'get_image_orientation', 'read_exif_metadata', 'write_exif_metadata', 'assign_exif_orientation',
-           'convert_to_base64', 'configure_logging']
+           'convert_to_base64', 'write_mask', 'configure_logging']
 
 # Cell
 import sys
@@ -181,6 +181,20 @@ def convert_to_base64(image, image_type="PNG"):
     buffered = BytesIO()
     image.save(buffered, format=image_type)
     return base64.b64encode(buffered.getvalue()).decode('UTF-8')
+
+# Cell
+
+
+def write_mask(mask, file_path):
+    """
+    Writes a mask as image.
+    The image format is set by the file extension in file_path.
+
+    `mask`: The mask to write.
+    `file_path`: The path including file name and file extension to write to.
+    """
+    im = PILImage.fromarray(mask)
+    im.save(file_path)
 
 # Cell
 

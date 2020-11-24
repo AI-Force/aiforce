@@ -6,6 +6,7 @@ __all__ = ['AnnotationShape', 'parse_shape', 'Annotation', 'FileAnnotation', 'co
 # Cell
 
 from enum import Enum
+from copy import deepcopy
 
 # Cell
 
