@@ -14,7 +14,7 @@ import tensorflow as tf
 from os import environ
 from os.path import join
 from ..core import Type, infer_type
-from ..annotation.via import read_annotations
+from ..annotation.via_adapter import read_annotations
 from ..image.pillow_tools import get_image_size
 from mlcore import category_tools
 

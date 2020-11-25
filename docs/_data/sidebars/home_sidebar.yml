@@ -13,6 +13,9 @@ entries:
       title: Annotation
       url: annotation-core.html
     - output: web,pdf
+      title: Folder Category Annotation Adapter
+      url: annotation-folder_category_adapter.html
+    - output: web,pdf
       title: VIA Annotation Adapter
       url: annotation-via_adapter.html
     - output: web,pdf

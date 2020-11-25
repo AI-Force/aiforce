@@ -82,7 +82,7 @@ Supports JSON and CSV file format.
 <code>annotations_file</code>: the path to the annotation file to read
 <code>files_source</code>: the path to the folder containing the source files
 <code>category_id</code>: the ID of the category label
-return: the file annotations</p>
+return: the annotations</p>
 
 </div>
 
@@ -112,82 +112,13 @@ return: the file annotations</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="write_annotations" class="doc_header"><code>write_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L42" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>write_annotations</code>(<strong><code>annotations_file</code></strong>, <strong><code>file_annotations</code></strong>, <strong><code>category_id</code></strong>=<em><code>'category'</code></em>)</p>
+<h4 id="write_annotations" class="doc_header"><code>write_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L42" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>write_annotations</code>(<strong><code>annotations_file</code></strong>, <strong><code>annotations</code></strong>, <strong><code>category_id</code></strong>=<em><code>'category'</code></em>)</p>
 </blockquote>
 <p>Writes a VIA annotations file.
 Supports JSON and CSV file format.
 <code>annotations_file</code>: the path to the annotation file to write
-<code>file_annotations</code>: the file annotations to write
+<code>annotations</code>: the annotations to write
 <code>category_id</code>: the ID of the category label</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="create_annotation_id" class="doc_header"><code>create_annotation_id</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L55" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_annotation_id</code>(<strong><code>file_path</code></strong>)</p>
-</blockquote>
-<p>Creates a VIA annotation ID
-<code>file_path</code>: the file_path to create the ID from
-return: the ID if file exist, else None</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_annotation_for_file" class="doc_header"><code>get_annotation_for_file</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L71" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_annotation_for_file</code>(<strong><code>file_annotations</code></strong>, <strong><code>file_path</code></strong>)</p>
-</blockquote>
-<p>Finds VIA annotation to a file_path
-<code>file_annotations</code>: the file annotations to search in
-<code>file_path</code>: the file_path to search for
-return: the annotation if found, else None</p>
 
 </div>
 
@@ -287,7 +218,7 @@ Supported annotation file format are JSON and CSV.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L346" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L326" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 <p>:param logging_level: The logging level to use.</p>
@@ -318,7 +249,7 @@ Supported annotation file format are JSON and CSV.</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>To run the data-set builder from command line, use the following command:
-<code>python -m mlcore.annotation.via [parameters]</code></p>
+<code>python -m mlcore.annotation.via_adapter [parameters]</code></p>
 
 </div>
 </div>
@@ -329,6 +260,7 @@ Supported annotation file format are JSON and CSV.</p>
 <ul>
 <li><code>[annotation]</code>: The path to the VIA annotation file (e.g.: <em>imagesets/segmentation/car_damage/via_region_data.json</em>)</li>
 <li><code>--files_source</code>: The path to the folder containing the source files (e.g.: <em>imagesets/segmentation/car_damage/trainval</em>)</li>
+<li><code>--category-label-key</code>: The key, the category name can be found in the annotation file, default to <em>category</em>.</li>
 </ul>
 
 </div>

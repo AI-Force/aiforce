@@ -21,8 +21,8 @@ from logging.handlers import MemoryHandler
 from .core import Type, infer_type
 from .image.pillow_tools import assign_exif_orientation, write_exif_metadata, get_image_size, write_mask
 from .io.core import create_folder, scan_files
-from .annotation.core import AnnotationShape, convert_annotation, annotation_bounding_box
-from .annotation.via import read_annotations, write_annotations
+from .annotation.core import RegionShape, convert_region, region_bounding_box
+from .annotation.via_adapter import read_annotations, write_annotations
 from .tensorflow.tfrecord_builder import create_tfrecord_file, create_labelmap_file
 from .evaluation.core import box_area, intersection_box, union_box
 from .category_tools import read_categories
@@ -77,7 +77,7 @@ class DataSet:
         self.logger.info("Created folder {}".format(self.train_folder))
         self.val_folder = create_folder(join(self.folder, VAL_FOLDER))
         self.logger.info("Created folder {}".format(self.val_folder))
-        if isdir(join(self.image_set_path, TEST_FOLDER)):
+        if isdir(self.test_source_folder):
             self.test_target_folder = create_folder(join(self.folder, TEST_FOLDER))
             self.logger.info("Created folder {}".format(self.test_target_folder))
 
@@ -394,17 +394,17 @@ class ObjectDetectionDataSet(DataSet):
     `data_set_type`: The type of the data-set.
     `annotations_path`: The path to the annotations-file.
     `create_tfrecord`: Also create .tfrecord files.
-    `join_overlapping_annotations`: Whether overlapping bounding boxes of same category should be joined.
+    `join_overlapping_regions`: Whether overlapping regions of same category should be joined.
     `annotation_area_threshold`: Keep only annotations with minimum size (width or height) related to image size
     """
 
     def __init__(self, name, base_path, image_set_path, categories_path, data_set_type, annotations_path=None,
-                 create_tfrecord=False, join_overlapping_annotations=False, annotation_area_threshold=None):
+                 create_tfrecord=False, join_overlapping_regions=False, annotation_area_threshold=None):
         super().__init__(name, base_path, image_set_path, categories_path, data_set_type)
         self.annotations_path = annotations_path
-        self.annotations = read_annotations(annotations_path, self.train_val_folder ,CATEGORY_LABEL_KEY) if annotations_path else {}
+        self.annotations = read_annotations(annotations_path, self.train_val_folder, CATEGORY_LABEL_KEY) if annotations_path else {}
         self.create_tfrecord = create_tfrecord
-        self.join_overlapping_annotations = join_overlapping_annotations
+        self.join_overlapping_regions = join_overlapping_regions
         self.annotation_area_threshold = annotation_area_threshold
 
     def validate(self):
@@ -424,29 +424,29 @@ class ObjectDetectionDataSet(DataSet):
 
         delete_annotations = {}
 
-        for annotation_id, file_annotation in self.annotations.items():
+        for annotation_id, annotation in self.annotations.items():
             delete_regions = {}
-            for index, annotation in enumerate(file_annotation.annotations):
-                len_labels = len(annotation.labels)
-                annotation_valid = len_labels and len(set(annotation.labels) & set(self.categories)) == len_labels
-                if not annotation_valid:
-                    message = '{} : Region {} with category {} is not in category list, skip category.'
-                    self.logger.info(message.format(file_annotation.file_name, index, ','.join(annotation.labels)))
+            for index, region in enumerate(annotation.regions):
+                len_labels = len(region.labels)
+                region_valid = len_labels and len(set(region.labels) & set(self.categories)) == len_labels
+                if not region_valid:
+                    message = '{} : Region {} with category {} is not in category list, skip region.'
+                    self.logger.info(message.format(annotation.file_name, index, ','.join(region.labels)))
                     delete_regions[index] = True
 
             # delete regions after iteration is finished
             for index in sorted(list(delete_regions.keys()), reverse=True):
-                del file_annotation.annotations[index]
+                del annotation.regions[index]
 
             # validate for empty region
-            if not file_annotation.annotations:
-                self.logger.info('{} : Has empty annotations, skip file.'.format(annotation_id))
+            if not annotation.regions:
+                self.logger.info('{} : Has empty regions, skip file.'.format(annotation.file_path))
                 delete_annotations[annotation_id] = True
 
-            if file_annotation.file_path in files:
-                files.pop(files.index(file_annotation.file_path))
+            if annotation.file_path in files:
+                files.pop(files.index(annotation.file_path))
             else:
-                self.logger.info('{} : File of annotations do not exist, skip annotations.'.format(annotation_id))
+                self.logger.info('{} : File of annotations do not exist, skip annotations.'.format(annotation.file_path))
                 delete_annotations[annotation_id] = True
 
         for index, file in enumerate(files):
@@ -487,11 +487,11 @@ class ObjectDetectionDataSet(DataSet):
 
         for key in train_files:
             # copy image
-            file_annotation = self.annotations[key]
-            copy_image_and_assign_orientation(self.train_val_folder, file_annotation.file_name, self.train_folder)
+            annotation = self.annotations[key]
+            copy_image_and_assign_orientation(self.train_val_folder, annotation.file_name, self.train_folder)
 
             # add annotation
-            annotations_train[key] = file_annotation
+            annotations_train[key] = annotation
         self.logger.info('Finished copy {} files to {}'.format(num_files, self.train_folder))
 
         num_files = len(val_files)
@@ -499,11 +499,11 @@ class ObjectDetectionDataSet(DataSet):
 
         for key in val_files:
             # copy image
-            file_annotation = self.annotations[key]
-            copy_image_and_assign_orientation(self.train_val_folder, file_annotation.file_name, self.val_folder)
+            annotation = self.annotations[key]
+            copy_image_and_assign_orientation(self.train_val_folder, annotation.file_name, self.val_folder)
 
             # add annotation
-            annotations_val[key] = file_annotation
+            annotations_val[key] = annotation
 
         self.logger.info('Finished copy {} files to {}'.format(num_files, self.val_folder))
 
@@ -652,33 +652,33 @@ class ObjectDetectionDataSet(DataSet):
 
         self.logger.info('Start convert image annotations from {}'.format(self.annotations_path))
 
-        for file_id, file_annotation in self.annotations.items():
+        for annotation in self.annotations.values():
             # skip file, if regions are empty or file do not exist
-            if not (file_annotation.annotations and isfile(file_annotation.file_path)):
+            if not (annotation.regions and isfile(annotation.file_path)):
                 continue
 
             # convert from polygon to rect if needed
-            for annotation in file_annotation.annotations:
-                convert_annotation(annotation, AnnotationShape.RECTANGLE)
+            for region in annotation.regions:
+                convert_region(region, RegionShape.RECTANGLE)
 
             # try to join regions
-            if self.join_overlapping_annotations:
-                self.join_annotations(file_annotation.annotations)
+            if self.join_overlapping_regions:
+                self.join_regions(annotation.regions)
 
-            image, _, __ = assign_exif_orientation(file_annotation.file_path)
+            image, _, __ = assign_exif_orientation(annotation.file_path)
             img_width, img_height = image.size
-            delete_annotations = {}
-            for index, annotation in enumerate(file_annotation.annotations):
+            delete_regions = {}
+            for index, region in enumerate(annotation.regions):
                 # validate the shape size
-                x_min, x_max = annotation.points_x[:2]
-                y_min, y_max = annotation.points_y[:2]
+                x_min, x_max = region.points_x[:2]
+                y_min, y_max = region.points_y[:2]
                 for step in steps:
                     width_condition = step['condition'](x_min, x_max, img_width)
                     height_condition = step['condition'](y_min, y_max, img_height)
                     if width_condition or height_condition:
                         size_message = ['width'] if width_condition else []
                         size_message.extend(['height'] if height_condition else [])
-                        message = step['message'].format(file_id, index, ' ',
+                        message = step['message'].format(annotation.file_name, index, ' ',
                                                          ' and '.join(size_message),
                                                          x_min, y_min, x_max, y_max)
 
@@ -687,8 +687,8 @@ class ObjectDetectionDataSet(DataSet):
                         choice_op = step['choice'].lower()
                         # if skip the shapes
                         if choice_op == 's':
-                            delete_annotations[index] = True
-                            message = step['message'].format(file_id, index,
+                            delete_regions[index] = True
+                            message = step['message'].format(annotation.file_name, index,
                                                              '{} '.format(step['choices'][choice_op]),
                                                              ' and '.join(size_message),
                                                              x_min, y_min, x_max, y_max)
@@ -696,50 +696,50 @@ class ObjectDetectionDataSet(DataSet):
 
                             break
                         else:
-                            annotation.points_x = list(map(partial(step['transform'], size=img_width), [x_min, x_max]))
-                            annotation.points_y = list(map(partial(step['transform'], size=img_height), [y_min, y_max]))
-                            message = step['message'].format(file_id, index,
+                            region.points_x = list(map(partial(step['transform'], size=img_width), [x_min, x_max]))
+                            region.points_y = list(map(partial(step['transform'], size=img_height), [y_min, y_max]))
+                            message = step['message'].format(annotation.file_name, index,
                                                              '{} '.format(step['choices'][choice_op]),
                                                              ' and '.join(size_message),
                                                              x_min, y_min, x_max, y_max)
                             self.logger.info(message)
 
             # delete regions after iteration is finished
-            for index in sorted(list(delete_annotations.keys()), reverse=True):
-                del file_annotation.annotations[index]
+            for index in sorted(list(delete_regions.keys()), reverse=True):
+                del annotation.regions[index]
 
         self.logger.info('Finished convert image annotations from {}'.format(self.annotations_path))
 
-    def join_annotations(self, annotations):
+    def join_regions(self, regions):
         """
-        Join annotations which overlaps.
-        `annotations`: the annotations to analyze to join
+        Join regions which overlaps.
+        `regions`: the region to parse
         """
-        len_before = len(annotations)
+        len_before = len(regions)
         index_left = 0
-        while index_left < len(annotations):
-            annotations_joined = []
-            anno_left = annotations[index_left]
-            for index_right in range(len(annotations)):
+        while index_left < len(regions):
+            regions_joined = []
+            region_left = regions[index_left]
+            for index_right in range(len(regions)):
                 if index_left == index_right:
                     continue
-                anno_right = annotations[index_right]
-                same_label_length = len(anno_left.labels) == len(anno_right.labels)
-                same_labels = same_label_length and len(anno_left.labels) == len(set(anno_left.labels) & set(anno_right.labels))
+                region_right = regions[index_right]
+                same_label_length = len(region_left.labels) == len(region_right.labels)
+                same_labels = same_label_length and len(region_left.labels) == len(set(region_left.labels) & set(region_right.labels))
                 if same_labels:
-                    bbox_left = (anno_left.points_x, anno_left.points_y)
-                    bbox_right = (anno_right.points_x, anno_right.points_y)
+                    bbox_left = (region_left.points_x, region_left.points_y)
+                    bbox_right = (region_right.points_x, region_right.points_y)
                     inter_area = box_area(intersection_box(bbox_left, bbox_right))
                     if inter_area > 0:
                         points_x, points_y = union_box(bbox_left, bbox_right)
-                        anno_left.points_x = points_x
-                        anno_left.points_y = points_y
-                        annotations_joined.append(index_right)
-            for index in annotations_joined[::-1]:
-                del annotations[index]
-            if not annotations_joined:
+                        region_left.points_x = points_x
+                        region_left.points_y = points_y
+                        regions_joined.append(index_right)
+            for index in regions_joined[::-1]:
+                del regions[index]
+            if not regions_joined:
                 index_left += 1
-        self.logger.info('Joined overlapping annotations from {} -> {} regions'.format(len_before, len(annotations)))
+        self.logger.info('Joined overlapping regions from {} -> {}.'.format(len_before, len(regions)))
 
 # Cell
 
@@ -809,41 +809,41 @@ class SegmentationDataSet(ObjectDetectionDataSet):
 
         self.logger.info('Start convert image annotations from {}'.format(self.annotations_path))
 
-        for file_id, file_annotation in self.annotations.items():
+        for annotation in self.annotations.values():
             # skip file, if regions are empty or file do not exist
-            if not (file_annotation.annotations and isfile(file_annotation.file_path)):
+            if not (annotation.regions and isfile(annotation.file_path)):
                 continue
 
-            image, _, __ = assign_exif_orientation(file_annotation.file_path)
+            image, _, __ = assign_exif_orientation(annotation.file_path)
             image_width, image_height = image.size
 
-            delete_annotations = {}
-            for index, annotation in enumerate(file_annotation.annotations):
+            delete_regions = {}
+            for index, region in enumerate(annotation.regions):
                 # convert from rect to polygon if needed
-                convert_annotation(annotation, AnnotationShape.POLYGON)
+                convert_region(region, RegionShape.POLYGON)
 
                 for step in steps:
                     # validate the shape size
-                    (x_min, x_max), (y_min, y_max) = annotation_bounding_box(annotation)
+                    (x_min, x_max), (y_min, y_max) = region_bounding_box(region)
 
                     width_condition = step['condition'](x_min, x_max, image_width)
                     height_condition = step['condition'](y_min, y_max, image_height)
                     if width_condition or height_condition:
                         size_message = ['width'] if width_condition else []
                         size_message.extend(['height'] if height_condition else [])
-                        message = step['message'].format(file_id, index, ' ', ' and '.join(size_message),
-                                                         annotation.points_x, annotation.points_y)
+                        message = step['message'].format(annotation.file_name, index, ' ', ' and '.join(size_message),
+                                                         region.points_x, region.points_y)
 
                         step['choice'] = input_feedback(message, step['choice'], step['choices'])
 
                         choice_op = step['choice'].lower()
                         # if skip the shapes
                         if choice_op == 's':
-                            delete_annotations[index] = True
-                            message = step['message'].format(file_id, index,
+                            delete_regions[index] = True
+                            message = step['message'].format(annotation.file_name, index,
                                                              '{} '.format(step['choices'][choice_op]),
                                                              ' and '.join(size_message),
-                                                             annotation.points_x, annotation.points_y)
+                                                             region.points_x, region.points_y)
                             self.logger.info(message)
 
                             break
@@ -853,15 +853,15 @@ class SegmentationDataSet(ObjectDetectionDataSet):
                             annotation.points_y = list(map(partial(step['transform'], size=image_height),
                                                            annotation.points_y))
 
-                            message = step['message'].format(file_id, index,
+                            message = step['message'].format(annotation.file_name, index,
                                                              '{} '.format(step['choices'][choice_op]),
                                                              ' and '.join(size_message),
-                                                             annotation.points_x, annotation.points_y)
+                                                             region.points_x, region.points_y)
                             self.logger.info(message)
 
             # delete regions after iteration is finished
-            for index in sorted(list(delete_annotations.keys()), reverse=True):
-                del file_annotation.annotations[index]
+            for index in sorted(list(delete_regions.keys()), reverse=True):
+                del annotation.regions[index]
 
         print('Finished convert image annotations from {}'.format(self.annotations_path))
 
@@ -878,12 +878,12 @@ class SegmentationDataSet(ObjectDetectionDataSet):
 
         # only the trainval images have annotation, not the test images
         for index, key in enumerate(keys):
-            file_annotation = self.annotations[key]
+            annotation = self.annotations[key]
 
-            if not file_annotation.annotations:
+            if not annotation.annotations:
                 continue
 
-            image, image_width, image_height = get_image_size(file_annotation.file_path)
+            image, image_width, image_height = get_image_size(annotation.file_path)
 
             # Convert polygons to a bitmap mask of shape
             # [height, width]
@@ -891,15 +891,15 @@ class SegmentationDataSet(ObjectDetectionDataSet):
 
             # sort the regions by category priority for handling pixels which are assigned to more than one category
             # the category with higher index overpaint the category with lower index
-            for annotation in sorted(file_annotation.annotations(), key=lambda a: self.categories.index(a.labels[0])):
-                class_id = self.categories.index(annotation.labels[0]) + 1
+            for region in sorted(annotation.regions(), key=lambda r: self.categories.index(r.labels[0])):
+                class_id = self.categories.index(region.labels[0]) + 1
 
                 # Get indexes of pixels inside the polygon and set them to 1
-                rr, cc = draw.polygon(annotation.points_y, annotation.points_x)
+                rr, cc = draw.polygon(region.points_y, region.points_x)
                 mask[rr, cc] = class_id
 
             # save the semantic mask
-            mask_path = join(self.semantic_mask_folder, splitext(file_annotation.file_name)[0] + '.png')
+            mask_path = join(self.semantic_mask_folder, splitext(annotation.file_name)[0] + '.png')
             write_mask(mask, mask_path)
 
             self.logger.info('{} / {} - Created segmentation mask {}'.format(index + 1, num_masks, mask_path))
@@ -987,7 +987,7 @@ def configure_logging(logging_level=logging.INFO):
 
 
 def build_data_set(category_file_path, output, annotation_file_path=None, split=DEFAULT_SPLIT, seed=None, sample=0,
-                   data_set_type=None, create_tfrecord=False, join_overlapping_annotations=False,
+                   data_set_type=None, create_tfrecord=False, join_overlapping_regions=False,
                    annotation_area_threshold=None, data_set_name=None):
     """
     Build the data-set for training, Validation and test
@@ -999,7 +999,7 @@ def build_data_set(category_file_path, output, annotation_file_path=None, split=
     `sample`: the size of the sample set as percentage
     `data_set_type`: the type of the data-set, if not set infer from the category file path
     `create_tfrecord`: Also create .tfrecord files.
-    `join_overlapping_annotations`: Whether overlapping bounding boxes of same category should be joined.
+    `join_overlapping_regions`: Whether overlapping regions of same category should be joined.
     `annotation_area_threshold`: Keep only annotations with minimum size (width or height) related to image size
     `data_set_name`: the name of the data-set, if not set infer from the category file path
     """
@@ -1029,7 +1029,7 @@ def build_data_set(category_file_path, output, annotation_file_path=None, split=
     logger.info('sample: {}'.format(sample))
     logger.info('type: {}'.format(data_set_type))
     logger.info('output: {}'.format(output))
-    logger.info('join_overlapping_annotations: {}'.format(join_overlapping_annotations))
+    logger.info('join_overlapping_regions: {}'.format(join_overlapping_regions))
     logger.info('annotation_area_threshold: {}'.format(annotation_area_threshold))
     logger.info('name: {}'.format(data_set_name))
 
@@ -1044,7 +1044,7 @@ def build_data_set(category_file_path, output, annotation_file_path=None, split=
                                        annotation_file_path)
     elif data_set_type == Type.IMAGE_OBJECT_DETECTION:
         data_set = ObjectDetectionDataSet(data_set_name, output, path, category_file_path, data_set_type,
-                                          annotation_file_path, create_tfrecord, join_overlapping_annotations,
+                                          annotation_file_path, create_tfrecord, join_overlapping_regions,
                                           annotation_area_threshold)
 
     if data_set:
@@ -1097,8 +1097,8 @@ if __name__ == '__main__' and '__file__' in globals():
     parser.add_argument("--tfrecord",
                         help="Also create .tfrecord files.",
                         action="store_true")
-    parser.add_argument("--join-overlapping-annotations",
-                        help="Whether overlapping bounding boxes of same category should be joined.",
+    parser.add_argument("--join-overlapping-regions",
+                        help="Whether overlapping regions of same category should be joined.",
                         action="store_true")
     parser.add_argument("--annotation-area-thresh",
                         help="Keep only annotations with minimum size (width or height) related to image size.",
@@ -1115,4 +1115,4 @@ if __name__ == '__main__' and '__file__' in globals():
     CATEGORY_LABEL_KEY = args.category_label_key
 
     build_data_set(args.categories, args.output, args.annotation, args.split, args.seed, args.sample, args.type,
-                   args.tfrecord, args.join_overlapping_annotations, args.annotation_area_thresh, args.name)
+                   args.tfrecord, args.join_overlapping_regions, args.annotation_area_thresh, args.name)

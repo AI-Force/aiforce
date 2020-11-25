@@ -2,6 +2,7 @@
   "mlcore": {
     "Overview": "/",
     "Annotation": "annotation-core.html",
+    "Folder Category Annotation Adapter": "annotation-folder_category_adapter.html",
     "VIA Annotation Adapter": "annotation-via_adapter.html",
     "Annotation Viewer": "annotation-viewer.html",
     "Category File Tools": "category_tools.html",

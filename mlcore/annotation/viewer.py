@@ -10,7 +10,7 @@ import logging
 import cv2
 import numpy as np
 from ..image.opencv_tools import fit_to_max_size
-from .core import AnnotationShape
+from .core import RegionShape
 from .via_adapter import read_annotations
 
 # Cell
@@ -45,34 +45,34 @@ def show_annotated_images(annotations, max_width=0, max_height=0):
     logger.info("Annotations to view: {}".format(len_annotations))
 
     while True:
-        file_id = annotation_keys[index]
-        file_annotation = annotations[file_id]
-        logger.info("View Image {}/{}: {}".format(index + 1, len_annotations, file_annotation.file_path))
-        img = cv2.imread(file_annotation.file_path, cv2.IMREAD_COLOR)
+        annotation_id = annotation_keys[index]
+        annotation = annotations[annotation_id]
+        logger.info("View Image {}/{}: {}".format(index + 1, len_annotations, annotation.file_path))
+        img = cv2.imread(annotation.file_path, cv2.IMREAD_COLOR)
 
         if img is None:
-            logger.info("Image not found at {}".format(file_annotation.file_path))
+            logger.info("Image not found at {}".format(annotation.file_path))
             img = np.zeros(shape=(1, 1, 3))
 
-        if file_annotation.annotations:
-            logger.info("Found {} annotations".format(len(file_annotation.annotations)))
-            for annotation_index, annotation in enumerate(file_annotation.annotations):
-                points = list(zip(annotation.points_x, annotation.points_y))
-                logger.info("Found {} of category {} with {} points: {}".format(annotation.shape,
-                                                                                ','.join(annotation.labels),
+        if annotation.regions:
+            logger.info("Found {} regions".format(len(annotation.regions)))
+            for region_index, region in enumerate(annotation.regions):
+                points = list(zip(region.points_x, region.points_y))
+                logger.info("Found {} of category {} with {} points: {}".format(region.shape,
+                                                                                ','.join(region.labels),
                                                                                 len(points), points))
-                if annotation.shape == AnnotationShape.CIRCLE:
-                    img = cv2.circle(img, points[0], annotation.radius_x, (0, 255, 255), 2)
-                elif annotation.shape == AnnotationShape.ELLIPSE:
-                    img = cv2.ellipse(img, points[0], (annotation.radius_x, annotation.radius_y), 0, 0, 360,
+                if region.shape == RegionShape.CIRCLE:
+                    img = cv2.circle(img, points[0], region.radius_x, (0, 255, 255), 2)
+                elif region.shape == RegionShape.ELLIPSE:
+                    img = cv2.ellipse(img, points[0], (region.radius_x, region.radius_y), 0, 0, 360,
                                       (0, 255, 255), 2)
-                elif annotation.shape == AnnotationShape.POINT:
+                elif region.shape == RegionShape.POINT:
                     img = cv2.circle(img, points[0], 1, (0, 255, 255), 2)
-                elif annotation.shape == AnnotationShape.POLYGON:
+                elif region.shape == RegionShape.POLYGON:
                     pts = np.array(points, np.int32)
                     pts = pts.reshape((-1, 1, 2))
                     img = cv2.polylines(img, [pts], True, (0, 255, 255), 2)
-                elif annotation.shape == AnnotationShape.RECTANGLE:
+                elif region.shape == RegionShape.RECTANGLE:
                     img = cv2.rectangle(img, points[0], points[1], (0, 255, 255), 2)
 
         if max_width and max_height:
