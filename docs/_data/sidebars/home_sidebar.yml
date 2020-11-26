@@ -32,7 +32,7 @@ entries:
       url: core.html
     - output: web,pdf
       title: Data-Set
-      url: dataset.html
+      url: dataset_generator.html
     - output: web,pdf
       title: Evaluation Core functions
       url: evaluation-core.html

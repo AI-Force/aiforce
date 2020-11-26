@@ -8,7 +8,7 @@
     "Annotation Viewer": "annotation-viewer.html",
     "Category File Tools": "category_tools.html",
     "Core classes and functions": "core.html",
-    "Data-Set": "dataset.html",
+    "Data-Set": "dataset_generator.html",
     "Evaluation Core functions": "evaluation-core.html",
     "Geometry toolbox": "geometry.html",
     "Color Palettes": "image-color_palette.html",
