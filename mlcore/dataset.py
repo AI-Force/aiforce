@@ -11,10 +11,9 @@ __all__ = ['CATEGORY_LABEL_KEY', 'DEFAULT_CATEGORIES_FILE', 'DEFAULT_CLASSIFICAT
 import numpy as np
 import shutil
 import sys
-import csv
 import argparse
 import logging
-from os.path import join, isdir, isfile, dirname, normpath, basename, sep, splitext, split
+from os.path import join, isdir, isfile, dirname, normpath, basename, splitext
 from functools import partial
 from datetime import datetime
 from logging.handlers import MemoryHandler
@@ -22,7 +21,11 @@ from .core import Type, infer_type
 from .image.pillow_tools import assign_exif_orientation, write_exif_metadata, get_image_size, write_mask
 from .io.core import create_folder, scan_files
 from .annotation.core import RegionShape, convert_region, region_bounding_box
-from .annotation.via_adapter import read_annotations, write_annotations
+from .annotation.via_adapter import read_annotations as via_read_annotations
+from .annotation.via_adapter import write_annotations as via_write_annotations
+from .annotation.folder_category_adapter import read_annotations as folder_category_read_annotations
+from .annotation.multi_category_adapter import read_annotations as multi_category_read_annotations
+from .annotation.multi_category_adapter import write_annotations as multi_category_write_annotations
 from .tensorflow.tfrecord_builder import create_tfrecord_file, create_labelmap_file
 from .evaluation.core import box_area, intersection_box, union_box
 from .category_tools import read_categories
@@ -50,7 +53,7 @@ logger = logging.getLogger(__name__)
 
 
 class DataSet:
-    def __init__(self, name, base_path, image_set_path, categories_path, data_set_type):
+    def __init__(self, name, base_path, image_set_path, categories_path, data_set_type, create_tfrecord=False):
         self.name = name
         self.base_path = base_path
         self.image_set_path = image_set_path
@@ -59,11 +62,13 @@ class DataSet:
         self.categories_path = categories_path
         self.categories = read_categories(categories_path, data_set_type)
         self.type = data_set_type
+        self.create_tfrecord = create_tfrecord
         self.folder = None
         self.train_folder = None
         self.val_folder = None
         self.test_target_folder = None
         self.logger = self.get_logger()
+        self.annotations = None
 
     def create_folders(self):
         """
@@ -81,20 +86,136 @@ class DataSet:
             self.test_target_folder = create_folder(join(self.folder, TEST_FOLDER))
             self.logger.info("Created folder {}".format(self.test_target_folder))
 
-    def validate(self):
+    def convert_annotations(self):
         """
-        Validates the images.
+        Converts annotations
         """
         pass
 
-    def copy(self, train_files, val_files, test_files=None):
+    def validate(self):
         """
-        Copy the images to the data-set
-        `train_files`: The list of training images
-        `val_files`: The list of validation images
-        `test_files`: The list of test images
+        Validates, that each file has at least one annotation.
         """
-        pass
+
+        # validate only the trainval images, the test images have no annotations to validate
+        # convert the annotations before doing validation
+        self.convert_annotations()
+
+        self.logger.info('Start validate image set at {}'.format(self.train_val_folder))
+
+        files = scan_files(self.train_val_folder)
+
+        self.logger.info('Found {} files at {}'.format(len(files), self.train_val_folder))
+
+        delete_annotations = {}
+        used_categories = set([])
+
+        for annotation_id, annotation in self.annotations.items():
+            delete_regions = {}
+            for index, region in enumerate(annotation.regions):
+                len_labels = len(region.labels)
+                region_valid = len_labels and len(set(region.labels) & set(self.categories)) == len_labels
+                if not region_valid:
+                    message = '{} : Region {} with category {} is not in category list, skip region.'
+                    self.logger.info(message.format(annotation.file_name, index, ','.join(region.labels)))
+                    delete_regions[index] = True
+                else:
+                    # update the used regions
+                    used_categories.update(region.labels)
+
+            # delete regions after iteration is finished
+            for index in sorted(list(delete_regions.keys()), reverse=True):
+                del annotation.regions[index]
+
+            # validate for empty region
+            if not annotation.regions:
+                self.logger.info('{} : Has empty regions, skip annotation.'.format(annotation.file_path))
+                delete_annotations[annotation_id] = True
+            # validate for file exist
+            elif annotation.file_path not in files:
+                self.logger.info('{} : File of annotations do not exist, skip annotations.'.format(annotation.file_path))
+                delete_annotations[annotation_id] = True
+            else:
+                files.pop(files.index(annotation.file_path))
+
+        for index, file in enumerate(files):
+            self.logger.info('[{}] -> {} : File has no annotations, skip file.'.format(index, file))
+
+        # list unised categories
+        empty_categories = frozenset(self.categories) - used_categories
+        if empty_categories:
+            self.logger.info('The following categories have no images: {}'.format(" , ".join(empty_categories)))
+
+        # delete annotations after iteration is finished
+        for index in delete_annotations.keys():
+            del self.annotations[index]
+
+        self.logger.info('Finished validate image set at {}'.format(self.train_val_folder))
+
+    def copy(self, train_file_keys, val_file_keys, test_file_names=None):
+        """
+        Copy the images to the data-set.
+        `train_file_keys`: The list of training image keys
+        `val_file_keys`: The list of validation image keys
+        `test_file_names`: The list of test image file names
+        return: A tuple containing train and val annotations
+        """
+
+        self.logger.info('Start copy files from {} to {}'.format(self.image_set_path, self.folder))
+
+        # copy the categories files
+        self.logger.info('Copy file {} to {}'.format(self.categories_path, self.folder))
+        shutil.copy2(self.categories_path, join(self.folder, DEFAULT_CATEGORIES_FILE))
+
+        # if create tfrecord, create a labelmap.pbtxt file containing the categories
+        if self.create_tfrecord:
+            labelmap_file_name = 'label_map.pbtxt'
+            labelmap_output_file = join(self.folder, labelmap_file_name)
+            self.logger.info('Generate file {} to {}'.format(labelmap_file_name, self.folder))
+            create_labelmap_file(labelmap_output_file, list(self.categories)[1:], 1)
+
+        annotations_train = {}
+        annotations_val = {}
+
+        num_files = len(train_file_keys)
+        self.logger.info('Start copy {} files to {}'.format(num_files, self.train_folder))
+
+        for key in train_file_keys:
+            # copy image
+            annotation = self.annotations[key]
+            copy_image_and_assign_orientation(self.train_val_folder, annotation.file_name, self.train_folder)
+
+            # add annotation
+            annotations_train[key] = annotation
+        self.logger.info('Finished copy {} files to {}'.format(num_files, self.train_folder))
+
+        num_files = len(val_file_keys)
+        self.logger.info('Start copy {} files to {}'.format(num_files, self.val_folder))
+
+        for key in val_file_keys:
+            # copy image
+            annotation = self.annotations[key]
+            copy_image_and_assign_orientation(self.train_val_folder, annotation.file_name, self.val_folder)
+
+            # add annotation
+            annotations_val[key] = annotation
+
+        self.logger.info('Finished copy {} files to {}'.format(num_files, self.val_folder))
+
+        # copy test_files, if exist
+        if test_file_names:
+
+            num_files = len(test_file_names)
+            self.logger.info('Start copy {} files to {}'.format(num_files, self.test_target_folder))
+
+            for file_name in test_file_names:
+                copy_image_and_assign_orientation(self.test_source_folder, file_name, self.test_target_folder)
+
+            self.logger.info('Finished copy {} files to {}'.format(num_files, self.test_target_folder))
+
+        self.logger.info('Finished copy files from {} to {}'.format(self.image_set_path, self.folder))
+
+        return annotations_train, annotations_val
 
     def build(self, split=DEFAULT_SPLIT, seed=None, sample=None):
         """
@@ -107,7 +228,68 @@ class DataSet:
         `seed`: A random seed to reproduce splits
         `sample`: The percentage of images from train, val and test which will also from a sample set
         """
-        pass
+
+        self.logger.info('Validation set contains {}% of the images.'.format(int(split * 100)))
+
+        # validate the image set
+        self.validate()
+
+        # sort filenames by assigned tags
+        labels_to_keys = {}
+
+        for annotation_id, annotation in self.annotations.items():
+            labels = ' '.join(annotation.labels())
+
+            if labels not in labels_to_keys:
+                labels_to_keys[labels] = []
+            labels_to_keys[labels].append(annotation_id)
+
+        # split category files into train & val and create the sample split, if set
+        train_file_keys = []
+        val_file_keys = []
+        sample_train_file_keys = []
+        sample_val_file_keys = []
+
+        for annotation_ids in labels_to_keys.values():
+            train, val = split_train_val_data(annotation_ids, split, seed)
+            train_file_keys.extend(train)
+            val_file_keys.extend(val)
+
+            # if a sample data set should be created, create the splits
+            if sample:
+                _, sample_train = split_train_val_data(train, sample, seed)
+                _, sample_val = split_train_val_data(val, sample, seed)
+                sample_train_file_keys.extend(sample_train)
+                sample_val_file_keys.extend(sample_val)
+
+        # scan the test images if exist
+        test_file_names = list(map(lambda f: basename(f), scan_files(self.test_source_folder))) if self.test_target_folder else None
+        _, sample_test_file_names = split_train_val_data(test_file_names, sample, seed) if test_file_names and sample else (None, None)
+
+        # copy the files
+        self.copy(train_file_keys, val_file_keys, test_file_names)
+
+        if sample:
+            sample_name = "{}_sample".format(self.name)
+
+            self.logger.info('Start build {} data-set containing {}% of images at {}'.format(sample_name,
+                                                                                             int(sample * 100),
+                                                                                             self.base_path))
+
+            # create the sample data-set
+            sample_data_set = self.__class__(sample_name, self.base_path, self.image_set_path, self.categories_path,
+                                             self.type, create_tfrecord=self.create_tfrecord)
+            # assign the converted annotations
+            sample_data_set.annotations = self.annotations
+
+            # create the data set folders
+            sample_data_set.create_folders()
+            # copy the sample images
+            sample_data_set.copy(sample_train_file_keys, sample_val_file_keys, sample_test_file_names)
+
+            self.logger.info('Finished build {} data-set containing {}% of images at {}'.format(sample_name,
+                                                                                                int(sample * 100),
+                                                                                                self.base_path))
 
     @classmethod
     def get_logger(cls):
@@ -122,264 +304,50 @@ class DataSet:
 
 
 class ClassificationDataSet(DataSet):
-    def __init__(self, name, base_path, image_set_path, categories_path, data_set_type, annotations_path=None):
-        super().__init__(name, base_path, image_set_path, categories_path, data_set_type)
+    """
+    Classification data-set.
+    `name`: The name of the data-set.
+    `base_path`: The data-set base-path.
+    `image_set_path`: The image-set source path.
+    `categories_path`: The path to the categories.txt file.
+    `data_set_type`: The type of the data-set.
+    `annotations_path`: The path to the annotations-file.
+    """
+
+    def __init__(self, name, base_path, image_set_path, categories_path, data_set_type, annotations_path=None,
+                 create_tfrecord=False):
+        super().__init__(name, base_path, image_set_path, categories_path, data_set_type, create_tfrecord)
         self.annotations_path = annotations_path
-        self.annotations = self._read_annotations(annotations_path) if annotations_path else []
-
-    def validate(self):
-        """
-        Validates if all images of a classification image set belongs to a category in `categories.txt` as well as
-        that each listet category contains at least one image.
-        return: a tuple with a list of missing categories and a list of empty categories
-        """
-
-        # validate only the trainval images, the test images have no annotations to validate
-        self.logger.info('Start validate image set at {}'.format(self.train_val_folder))
-
-        base_path = join(self.train_val_folder, '')
-
-        files = list(map(lambda f: self.trim_base_path(f, base_path), scan_files(self.train_val_folder)))
-
-        self.logger.info('Found {} files at {}'.format(len(files), self.train_val_folder))
-
-        steps = [
-            {
-                'name': 'missing_categories',
-                'choices': {
-                    's': 'Skip',  # just skip the category
-                    'S': 'Skip All',
-                    'a': 'Add',  # add category to category index
-                    'A': 'Add All',
-                },
-                'choice': None,
-                'condition': lambda tags, cats: list(filter(lambda t: t not in cats, tags)),
-                'message': '[{}] -> {} : {}Found categories not in the category index. Missing Categories: {}',
-                'transform': lambda tags, cats: list(map(lambda t: cats.append(t) if t not in cats else None, tags)),
-                'skip': lambda tags, cats: " ".join(filter(lambda t: t not in tags, cats)),
-            },
-            {
-                'name': 'empty_categories',
-                'choices': {
-                    's': 'Skip',  # skip files with empty categories
-                    'S': 'Skip All',
-                    'k': 'Keep',  # keep files with empty categories
-                    'K': 'Keep All',
-                },
-                'choice': None,
-                'condition': lambda tags, _: not tags,
-                'message': '[{}] -> {} : {}Has no category assigned.{}',
-                'transform': lambda _, cats: cats,
-                'skip': lambda tags, cats: None,
-            }
-        ]
-
         # if no annotation file exist, generate annotations based on the folder names
-        if not self.annotations:
-            self.logger.info("No annotation file found, Start try to detect categories from folder structure.")
-            self.annotations = self._annotations_from_file_paths(self.categories, files)
-            self.logger.info("Finished try to detect categories from folder structure.")
+        if not annotations_path:
+            self.annotations = folder_category_read_annotations(self.train_val_folder)
+        else:
+            self.annotations = multi_category_read_annotations(annotations_path, self.train_val_folder)
 
-        handled_files = {}
-        used_categories = set([])
-
-        # skip the title column
-        for ind, (file, tags) in enumerate(self.annotations[1:]):
-            index = ind + 1  # need to count the title column
-            filename = file + ".jpg"
-            tag_list = tags.split(" ")
-            # validate annotation
-            for step in steps:
-                step_condition = step['condition'](tag_list, self.categories)
-                if step_condition:
-                    message = step['message'].format(index, filename, ' ', ' , '.join(step_condition))
-                    step['choice'] = input_feedback(message, step['choice'], step['choices'])
-
-                    choice_op = step['choice'].lower()
-                    # if skip
-                    if choice_op == 's':
-                        handled_files[index] = step['skip'](step_condition, tag_list)
-                        message = step['message'].format(index, filename, '{} '.format(step['choices'][choice_op]),
-                                                         ' , '.join(step_condition))
-                        self.logger.info(message)
-                    else:
-                        step['transform'](step_condition, self.categories)
-                        message = step['message'].format(index, filename, '{} '.format(step['choices'][choice_op]),
-                                                         ' , '.join(step_condition))
-                        self.logger.info(message)
-
-            if tag_list:
-                used_categories.update(tag_list)
-
-            if filename not in files:
-                self.logger.info('[{}] -> {} : Annotated file do not exist, skip annotation.'.format(index, filename))
-                handled_files[index] = None
-
-        empty_categories = frozenset(self.categories) - used_categories
-        if empty_categories:
-            self.logger.info('The following categories have no images: {}'.format(" , ".join(empty_categories)))
-
-        for index, tags in handled_files.items():
-            self.annotations[index][1] = tags
-
-        self.annotations = list(filter(lambda a: a[1] is not None, self.annotations))
-
-        self.logger.info('Finished validate image set at {}'.format(self.train_val_folder))
-
-    def copy(self, train_files, val_files, test_files=None):
+    def copy(self, train_file_keys, val_file_keys, test_file_names=None):
         """
-        Copy the images to the data-set and generate the annotations for train and val images.
-        `train_files`: The list of training images
-        `val_files`: The list of validation images
-        `test_files`: The list of test images
+        Copy the images to the data-set, generate the annotations for train and val images.
+        `train_file_keys`: The list of training image keys
+        `val_file_keys`: The list of validation image keys
+        `test_file_names`: The list of test image file names
+        return: A tuple containing train and val annotations
         """
 
-        train_folder_name = basename(self.train_folder)
-        val_folder_name = basename(self.val_folder)
+        annotations_train, annotations_val = super().copy(train_file_keys, val_file_keys, test_file_names)
 
-        # copy the categories files
-        shutil.copy2(self.categories_path, join(self.folder, DEFAULT_CATEGORIES_FILE))
+        # write the split train annotations
+        if annotations_train:
+            annotations_target_path = join(self.train_folder, DEFAULT_CLASSIFICATION_ANNOTATIONS_FILE)
+            self.logger.info('Write annotations to {}'.format(annotations_target_path))
+            multi_category_write_annotations(annotations_target_path, annotations_train)
 
-        # generate the annotations to match the processed files
-        # and add the header and append the is_valid column
-        annotations = [[h for h in (self.annotations[0] + ['is_valid'])]]
+        # write the split val annotations
+        if annotations_val:
+            annotations_target_path = join(self.val_folder, DEFAULT_SEGMENTATION_ANNOTATIONS_FILE)
+            self.logger.info('Write annotations to {}'.format(annotations_target_path))
+            multi_category_write_annotations(annotations_target_path, annotations_val)
 
-        # copy train files
-        for index, filename in train_files:
-            # copy image
-            sub_folder = split(filename)[0]
-            target_folder = join(self.train_folder, sub_folder)
-            if sub_folder:
-                create_folder(target_folder)
-            copy_image_and_assign_orientation(self.train_val_folder, filename + ".jpg", target_folder)
-
-            self.logger.info('Copied {}'.format(join(self.train_folder, filename + ".jpg")))
-            annotation = [join(train_folder_name, filename)] + self.annotations[index][1:] + [False]
-            annotations.append(annotation)
-
-        # copy val files
-        for index, filename in val_files:
-            # copy image
-            sub_folder = split(filename)[0]
-            target_folder = join(self.val_folder, sub_folder)
-            if sub_folder:
-                create_folder(target_folder)
-            copy_image_and_assign_orientation(self.train_val_folder, filename + ".jpg", target_folder)
-
-            self.logger.info('Copied {}'.format(join(self.val_folder, filename + ".jpg")))
-            annotation = [join(val_folder_name, filename)] + self.annotations[index][1:] + [True]
-            annotations.append(annotation)
-
-        # write the modified annotation file into data-set folder
-        annotation_path = join(self.folder, DEFAULT_CLASSIFICATION_ANNOTATIONS_FILE)
-        with open(annotation_path, mode='w') as csv_file:
-            csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            csv_writer.writerows(annotations)
-            self.logger.info('Wrote annotations file {}'.format(annotation_path))
-
-        # copy test_files, if exist
-        if test_files:
-            for filename in test_files:
-                copy_image_and_assign_orientation(self.test_source_folder, filename, self.test_target_folder)
-                self.logger.info('Copied {}'.format(join(self.test_target_folder, filename)))
-
-    def build(self, split=DEFAULT_SPLIT, seed=None, sample=None):
-        """
-        Build the data-set. This is the main logic.
-        This method validates the images against the annotations,
-        split the image-set into train and val on given split percentage,
-        creates the data-set folders and copies the image.
-        If a sample percentage is given, a sub-set is created as sample.
-        `split`: The percentage of images which will be copied into the validation set
-        `seed`: A random seed to reproduce splits
-        `sample`: The percentage of images from train, val and test which will also from a sample set
-        """
-        # validate the image set
-        self.validate()
-
-        # sort filenames by assigned tags
-        tags_to_files = {}
-
-        for index, (filename, tags) in enumerate(self.annotations[1:]):
-            if tags not in tags_to_files:
-                tags_to_files[tags] = []
-            tags_to_files[tags].append((index + 1, filename))
-
-        # split category files into train & val and create the sample split, if set
-        train_files = []
-        val_files = []
-        sample_train_files = []
-        sample_val_files = []
-
-        for tags, files in tags_to_files.items():
-            train, val = split_train_val_data(files, split, seed)
-            train_files.extend(train)
-            val_files.extend(val)
-
-            # if a sample data set should be created, create the splits
-            if sample:
-                _, sample_train = split_train_val_data(train, sample, seed)
-                _, sample_val = split_train_val_data(val, sample, seed)
-                sample_train_files.extend(sample_train)
-                sample_val_files.extend(sample_val)
-
-        # scan the test images if exist
-        test_files = list(map(lambda f: basename(f), scan_files(self.test_source_folder))) if self.test_target_folder else None
-        _, sample_test_files = split_train_val_data(test_files, sample, seed) if test_files and sample else (None, None)
-
-        # copy the files
-        self.copy(train_files, val_files, test_files)
-
-        if sample:
-            # create the sample data-set
-            sample_data_set = self.__class__("{}_sample".format(self.name), self.base_path, self.image_set_path,
-                                             self.categories_path, self.type)
-            # assign the annotations
-            sample_data_set.annotations = self.annotations
-            # create the data set folders
-            sample_data_set.create_folders()
-            # copy the sample images
-            sample_data_set.copy(sample_train_files, sample_val_files, sample_test_files)
-
-    def _read_annotations(self, annotations_file):
-        """
-        Reads an annotation file
-        `annotations_file`: the path to the annotation file to read
-        return: the annotations
-        """
-        with open(annotations_file) as csv_file:
-            annotations = list(csv.reader(csv_file))
-            self.logger.info('Found {} annotations at {}'.format(len(annotations), annotations_file))
-
-        return annotations
-
-    def _detect_category_index_from_paths(self, categories, file_paths):
-        for path in file_paths:
-            path_split = normpath(path).lstrip(sep).split(sep)
-            for category in categories:
-                try:
-                    index = path_split.index(category)
-                    self.logger.info("{} -> Found category in folder naming at index {}.".format(path, index))
-                    return index
-                except ValueError:
-                    continue
-            self.logger.info("{} -> Could not find any category in folder naming. Try next file.".format(path))
-        return -1
-
-    def _annotations_from_file_paths(self, categories, file_paths):
-        annotations = [["image_name", "tags"]]
-        index = self._detect_category_index_from_paths(categories, file_paths)
-        if index >= 0:
-            for path in file_paths:
-                path_split = normpath(path).lstrip(sep).split(sep)
-                annotations.append([splitext(path)[0], path_split[index]])
-        return annotations
-
-    @classmethod
-    def trim_base_path(cls, file_path, base_path):
-        if file_path.startswith(base_path):
-            file_path = file_path[len(base_path):]
-        return file_path
+        return annotations_train, annotations_val
 
 # Cell
 
@@ -400,118 +368,28 @@ class ObjectDetectionDataSet(DataSet):
 
     def __init__(self, name, base_path, image_set_path, categories_path, data_set_type, annotations_path=None,
                  create_tfrecord=False, join_overlapping_regions=False, annotation_area_threshold=None):
-        super().__init__(name, base_path, image_set_path, categories_path, data_set_type)
+        super().__init__(name, base_path, image_set_path, categories_path, data_set_type, create_tfrecord)
         self.annotations_path = annotations_path
-        self.annotations = read_annotations(annotations_path, self.train_val_folder, CATEGORY_LABEL_KEY) if annotations_path else {}
-        self.create_tfrecord = create_tfrecord
+        self.annotations = via_read_annotations(annotations_path, self.train_val_folder, CATEGORY_LABEL_KEY) if annotations_path else {}
         self.join_overlapping_regions = join_overlapping_regions
         self.annotation_area_threshold = annotation_area_threshold
 
-    def validate(self):
-        """
-        Validates, that each file has at least one annotation.
-        """
-
-        # validate only the trainval images, the test images have no annotations to validate
-        # convert the annotations before doing validation
-        self.convert_annotation()
-
-        self.logger.info('Start validate image set at {}'.format(self.train_val_folder))
-
-        files = scan_files(self.train_val_folder)
-
-        self.logger.info('Found {} files at {}'.format(len(files), self.train_val_folder))
-
-        delete_annotations = {}
-
-        for annotation_id, annotation in self.annotations.items():
-            delete_regions = {}
-            for index, region in enumerate(annotation.regions):
-                len_labels = len(region.labels)
-                region_valid = len_labels and len(set(region.labels) & set(self.categories)) == len_labels
-                if not region_valid:
-                    message = '{} : Region {} with category {} is not in category list, skip region.'
-                    self.logger.info(message.format(annotation.file_name, index, ','.join(region.labels)))
-                    delete_regions[index] = True
-
-            # delete regions after iteration is finished
-            for index in sorted(list(delete_regions.keys()), reverse=True):
-                del annotation.regions[index]
-
-            # validate for empty region
-            if not annotation.regions:
-                self.logger.info('{} : Has empty regions, skip file.'.format(annotation.file_path))
-                delete_annotations[annotation_id] = True
-
-            if annotation.file_path in files:
-                files.pop(files.index(annotation.file_path))
-            else:
-                self.logger.info('{} : File of annotations do not exist, skip annotations.'.format(annotation.file_path))
-                delete_annotations[annotation_id] = True
-
-        for index, file in enumerate(files):
-            self.logger.info('[{}] -> {} : File has no annotations, skip file.'.format(index, file))
-
-        # delete annotations after iteration is finished
-        for index in delete_annotations.keys():
-            del self.annotations[index]
-
-        self.logger.info('Finished validate image set at {}'.format(self.train_val_folder))
-
-    def copy(self, train_files, val_files, test_files=None):
+    def copy(self, train_file_keys, val_file_keys, test_file_names=None):
         """
         Copy the images to the data-set, generate the annotations for train and val images.
-        `train_files`: The list of training images
-        `val_files`: The list of validation images
-        `test_files`: The list of test images
+        `train_file_keys`: The list of training image keys
+        `val_file_keys`: The list of validation image keys
+        `test_file_names`: The list of test image file names
+        return: A tuple containing train and val annotations
         """
 
-        self.logger.info('Start copy files from {} to {}'.format(self.image_set_path, self.folder))
-
-        # copy the categories files
-        self.logger.info('Copy file {} to {}'.format(self.categories_path, self.folder))
-        shutil.copy2(self.categories_path, join(self.folder, DEFAULT_CATEGORIES_FILE))
-
-        # if create tfrecord, create a labelmap.pbtxt file containing the categories
-        labelmap_file_name = 'label_map.pbtxt'
-        if self.create_tfrecord:
-            labelmap_output_file = join(self.folder, labelmap_file_name)
-            self.logger.info('Generate file {} to {}'.format(labelmap_file_name, self.folder))
-            create_labelmap_file(labelmap_output_file, list(self.categories)[1:], 1)
-
-        annotations_train = {}
-        annotations_val = {}
-
-        num_files = len(train_files)
-        self.logger.info('Start copy {} files to {}'.format(num_files, self.train_folder))
-
-        for key in train_files:
-            # copy image
-            annotation = self.annotations[key]
-            copy_image_and_assign_orientation(self.train_val_folder, annotation.file_name, self.train_folder)
-
-            # add annotation
-            annotations_train[key] = annotation
-        self.logger.info('Finished copy {} files to {}'.format(num_files, self.train_folder))
-
-        num_files = len(val_files)
-        self.logger.info('Start copy {} files to {}'.format(num_files, self.val_folder))
-
-        for key in val_files:
-            # copy image
-            annotation = self.annotations[key]
-            copy_image_and_assign_orientation(self.train_val_folder, annotation.file_name, self.val_folder)
-
-            # add annotation
-            annotations_val[key] = annotation
-
-        self.logger.info('Finished copy {} files to {}'.format(num_files, self.val_folder))
+        annotations_train, annotations_val = super().copy(train_file_keys, val_file_keys, test_file_names)
 
         # write the split train annotations
         if annotations_train:
             annotations_target_path = join(self.train_folder, DEFAULT_SEGMENTATION_ANNOTATIONS_FILE)
             self.logger.info('Write annotations to {}'.format(annotations_target_path))
-            write_annotations(annotations_target_path, annotations_train, CATEGORY_LABEL_KEY)
+            via_write_annotations(annotations_target_path, annotations_train, CATEGORY_LABEL_KEY)
             # if creating a .tfrecord
             if self.create_tfrecord:
                 tfrecord_file_name = '{}.record'.format(normpath(basename(self.train_folder)))
@@ -523,7 +401,7 @@ class ObjectDetectionDataSet(DataSet):
         if annotations_val:
             annotations_target_path = join(self.val_folder, DEFAULT_SEGMENTATION_ANNOTATIONS_FILE)
             self.logger.info('Write annotations to {}'.format(annotations_target_path))
-            write_annotations(annotations_target_path, annotations_val, CATEGORY_LABEL_KEY)
+            via_write_annotations(annotations_target_path, annotations_val, CATEGORY_LABEL_KEY)
             # if creating a .tfrecord
             if self.create_tfrecord:
                 tfrecord_file_name = '{}.record'.format(normpath(basename(self.val_folder)))
@@ -531,76 +409,9 @@ class ObjectDetectionDataSet(DataSet):
                 self.logger.info('Generate file {} to {}'.format(tfrecord_file_name, self.folder))
                 create_tfrecord_file(tfrecord_output_file, self.categories, annotations_val)
 
-        # copy test_files, if exist
-        if test_files:
+        return annotations_train, annotations_val
 
-            num_files = len(test_files)
-            self.logger.info('Start copy {} files to {}'.format(num_files, self.test_target_folder))
-
-            for file_name in test_files:
-                copy_image_and_assign_orientation(self.test_source_folder, file_name, self.test_target_folder)
-
-            self.logger.info('Finished copy {} files to {}'.format(num_files, self.test_target_folder))
-
-        self.logger.info('Finished copy files from {} to {}'.format(self.image_set_path, self.folder))
-
-    def build(self, split=DEFAULT_SPLIT, seed=None, sample=None):
-        """
-        Build the data-set. This is the main logic.
-        This method validates the images against the annotations,
-        split the image-set into train and val on given split percentage,
-        creates the data-set folders and copies the image.
-        If a sample percentage is given, a sub-set is created as sample.
-        `split`: The percentage of images which will be copied into the validation set
-        `seed`: A random seed to reproduce splits
-        `sample`: The percentage of images from train, val and test which will also from a sample set
-        """
-
-        self.logger.info('Validation set contains {}% of the images.'.format(int(split * 100)))
-
-        # validate the image set
-        self.validate()
-
-        # split category files into train & val and create the sample split, if set
-        train_files, val_files = split_train_val_data(list(self.annotations.keys()), split, seed)
-        sample_train_files = []
-        sample_val_files = []
-
-        # if a sample data set should be created, create the splits
-        if sample:
-            _, sample_train_files = split_train_val_data(train_files, sample, seed)
-            _, sample_val_files = split_train_val_data(val_files, sample, seed)
-
-        # scan the test images if exist
-        test_files = list(map(lambda f: basename(f), scan_files(self.test_source_folder))) if self.test_target_folder else None
-        _, sample_test_files = split_train_val_data(test_files, sample, seed) if test_files and sample else (None, None)
-
-        # copy the files
-        self.copy(train_files, val_files, test_files)
-
-        if sample:
-            sample_name = "{}_sample".format(self.name)
-
-            self.logger.info('Start build {} data-set containing {}% of images at {}'.format(sample_name,
-                                                                                             int(sample * 100),
-                                                                                             self.base_path))
-
-            # create the sample data-set
-            sample_data_set = self.__class__(sample_name, self.base_path, self.image_set_path, self.categories_path,
-                                             self.type, create_tfrecord=self.create_tfrecord)
-            # assign the converted annotations
-            sample_data_set.annotations = self.annotations
-
-            # create the data set folders
-            sample_data_set.create_folders()
-            # copy the sample images
-            sample_data_set.copy(sample_train_files, sample_val_files, sample_test_files)
-
-            self.logger.info('Finished build {} data-set containing {}% of images at {}'.format(sample_name,
-                                                                                                int(sample * 100),
-                                                                                                self.base_path))
-
-    def convert_annotation(self):
+    def convert_annotations(self):
         """
         Converts segmentation regions from polygon to rectangle, if exist
         """
@@ -759,20 +570,22 @@ class SegmentationDataSet(ObjectDetectionDataSet):
         self.semantic_mask_folder = create_folder(join(self.folder, SEMANTIC_MASK_FOLDER), clear=True)
         self.logger.info("Created folder {}".format(self.semantic_mask_folder))
 
-    def copy(self, train_files, val_files, test_files=None):
+    def copy(self, train_file_keys, val_file_keys, test_file_names=None):
         """
         Copy the images to the data-set, generate the annotations for train and val images
         and generate the semantic masks.
-        `train_files`: The list of training images
-        `val_files`: The list of validation images
-        `test_files`: The list of test images
+        `train_file_keys`: The list of training image keys
+        `val_file_keys`: The list of validation image keys
+        `test_file_names`: The list of test image file names
+        return: A tuple containing train and val annotations
         """
-        super().copy(train_files, val_files, test_files)
 
-        # save semantic annotations
-        self._save_semantic_masks(train_files + val_files)
+        annotations_train, annotations_val = super().copy(train_file_keys, val_file_keys, test_file_names)
+        # save semantic masks
+        self._save_semantic_masks(train_file_keys + val_file_keys)
+        return annotations_train, annotations_val
 
-    def convert_annotation(self):
+    def convert_annotations(self):
         """
         Converts segmentation regions from rectangle to polygon, if exist
         """

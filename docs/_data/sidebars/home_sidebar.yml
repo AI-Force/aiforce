@@ -16,6 +16,9 @@ entries:
       title: Folder Category Annotation Adapter
       url: annotation-folder_category_adapter.html
     - output: web,pdf
+      title: Multi Category Annotation Adapter
+      url: annotation-multi_category_adapter.html
+    - output: web,pdf
       title: VIA Annotation Adapter
       url: annotation-via_adapter.html
     - output: web,pdf

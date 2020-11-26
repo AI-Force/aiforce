@@ -276,7 +276,7 @@ def _write_annotations_csv_v1(annotations_file, annotations, category_id=DEFAULT
             for index, region in enumerate(annotation.regions):
                 region_shape_attributes = _create_region_shape_attributes(region)
                 region_attributes = {
-                    category_id: region.labels[0] if len(region.labels) else ''
+                    category_id: ' '.join(region.labels) if len(region.labels) else ''
                 }
                 writer.writerow({'#filename': annotation.file_name,
                                  'file_size': annotation.file_size,
@@ -305,7 +305,7 @@ def _write_annotations_json_v1(annotations_file, annotations, category_id=DEFAUL
             regions[str(index)] = {
                 'shape_attributes': _create_region_shape_attributes(region),
                 'region_attributes': {
-                    category_id: region.labels[0] if len(region.labels) else ''
+                    category_id: ' '.join(region.labels) if len(region.labels) else ''
                 }
             }
         via_annotations[file_id] = {

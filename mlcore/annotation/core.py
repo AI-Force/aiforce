@@ -84,6 +84,13 @@ class Annotation:
         self.file_size = file_size
         self.regions: [Region] = [] if regions is None else regions
 
+    def labels(self):
+        labels = {}
+        for region in self.regions:
+            for label in regions.labels:
+                labels[label] = None
+        return list(tags.keys())
+
 # Cell
 
 
