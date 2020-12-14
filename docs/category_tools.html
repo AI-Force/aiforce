@@ -69,13 +69,13 @@ The order of the category names is important and reflects the index of the resul
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_categories" class="doc_header"><code>read_categories</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/category_tools.py#L27" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_categories</code>(<strong><code>categories_file</code></strong>=<em><code>None</code></em>, <strong><code>data_set_type</code></strong>=<em><code>&lt;Type.IMAGE_CLASSIFICATION: 'image_classification'&gt;</code></em>)</p>
+<h4 id="read_categories" class="doc_header"><code>read_categories</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/category_tools.py#L27" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_categories</code>(<strong><code>categories_file</code></strong>=<em><code>None</code></em>, <strong><code>dataset_type</code></strong>=<em><code>&lt;DatasetType.IMAGE_CLASSIFICATION: 'image_classification'&gt;</code></em>)</p>
 </blockquote>
 <p>Reads the categories from a categories file.
-If the data-set type is image segmentation or object detection, a background class at index 0 is prepend.
+If the dataset type is image segmentation or object detection, a background class at index 0 is prepend.
 If the optional <code>categories_file</code> is not given, the file name <em>categories.txt</em> is used by default
 <code>categories_file</code>: the categories file name, if not the default
-<code>data_set_type</code>: the type of the data-set to create the categories for
+<code>dataset_type</code>: the type of the data-set to create the categories for
 return: a list of the category names</p>
 
 </div>

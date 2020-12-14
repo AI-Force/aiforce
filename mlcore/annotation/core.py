@@ -7,7 +7,7 @@ __all__ = ['RegionShape', 'parse_region_shape', 'Region', 'Annotation', 'create_
 
 from enum import Enum
 from copy import deepcopy
-from os.path import basename, isfile, getsize
+from os.path import isfile
 from ..io.core import get_file_sha
 
 # Cell
@@ -87,9 +87,9 @@ class Annotation:
     def labels(self):
         labels = {}
         for region in self.regions:
-            for label in regions.labels:
+            for label in region.labels:
                 labels[label] = None
-        return list(tags.keys())
+        return list(labels.keys())
 
 # Cell
 
@@ -159,6 +159,6 @@ def region_bounding_box(region: Region):
     `region`: the region
     return: a tuple of points_x and points_y
     """
-    bbox = deepcopy(annotation)
+    bbox = deepcopy(region)
     convert_region(bbox, RegionShape.RECTANGLE)
     return bbox.points_x, bbox.points_y

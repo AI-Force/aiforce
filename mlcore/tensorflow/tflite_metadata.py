@@ -14,7 +14,7 @@ from tflite_support import flatbuffers
 from tflite_support import metadata as _metadata
 from tflite_support import metadata_schema_py_generated as _metadata_fb
 from os.path import basename
-from ..core import Type, infer_type
+from ..dataset.type import DatasetType, infer_dataset_type
 
 # Cell
 
@@ -81,11 +81,11 @@ def create_metadata(saved_model_dir, categories_file_path, model_type, model_nam
     model_meta.name = model_name
 
     description = ""
-    if model_type == Type.IMAGE_OBJECT_DETECTION:
+    if model_type == DatasetType.IMAGE_OBJECT_DETECTION:
         description = ("Identify which of a known set of objects "
                        "might be present and provide information about their positions "
                        "within the given image or a video stream.")
-    elif model_type == Type.IMAGE_CLASSIFICATION:
+    elif model_type == DatasetType.IMAGE_CLASSIFICATION:
         description = ("Identify the most prominent object in the "
                        "image from a set of ategories.")
 
@@ -376,8 +376,8 @@ if __name__ == '__main__' and '__file__' in globals():
     parser.add_argument("-t",
                         "--type",
                         help="The type of the model, if not explicitly set try to infer from categories file path.",
-                        choices=list(Type),
-                        type=Type,
+                        choices=list(DatasetType),
+                        type=DatasetType,
                         default=None)
 
     args = parser.parse_args()
@@ -392,7 +392,7 @@ if __name__ == '__main__' and '__file__' in globals():
         # try to infer the model type if not explicitly set
         if model_type is None:
             try:
-                model_type = infer_type(args.categories)
+                model_type = infer_dataset_type(args.categories)
             except ValueError as e:
                 logger.error(e)
                 sys.exit(1)

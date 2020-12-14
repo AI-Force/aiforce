@@ -8,9 +8,7 @@ import csv
 import sys
 import argparse
 import logging
-import shutil
-from os.path import join, normpath, sep, getsize, basename
-from ..io.core import create_folder, scan_files
+from os.path import join, getsize, basename
 from .core import Annotation, Region, create_annotation_id
 
 # Cell

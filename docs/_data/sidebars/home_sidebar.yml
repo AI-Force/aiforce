@@ -31,7 +31,22 @@ entries:
       title: Core classes and functions
       url: core.html
     - output: web,pdf
-      title: Data-Set
+      title: Dataset
+      url: dataset-core.html
+    - output: web,pdf
+      title: Dataset for image classification
+      url: dataset-image_classification.html
+    - output: web,pdf
+      title: Dataset for image object detection
+      url: dataset-image_object_detection.html
+    - output: web,pdf
+      title: Dataset for image segmentation
+      url: dataset-image_segmentation.html
+    - output: web,pdf
+      title: DataSet type
+      url: dataset-type.html
+    - output: web,pdf
+      title: Dataset Generator
       url: dataset_generator.html
     - output: web,pdf
       title: Evaluation Core functions

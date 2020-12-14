@@ -12,8 +12,7 @@ import io
 import sys
 import tensorflow as tf
 from os import environ
-from os.path import join
-from ..core import Type, infer_type
+from ..dataset.type import DatasetType, infer_dataset_type
 from ..annotation.via_adapter import read_annotations
 from ..image.pillow_tools import get_image_size
 from mlcore import category_tools
@@ -27,18 +26,18 @@ logger = logging.getLogger(__name__)
 # Cell
 
 
-def create_tfrecord_entry(categories, file_annotation):
+def create_tfrecord_entry(categories, annotation):
     """
     Create tfrecord entry with annotations for one file / image.
     `categories`: the categories used
-    `file_annotation`: the annotation of a file / image
+    `annotation`: the annotation of a file / image
     return: the tfrecord entry
     """
-    with tf.io.gfile.GFile(file_annotation.file_path, 'rb') as fid:
+    with tf.io.gfile.GFile(annotation.file_path, 'rb') as fid:
         encoded_jpg = fid.read()
     _, width, height = get_image_size(io.BytesIO(encoded_jpg))
 
-    file_name = file_annotation.file_name.encode('utf8')
+    file_name = annotation.file_name.encode('utf8')
     image_format = b'jpg'
     xmins = []
     xmaxs = []
@@ -47,12 +46,12 @@ def create_tfrecord_entry(categories, file_annotation):
     classes_text = []
     classes = []
 
-    for index, annotation in enumerate(file_annotation.annotations):
-        x_min = min(annotation.points_x)
-        y_min = min(annotation.points_y)
-        x_max = max(annotation.points_x)
-        y_max = max(annotation.points_y)
-        category = annotation.labels[0] if len(annotation.labels) else ''
+    for region in annotation.regions:
+        x_min = min(region.points_x)
+        y_min = min(region.points_y)
+        x_max = max(region.points_x)
+        y_max = max(region.points_y)
+        category = region.labels[0] if len(region.labels) else ''
 
         xmins.append(x_min / width)
         xmaxs.append(x_max / width)
@@ -170,35 +169,35 @@ if __name__ == '__main__' and '__file__' in globals():
                         type=str)
     parser.add_argument("-s",
                         "--source",
-                        help="The path to the data-set source files.",
+                        help="The path to the dataset source files.",
                         type=str)
     parser.add_argument("-c",
                         "--categories",
-                        help="The path to the data-set categories file.",
+                        help="The path to the dataset categories file.",
                         type=str)
     parser.add_argument("-a",
                         "--annotation",
-                        help="The path to the data-set annotation file, the data-set is build from.",
+                        help="The path to the dataset annotation file, the dataset is build from.",
                         type=str)
     parser.add_argument("-t",
                         "--type",
-                        help="The type of the data-set, if not explicitly set try to infer from categories file path.",
-                        choices=list(Type),
-                        type=Type,
+                        help="The type of the dataset, if not explicitly set try to infer from categories file path.",
+                        choices=list(DatasetType),
+                        type=DatasetType,
                         default=None)
     args = parser.parse_args()
 
     category_file_path = args.categories
-    data_set_type = args.type
+    dataset_type = args.type
     # try to infer the data-set type if not explicitly set
-    if data_set_type is None:
+    if dataset_type is None:
         try:
-            data_set_type = infer_type(category_file_path)
+            dataset_type = infer_dataset_type(category_file_path)
         except ValueError as e:
             logger.error(e)
             sys.exit(1)
 
-    categories = category_tools.read_categories(category_file_path, data_set_type)
+    categories = category_tools.read_categories(category_file_path, dataset_type)
     annotations = read_annotations(args.annotation, args.source)
 
     create_tfrecord_file(args.output, categories, annotations)

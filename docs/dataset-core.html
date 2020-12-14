@@ -1,13 +1,13 @@
 ---
 
-title: Data-Set
+title: Dataset
 
 
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Data-Set Notes."
-description: "Data-Set Notes."
+summary: "Dataset Notes."
+description: "Dataset Notes."
 nb_path: "nbs/dataset-core.ipynb"
 ---
 <!--
@@ -52,24 +52,24 @@ nb_path: "nbs/dataset-core.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Creating a data-set for a classification or segmentation task. If an annotation file is present, the annotations are also prepared.
-The data-set is created based on an image-set.</p>
+<p>Creating a dataset for a classification or segmentation task. If an annotation file is present, the annotations are also prepared.
+The dataset is created based on an imageset.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Image-Set">Image-Set<a class="anchor-link" href="#Image-Set"> </a></h2>
+<h2 id="Imageset">Imageset<a class="anchor-link" href="#Imageset"> </a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Image-sets are collected images to build a data-set from, stored in the <code>imagesets</code> folder.
+<p>Imagesets are collected images to build a dataset from, stored in the <code>imagesets</code> folder.
 The <code>imagesets</code> folder contains the following folder structure:</p>
 <ul>
-<li>imagesets/<em>[image_set_type]</em>/<em>[image_set_name]</em></li>
+<li>imagesets/<em>[imageset_type]</em>/<em>[imageset_name]</em></li>
 </ul>
 
 </div>
@@ -77,11 +77,11 @@ The <code>imagesets</code> folder contains the following folder structure:</p>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Inside the <code>[image_set_name]</code> folder are the following files / folders</p>
+<p>Inside the <code>[imageset_name]</code> folder are the following files / folders</p>
 <ul>
 <li><code>test/</code>: test images (benchmark)</li>
 <li><code>trainval/</code>: training and validation images for <a href="https://pdc-pj.backlog.jp/wiki/RAD_RAD/Neural+Network+-+Training">cross validation</a></li>
-<li><code>categories.txt</code>: all categories (classes) the image-set contains</li>
+<li><code>categories.txt</code>: all categories (classes) the imageset contains</li>
 </ul>
 
 </div>
@@ -89,7 +89,7 @@ The <code>imagesets</code> folder contains the following folder structure:</p>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Data-Set-Folders">Data-Set Folders<a class="anchor-link" href="#Data-Set-Folders"> </a></h2>
+<h2 id="Dataset-Folders">Dataset Folders<a class="anchor-link" href="#Dataset-Folders"> </a></h2>
 </div>
 </div>
 </div>
@@ -98,8 +98,8 @@ The <code>imagesets</code> folder contains the following folder structure:</p>
 <p>Data-sets are stored in the <code>datasets</code> base folder.
 The <code>datasets</code> folder contains the following folder structure:</p>
 <ul>
-<li>datasets/<em>[data_set_type]</em>/<em>[data_set_name]</em>
-where <code>[data_set_type]</code> is the same as the corresponding <code>[image_set_type]</code> and <code>[data_set_name]</code> is the same as the corresponding <code>[image_set_name]</code>.</li>
+<li>datasets/<em>[dataset_type]</em>/<em>[dataset_name]</em>
+where <code>[dataset_type]</code> is the same as the corresponding <code>[imageset_type]</code> and <code>[dataset_name]</code> is the same as the corresponding <code>[imageset_name]</code>.</li>
 </ul>
 
 </div>
@@ -107,12 +107,12 @@ where <code>[data_set_type]</code> is the same as the corresponding <code>[image
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Inside the <code>[data_set_name]</code> folder are the following files / folders</p>
+<p>Inside the <code>[dataset_name]</code> folder are the following files / folders</p>
 <ul>
 <li><code>test/</code>: test set (benchmark)</li>
 <li><code>train/</code>: training set</li>
 <li><code>val/</code>: validation set</li>
-<li><code>categories.txt</code>: all categories (classes) the data-set contains</li>
+<li><code>categories.txt</code>: all categories (classes) the dataset contains</li>
 </ul>
 
 </div>
@@ -129,7 +129,7 @@ where <code>[data_set_type]</code> is the same as the corresponding <code>[image
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DataSet" class="doc_header"><code>class</code> <code>DataSet</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L54" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DataSet</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>image_set_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>data_set_type</code></strong>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>)</p>
+<h2 id="Dataset" class="doc_header"><code>class</code> <code>Dataset</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L35" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Dataset</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>imageset_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>dataset_type</code></strong>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 
 </div>
@@ -160,13 +160,13 @@ where <code>[data_set_type]</code> is the same as the corresponding <code>[image
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="split_train_val_data" class="doc_header"><code>split_train_val_data</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L305" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>split_train_val_data</code>(<strong><code>data</code></strong>, <strong><code>val_size</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="split_train_val_data" class="doc_header"><code>split_train_val_data</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L286" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>split_train_val_data</code>(<strong><code>data</code></strong>, <strong><code>val_size</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Splits the images in train and validation set
 <code>data</code>: the data to split
 <code>val_size</code>: the size of the validation set in percentage
 <code>seed</code>: A random seed to reproduce splits.
-return: the splittet train, validation images</p>
+return: the splitted train, validation images</p>
 
 </div>
 
@@ -196,7 +196,7 @@ return: the splittet train, validation images</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="copy_image_and_assign_orientation" class="doc_header"><code>copy_image_and_assign_orientation</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L321" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>copy_image_and_assign_orientation</code>(<strong><code>source_folder</code></strong>, <strong><code>file_name</code></strong>, <strong><code>target_folder</code></strong>)</p>
+<h4 id="copy_image_and_assign_orientation" class="doc_header"><code>copy_image_and_assign_orientation</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L302" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>copy_image_and_assign_orientation</code>(<strong><code>source_folder</code></strong>, <strong><code>file_name</code></strong>, <strong><code>target_folder</code></strong>)</p>
 </blockquote>
 <p>Copy an image file from source to target and assign the EXIF metadata orientation.
 <code>source_folder</code>: the source folder of the image file
@@ -232,7 +232,7 @@ return: <code>True</code> if modified EXIF metadata could be saved, else <code>F
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="input_feedback" class="doc_header"><code>input_feedback</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L341" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>input_feedback</code>(<strong><code>msg</code></strong>, <strong><code>choice</code></strong>, <strong><code>choices</code></strong>)</p>
+<h4 id="input_feedback" class="doc_header"><code>input_feedback</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L322" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>input_feedback</code>(<strong><code>msg</code></strong>, <strong><code>choice</code></strong>, <strong><code>choices</code></strong>)</p>
 </blockquote>
 <p>User input request wrapper.
 <code>msg</code>: the message to dosplay
@@ -274,7 +274,7 @@ return: <code>True</code> if modified EXIF metadata could be saved, else <code>F
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L362" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L343" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 

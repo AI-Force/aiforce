@@ -8,7 +8,7 @@ __all__ = ['DEFAULT_CATEGORIES_FILE', 'NOT_CATEGORIZED', 'BACKGROUND_CLASS', 'BA
 import sys
 import argparse
 import logging
-from .core import Type
+from .dataset.type import DatasetType
 
 # Cell
 
@@ -24,13 +24,13 @@ logger = logging.getLogger(__name__)
 # Cell
 
 
-def read_categories(categories_file=None, data_set_type=Type.IMAGE_CLASSIFICATION):
+def read_categories(categories_file=None, dataset_type=DatasetType.IMAGE_CLASSIFICATION):
     """
     Reads the categories from a categories file.
-    If the data-set type is image segmentation or object detection, a background class at index 0 is prepend.
+    If the dataset type is image segmentation or object detection, a background class at index 0 is prepend.
     If the optional `categories_file` is not given, the file name *categories.txt* is used by default
     `categories_file`: the categories file name, if not the default
-    `data_set_type`: the type of the data-set to create the categories for
+    `dataset_type`: the type of the data-set to create the categories for
     return: a list of the category names
     """
     if categories_file is None:
@@ -38,7 +38,7 @@ def read_categories(categories_file=None, data_set_type=Type.IMAGE_CLASSIFICATIO
 
     with open(categories_file) as f:
         categories = f.read().strip().split('\n')
-    if data_set_type in [Type.IMAGE_OBJECT_DETECTION, Type.IMAGE_SEGMENTATION]:
+    if dataset_type in [DatasetType.IMAGE_OBJECT_DETECTION, DatasetType.IMAGE_SEGMENTATION]:
         categories = [BACKGROUND_CLASS] + categories
     return categories
 

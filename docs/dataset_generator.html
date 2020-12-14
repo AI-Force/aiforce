@@ -1,13 +1,13 @@
 ---
 
-title: Data-Set
+title: Dataset Generator
 
 
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Data-Set Notes."
-description: "Data-Set Notes."
+summary: "Dataset generator Notes."
+description: "Dataset generator Notes."
 nb_path: "nbs/dataset_generator.ipynb"
 ---
 <!--
@@ -52,24 +52,24 @@ nb_path: "nbs/dataset_generator.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Creating a data-set for a classification or segmentation task. If an annotation file is present, the annotations are also prepared.
-The data-set is created based on an image-set.</p>
+<p>Creating a dataset for a classification or segmentation task. If an annotation file is present, the annotations are also prepared.
+The dataset is created based on an imageset.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Image-Set">Image-Set<a class="anchor-link" href="#Image-Set"> </a></h2>
+<h2 id="Imageset">Imageset<a class="anchor-link" href="#Imageset"> </a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Image-sets are collected images to build a data-set from, stored in the <code>imagesets</code> folder.
+<p>Imagesets are collected images to build a data-set from, stored in the <code>imagesets</code> folder.
 The <code>imagesets</code> folder contains the following folder structure:</p>
 <ul>
-<li>imagesets/<em>[image_set_type]</em>/<em>[image_set_name]</em></li>
+<li>imagesets/<em>[imageset_type]</em>/<em>[imageset_name]</em></li>
 </ul>
 
 </div>
@@ -77,11 +77,11 @@ The <code>imagesets</code> folder contains the following folder structure:</p>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Inside the <code>[image_set_name]</code> folder are the following files / folders</p>
+<p>Inside the <code>[imageset_name]</code> folder are the following files / folders</p>
 <ul>
 <li><code>test/</code>: test images (benchmark)</li>
 <li><code>trainval/</code>: training and validation images for <a href="https://pdc-pj.backlog.jp/wiki/RAD_RAD/Neural+Network+-+Training">cross validation</a></li>
-<li><code>categories.txt</code>: all categories (classes) the image-set contains</li>
+<li><code>categories.txt</code>: all categories (classes) the imageset contains</li>
 </ul>
 
 </div>
@@ -89,17 +89,17 @@ The <code>imagesets</code> folder contains the following folder structure:</p>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Data-Set-Folders">Data-Set Folders<a class="anchor-link" href="#Data-Set-Folders"> </a></h2>
+<h2 id="Dataset-Folders">Dataset Folders<a class="anchor-link" href="#Dataset-Folders"> </a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Data-sets are stored in the <code>datasets</code> base folder.
+<p>Datasets are stored in the <code>datasets</code> base folder.
 The <code>datasets</code> folder contains the following folder structure:</p>
 <ul>
-<li>datasets/<em>[data_set_type]</em>/<em>[data_set_name]</em>
-where <code>[data_set_type]</code> is the same as the corresponding <code>[image_set_type]</code> and <code>[data_set_name]</code> is the same as the corresponding <code>[image_set_name]</code>.</li>
+<li>datasets/<em>[dataset_type]</em>/<em>[dataset_name]</em>
+where <code>[dataset_type]</code> is the same as the corresponding <code>[imageset_type]</code> and <code>[dataset_name]</code> is the same as the corresponding <code>[imageset_name]</code>.</li>
 </ul>
 
 </div>
@@ -107,12 +107,12 @@ where <code>[data_set_type]</code> is the same as the corresponding <code>[image
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Inside the <code>[data_set_name]</code> folder are the following files / folders</p>
+<p>Inside the <code>[dataset_name]</code> folder are the following files / folders</p>
 <ul>
 <li><code>test/</code>: test set (benchmark)</li>
 <li><code>train/</code>: training set</li>
 <li><code>val/</code>: validation set</li>
-<li><code>categories.txt</code>: all categories (classes) the data-set contains</li>
+<li><code>categories.txt</code>: all categories (classes) the dataset contains</li>
 </ul>
 
 </div>
@@ -135,7 +135,7 @@ where <code>[data_set_type]</code> is the same as the corresponding <code>[image
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset_generator.py#L54" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset_generator.py#L31" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 
@@ -180,20 +180,20 @@ where <code>[data_set_type]</code> is the same as the corresponding <code>[image
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="build_data_set" class="doc_header"><code>build_data_set</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset_generator.py#L74" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>build_data_set</code>(<strong><code>category_file_path</code></strong>, <strong><code>output</code></strong>, <strong><code>annotation_file_path</code></strong>=<em><code>None</code></em>, <strong><code>split</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>0</code></em>, <strong><code>data_set_type</code></strong>=<em><code>None</code></em>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>, <strong><code>join_overlapping_regions</code></strong>=<em><code>False</code></em>, <strong><code>annotation_area_threshold</code></strong>=<em><code>None</code></em>, <strong><code>data_set_name</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="build_dataset" class="doc_header"><code>build_dataset</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset_generator.py#L51" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>build_dataset</code>(<strong><code>category_file_path</code></strong>, <strong><code>output</code></strong>, <strong><code>annotation_file_path</code></strong>=<em><code>None</code></em>, <strong><code>split</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>0</code></em>, <strong><code>dataset_type</code></strong>=<em><code>None</code></em>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>, <strong><code>join_overlapping_regions</code></strong>=<em><code>False</code></em>, <strong><code>annotation_area_threshold</code></strong>=<em><code>None</code></em>, <strong><code>dataset_name</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
-<p>Build the data-set for training, Validation and test
+<p>Build the dataset for training, Validation and test
 <code>category_file_path</code>: the filename of the categories file
 <code>output</code>: the dataset base folder to build the dataset in
 <code>annotation_file_path</code>: the file path to the annotation file
 <code>split</code>: the size of the validation set as percentage
 <code>seed</code>: random seed to reproduce splits
 <code>sample</code>: the size of the sample set as percentage
-<code>data_set_type</code>: the type of the data-set, if not set infer from the category file path
+<code>dataset_type</code>: the type of the dataset, if not set infer from the category file path
 <code>create_tfrecord</code>: Also create .tfrecord files.
 <code>join_overlapping_regions</code>: Whether overlapping regions of same category should be joined.
 <code>annotation_area_threshold</code>: Keep only annotations with minimum size (width or height) related to image size
-<code>data_set_name</code>: the name of the data-set, if not set infer from the category file path</p>
+<code>dataset_name</code>: the name of the dataset, if not set infer from the category file path</p>
 
 </div>
 
