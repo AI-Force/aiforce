@@ -25,6 +25,9 @@ entries:
       title: Annotation Viewer
       url: annotation-viewer.html
     - output: web,pdf
+      title: YOLO Annotation Adapter
+      url: annotation-yolo_adapter.html
+    - output: web,pdf
       title: Category File Tools
       url: category_tools.html
     - output: web,pdf
