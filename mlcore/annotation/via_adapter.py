@@ -10,7 +10,7 @@ import csv
 import sys
 import argparse
 import logging
-from os.path import join, splitext
+from os.path import join, splitext, getsize, basename
 from .core import Annotation, Region, RegionShape, parse_region_shape, create_annotation_id
 
 # Cell
@@ -141,19 +141,18 @@ def _read_annotations_v1(annotations_file, files_source, category_id=DEFAULT_CAT
     `category_id`: the ID of the category label
     return: the annotations as dictionary
     """
-    file_annotations = None
     file_extension = splitext(annotations_file)[1]
 
     if file_extension.lower() == '.json':
-        file_annotations = _read_annotations_json_v1(annotations_file, files_source, category_id)
+        annotations = _read_annotations_json_v1(annotations_file, files_source, category_id)
     elif file_extension.lower() == '.csv':
-        file_annotations = _read_annotations_csv_v1(annotations_file, files_source, category_id)
+        annotations = _read_annotations_csv_v1(annotations_file, files_source, category_id)
     else:
         message = 'Unsupported annotation format at {}'.format(annotations_file)
         logger.error(message)
         raise ValueError(message)
 
-    return file_annotations
+    return annotations
 
 # Cell
 
@@ -179,10 +178,7 @@ def _read_annotations_csv_v1(annotations_file, files_source, category_id=DEFAULT
                 continue
 
             if annotation_id not in annotations:
-                file_name = row['#filename']
-                file_size = row['file_size']
-                annotations[annotation_id] = Annotation(annotation_id=annotation_id, file_name=file_name,
-                                                        file_size=file_size, file_path=file_path)
+                annotations[annotation_id] = Annotation(annotation_id=annotation_id, file_path=file_path)
 
             region_shape_attributes = json.loads(row['region_shape_attributes'])
             region = _parse_region_shape_attributes(region_shape_attributes)
@@ -202,14 +198,14 @@ def _read_annotations_json_v1(annotations_file, files_source, category_id=DEFAUL
     `annotations_file`: the path to the JSON annotation file to read
     `files_source`: the path to the folder containing the source files
     `category_id`: the ID of the category label
-    return: the file annotations as dictionary
+    return: the annotations as dictionary
     """
-    file_annotations = {}
+    annotations = {}
 
     with open(annotations_file) as json_file:
-        annotations = json.load(json_file)
+        via_annotations = json.load(json_file)
 
-        for data in annotations.values():
+        for data in via_annotations.values():
             file_path = join(files_source, data['filename'])
             annotation_id = create_annotation_id(file_path)
             if annotation_id is None:
@@ -217,12 +213,9 @@ def _read_annotations_json_v1(annotations_file, files_source, category_id=DEFAUL
                 continue
 
             if annotation_id not in annotations:
-                file_name = data['filename']
-                file_size = data['size']
-                annotations[annotation_id] = Annotation(annotation_id=annotation_id, file_name=file_name,
-                                                        file_size=file_size, file_path=file_path)
+                annotations[annotation_id] = Annotation(annotation_id=annotation_id, file_path=file_path)
 
-            annotation = file_annotations[annotation_id]
+            annotation = annotations[annotation_id]
 
             for region_data in data['regions'].values():
                 region_shape_attributes = region_data['shape_attributes']
@@ -232,7 +225,7 @@ def _read_annotations_json_v1(annotations_file, files_source, category_id=DEFAUL
                 region.labels = [category] if category else []
                 annotation.regions.append(annotation)
 
-    return file_annotations
+    return annotations
 
 # Cell
 
@@ -271,15 +264,17 @@ def _write_annotations_csv_v1(annotations_file, annotations, category_id=DEFAULT
                       'region_shape_attributes', 'region_attributes']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-
         for annotation in annotations.values():
+            file_size = getsize(annotation.file_path)
+            file_name = basename(annotation.file_path)
             for index, region in enumerate(annotation.regions):
                 region_shape_attributes = _create_region_shape_attributes(region)
                 region_attributes = {
                     category_id: ' '.join(region.labels) if len(region.labels) else ''
                 }
-                writer.writerow({'#filename': annotation.file_name,
-                                 'file_size': annotation.file_size,
+
+                writer.writerow({'#filename': file_name,
+                                 'file_size': file_size,
                                  'file_attributes': '{}',
                                  'region_count': len(annotation.regions),
                                  'region_id': str(index),
@@ -299,7 +294,9 @@ def _write_annotations_json_v1(annotations_file, annotations, category_id=DEFAUL
     via_annotations = {}
 
     for annotation in annotations.values():
-        file_id = '{:s}{:d}'.format(annotation.file_name, annotation. file_size)
+        file_size = getsize(annotation.file_path)
+        file_name = basename(annotation.file_path)
+        file_id = '{:s}{:d}'.format(file_name, file_size)
         regions = {}
         for index, region in enumerate(annotation.regions):
             regions[str(index)] = {
@@ -310,8 +307,8 @@ def _write_annotations_json_v1(annotations_file, annotations, category_id=DEFAUL
             }
         via_annotations[file_id] = {
             'fileref': "",
-            'size': annotation.file_size,
-            'filename': annotation.file_name,
+            'size': file_size,
+            'filename': file_name,
             'base64_img_data': "",
             'file_attributes': '{}',
             "regions": regions

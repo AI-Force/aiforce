@@ -152,12 +152,11 @@ raises: <code>ValueError</code> if unsupported shape parsed</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Annotation" class="doc_header"><code>class</code> <code>Annotation</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L70" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Annotation</code>(<strong><code>annotation_id</code></strong>=<em><code>None</code></em>, <strong><code>file_name</code></strong>=<em><code>None</code></em>, <strong><code>file_size</code></strong>=<em><code>None</code></em>, <strong><code>file_path</code></strong>=<em><code>None</code></em>, <strong><code>regions</code></strong>=<em><code>None</code></em>)</p>
+<h2 id="Annotation" class="doc_header"><code>class</code> <code>Annotation</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L70" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Annotation</code>(<strong><code>annotation_id</code></strong>=<em><code>None</code></em>, <strong><code>file_path</code></strong>=<em><code>None</code></em>, <strong><code>regions</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>A annotation for a file.
 <code>annotation_id</code>: a unique annotation identifier
 <code>file_name</code>: the file
-<code>file_size</code>: the file size
 <code>file_path</code>: the file path
 <code>regions</code>: A list of regions</p>
 
@@ -189,7 +188,7 @@ raises: <code>ValueError</code> if unsupported shape parsed</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="create_annotation_id" class="doc_header"><code>create_annotation_id</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L97" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_annotation_id</code>(<strong><code>file_path</code></strong>)</p>
+<h4 id="create_annotation_id" class="doc_header"><code>create_annotation_id</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L94" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_annotation_id</code>(<strong><code>file_path</code></strong>)</p>
 </blockquote>
 <p>Creates a annotation ID
 <code>file_path</code>: the file_path to create the ID from
@@ -223,7 +222,7 @@ return: the ID if file exist, else None</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="convert_region" class="doc_header"><code>convert_region</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L111" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>convert_region</code>(<strong><code>region</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#Region"><code>Region</code></a>, <strong><code>target_shape</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#RegionShape"><code>RegionShape</code></a>)</p>
+<h4 id="convert_region" class="doc_header"><code>convert_region</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L108" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>convert_region</code>(<strong><code>region</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#Region"><code>Region</code></a>, <strong><code>target_shape</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#RegionShape"><code>RegionShape</code></a>)</p>
 </blockquote>
 <p>Convert region to target shape.
 <code>region</code>: the region to convert
@@ -257,7 +256,7 @@ return: the ID if file exist, else None</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="region_bounding_box" class="doc_header"><code>region_bounding_box</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L156" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>region_bounding_box</code>(<strong><code>region</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#Region"><code>Region</code></a>)</p>
+<h4 id="region_bounding_box" class="doc_header"><code>region_bounding_box</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L153" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>region_bounding_box</code>(<strong><code>region</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#Region"><code>Region</code></a>)</p>
 </blockquote>
 <p>Calculates the region bounding box.
 <code>region</code>: the region

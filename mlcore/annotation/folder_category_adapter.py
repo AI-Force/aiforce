@@ -8,7 +8,7 @@ import sys
 import argparse
 import logging
 import shutil
-from os.path import join, normpath, sep, getsize, basename
+from os.path import join, normpath, sep, basename
 from ..io.core import create_folder, scan_files
 from .core import Annotation, Region, create_annotation_id
 
@@ -35,10 +35,7 @@ def read_annotations(files_source, category_index=DEFAULT_CATEGORY_FOLDER_INDEX)
     for file_path in file_paths:
         annotation_id = create_annotation_id(file_path)
         if annotation_id not in annotations:
-            file_size = getsize(file_path)
-            file_name = basename(file_path)
-            annotations[annotation_id] = Annotation(annotation_id=annotation_id, file_name=file_name,
-                                                    file_size=file_size, file_path=file_path)
+            annotations[annotation_id] = Annotation(annotation_id=annotation_id, file_path=file_path)
         annotation = annotations[annotation_id]
 
         trimmed_path = _trim_base_path(file_path, files_source)
@@ -67,7 +64,7 @@ def write_annotations(target_path, annotations):
     for annotation in annotations.values():
         for label in annotation.labels():
             category_folder = create_folder(join(target_path, label))
-            shutil.copy2(annotation.file_path, join(category_folder, annotation.file_name))
+            shutil.copy2(annotation.file_path, join(category_folder, basename(annotation.file_path)))
 
 # Cell
 

@@ -8,7 +8,7 @@ import csv
 import sys
 import argparse
 import logging
-from os.path import join, getsize, basename
+from os.path import join, basename
 from .core import Annotation, Region, create_annotation_id
 
 # Cell
@@ -42,10 +42,7 @@ def read_annotations(annotations_file, files_source):
                 continue
 
             if annotation_id not in annotations:
-                file_size = getsize(file_path)
-                file_name = basename(file_path)
-                annotations[annotation_id] = Annotation(annotation_id=annotation_id, file_name=file_name,
-                                                        file_size=file_size, file_path=file_path)
+                annotations[annotation_id] = Annotation(annotation_id=annotation_id, file_path=file_path)
 
             annotation = annotations[annotation_id]
 
@@ -69,9 +66,8 @@ def write_annotations(annotations_file, annotations):
         fieldnames = ['image_name', 'tags']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writeheader()
-
         for annotation in annotations.values():
-            writer.writerow({'image_name': annotation.file_name,
+            writer.writerow({'image_name': basename(annotation.file_path),
                              'tags': ' '.join(annotation.labels())})
 
 # Cell

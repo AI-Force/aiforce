@@ -72,16 +72,13 @@ class Annotation:
     A annotation for a file.
     `annotation_id`: a unique annotation identifier
     `file_name`: the file
-    `file_size`: the file size
     `file_path`: the file path
     `regions`: A list of regions
     """
 
-    def __init__(self, annotation_id=None, file_name=None, file_size=None, file_path=None, regions=None):
+    def __init__(self, annotation_id=None, file_path=None, regions=None):
         self.annotation_id = annotation_id
-        self.file_name = file_name
         self.file_path = file_path
-        self.file_size = file_size
         self.regions: [Region] = [] if regions is None else regions
 
     def labels(self):
