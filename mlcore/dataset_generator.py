@@ -10,6 +10,7 @@ import logging
 from os.path import join, dirname, basename
 from datetime import datetime
 from logging.handlers import MemoryHandler
+from .annotation.core import AnnotationAdapter
 from .dataset.type import DatasetType, infer_dataset_type
 from .dataset.image_classification import ImageClassificationDataset
 from .dataset.image_object_detection import ImageObjectDetectionDataset
@@ -126,52 +127,83 @@ def build_dataset(category_file_path, output, annotation_file_path=None, split=D
 
 
 if __name__ == '__main__' and '__file__' in globals():
-    # for direct shell execution
+
+    # read annotation adapters to use
+    adapter_classes = AnnotationAdapter.__subclasses__()
+    adapters = dict(zip(map(lambda c: c.__name__, adapter_classes), adapter_classes))
+
+    # parse the main arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("categories",
-                        help="The path to the imageset categories file.")
-    parser.add_argument("--annotation",
-                        help="The path to the imageset annotation file, the data-set is build from.",
-                        default=None)
-    parser.add_argument("--split",
-                        help="Percentage of the data which belongs to validation set.",
-                        type=float,
-                        default=0.2)
-    parser.add_argument("--seed",
-                        help="A random seed to reproduce splits.",
-                        type=int,
-                        default=None)
-    parser.add_argument("--category-label-key",
-                        help="The key of the category name.",
-                        default=CATEGORY_LABEL_KEY)
-    parser.add_argument("--sample",
-                        help="Percentage of the data which will be copied as a sample set.",
-                        type=float,
-                        default=0)
-    parser.add_argument("--type",
-                        help="The type of the dataset, if not explicitly set try to infer from categories file path.",
-                        choices=list(DatasetType),
-                        type=DatasetType,
-                        default=None)
-    parser.add_argument("--tfrecord",
-                        help="Also create .tfrecord files.",
-                        action="store_true")
-    parser.add_argument("--join-overlapping-regions",
-                        help="Whether overlapping regions of same category should be joined.",
-                        action="store_true")
-    parser.add_argument("--annotation-area-thresh",
-                        help="Keep only annotations with minimum size (width or height) related to image size.",
-                        type=float,
-                        default=None)
-    parser.add_argument("--output",
-                        help="The path of the dataset folder.",
-                        default=DATASET_FOLDER)
-    parser.add_argument("--name",
-                        help="The name of the dataset, if not explicitly set try to infer from categories file path.",
-                        default=None)
-    args = parser.parse_args()
+    parser.add_argument("-i",
+                        "--input",
+                        help="The data input adapter.",
+                        type=str,
+                        choices=adapters.keys(),
+                        required=True)
+    parser.add_argument("-o",
+                        "--output",
+                        help="The dataset output adapter.",
+                        type=str,
+                        choices=adapters.keys(),
+                        required=True)
 
-    CATEGORY_LABEL_KEY = args.category_label_key
+    args, rest_args = parser.parse_known_args()
 
-    build_dataset(args.categories, args.output, args.annotation, args.split, args.seed, args.sample, args.type,
-                  args.tfrecord, args.join_overlapping_regions, args.annotation_area_thresh, args.name)
+    adapter_class = adapters[args.input]
+
+    # parse the input arguments
+    input_parser = getattr(adapters[args.input], 'argparse')(prefix='input')
+    input_args, rest_args = input_parser.parse_known_args(rest_args)
+
+    # parse the output arguments
+    output_parser = getattr(adapters[args.output], 'argparse')(prefix='output')
+    output_args, rest_args = output_parser.parse_known_args(rest_args)
+
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument("categories",
+#                         help="The path to the imageset categories file.")
+#     parser.add_argument("--annotation",
+#                         help="The path to the imageset annotation file, the data-set is build from.",
+#                         default=None)
+#     parser.add_argument("--split",
+#                         help="Percentage of the data which belongs to validation set.",
+#                         type=float,
+#                         default=0.2)
+#     parser.add_argument("--seed",
+#                         help="A random seed to reproduce splits.",
+#                         type=int,
+#                         default=None)
+#     parser.add_argument("--category-label-key",
+#                         help="The key of the category name.",
+#                         default=CATEGORY_LABEL_KEY)
+#     parser.add_argument("--sample",
+#                         help="Percentage of the data which will be copied as a sample set.",
+#                         type=float,
+#                         default=0)
+#     parser.add_argument("--type",
+#                         help="The type of the dataset, if not explicitly set try to infer from categories file path.",
+#                         choices=list(DatasetType),
+#                         type=DatasetType,
+#                         default=None)
+#     parser.add_argument("--tfrecord",
+#                         help="Also create .tfrecord files.",
+#                         action="store_true")
+#     parser.add_argument("--join-overlapping-regions",
+#                         help="Whether overlapping regions of same category should be joined.",
+#                         action="store_true")
+#     parser.add_argument("--annotation-area-thresh",
+#                         help="Keep only annotations with minimum size (width or height) related to image size.",
+#                         type=float,
+#                         default=None)
+#     parser.add_argument("--output",
+#                         help="The path of the dataset folder.",
+#                         default=DATASET_FOLDER)
+#     parser.add_argument("--name",
+#                         help="The name of the dataset, if not explicitly set try to infer from categories file path.",
+#                         default=None)
+#     args = parser.parse_args()
+
+#     CATEGORY_LABEL_KEY = args.category_label_key
+
+#     build_dataset(args.categories, args.output, args.annotation, args.split, args.seed, args.sample, args.type,
+#                   args.tfrecord, args.join_overlapping_regions, args.annotation_area_thresh, args.name)

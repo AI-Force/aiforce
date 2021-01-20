@@ -6,8 +6,8 @@ title: Folder Category Annotation Adapter
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Adapter to read and write annotations classification where the folder structure represents the categories."
-description: "Adapter to read and write annotations classification where the folder structure represents the categories."
+summary: "Adapter to read and write annotations where the folder structure represents the categories."
+description: "Adapter to read and write annotations where the folder structure represents the categories."
 nb_path: "nbs/annotation-folder_category_adapter.ipynb"
 ---
 <!--
@@ -50,6 +50,17 @@ nb_path: "nbs/annotation-folder_category_adapter.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The <code>args</code> parameter contains the following options:</p>
+<ul>
+<li><code>files_path</code>: the path to the folder containing subfolders as category label with source files (e.g.: <em>data/segmentation/my_collection/trainval</em>)</li>
+<li><code>category_index</code>: The folder index, representing the category, default to <em>-2</em> (the parent folder of the file)</li>
+</ul>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -61,67 +72,78 @@ nb_path: "nbs/annotation-folder_category_adapter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_annotations" class="doc_header"><code>read_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L26" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_annotations</code>(<strong><code>files_source</code></strong>, <strong><code>category_index</code></strong>=<em><code>-2</code></em>)</p>
+<h2 id="FolderCategoryAdapter" class="doc_header"><code>class</code> <code>FolderCategoryAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FolderCategoryAdapter</code>(<strong><code>args</code></strong>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
+</blockquote>
+<p>Adapter to read and write annotations where the folder structure represents the categories.
+<code>args</code>: the arguments containing the parameters</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="FolderCategoryAdapter.read" class="doc_header"><code>FolderCategoryAdapter.read</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L37" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>FolderCategoryAdapter.read</code>()</p>
 </blockquote>
 <p>Read annotations from folder structure representing the categories.
-<code>files_source</code>: the path to the folder containing subfolders as category label with source files
-return: the annotations</p>
+return: the annotations as dictionary</p>
 
 </div>
 
 </div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
 
 <div class="output_area">
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="write_annotations" class="doc_header"><code>write_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L57" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>write_annotations</code>(<strong><code>target_path</code></strong>, <strong><code>annotations</code></strong>)</p>
+<h4 id="FolderCategoryAdapter.write" class="doc_header"><code>FolderCategoryAdapter.write</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L72" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>FolderCategoryAdapter.write</code>(<strong><code>annotations</code></strong>)</p>
 </blockquote>
 <p>Write annotations to folder structure representing the categories.
-The category folder will is created, if not exist, and corresponding files are copied into the labeled folder.
-<code>target_path</code>: the target path to create labeled folder structure into
+The category folder is created, if not exist, and corresponding files are copied into the labeled folder.
 <code>annotations</code>: the annotations to write</p>
 
 </div>
 
 </div>
 
-</div>
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="FolderCategoryAdapter.argparse" class="doc_header"><code>FolderCategoryAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L107" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>FolderCategoryAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Returns the argument parser containing argument definition for command line use.
+<code>prefix</code>: a parameter prefix to set, if needed
+return: the argument parser</p>
+
 </div>
 
 </div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
+</div>
 
 </div>
     {% endraw %}
@@ -143,7 +165,7 @@ The category folder will is created, if not exist, and corresponding files are c
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L86" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L129" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 <p>:param logging_level: The logging level to use.</p>
@@ -158,38 +180,6 @@ The category folder will is created, if not exist, and corresponding files are c
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Run-from-command-line">Run from command line<a class="anchor-link" href="#Run-from-command-line"> </a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>To run the data-set builder from command line, use the following command:
-<code>python -m mlcore.annotation.folder_category_adapter [parameters]</code></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The following parameters are supported:</p>
-<ul>
-<li><code>[files-source]</code>: the path to the folder containing subfolders as category label with source files (e.g.: <em>imagesets/segmentation/car_damage/trainval</em>)</li>
-<li><code>--category-index</code>: The folder index, representing the category, default to <em>-2</em> (the parent folder of the file)</li>
-</ul>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">

@@ -50,6 +50,17 @@ nb_path: "nbs/annotation-multi_category_adapter.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The <code>args</code> parameter contains the following options:</p>
+<ul>
+<li><code>files_path</code>: the path to the folder containing the source files (e.g.: <em>data/segmentation/my_collection/trainval</em>)</li>
+<li><code>annotations_file</code>: The path to the multi classification CSV annotation file (e.g.: data/segmentation/my_collection/annotations.csv)</li>
+</ul>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -61,60 +72,77 @@ nb_path: "nbs/annotation-multi_category_adapter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_annotations" class="doc_header"><code>read_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L25" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_annotations</code>(<strong><code>annotations_file</code></strong>, <strong><code>files_source</code></strong>)</p>
+<h2 id="MultiCategoryAdapter" class="doc_header"><code>class</code> <code>MultiCategoryAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L27" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>MultiCategoryAdapter</code>(<strong><code>args</code></strong>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
 </blockquote>
-<p>Reads a multi classification CSV annotations file.
-<code>annotations_file</code>: the path to the CSV annotation file to read
-<code>files_source</code>: the path to the folder containing the source files
+<p>Adapter to read and write annotations for multi label classification.
+<code>args</code>: the arguments containing the parameters</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="MultiCategoryAdapter.read" class="doc_header"><code>MultiCategoryAdapter.read</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L38" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAdapter.read</code>()</p>
+</blockquote>
+<p>Read annotations from a multi classification CSV annotations file.
 return: the annotations as dictionary</p>
 
 </div>
 
 </div>
 
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
 <div class="output_area">
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="write_annotations" class="doc_header"><code>write_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L59" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>write_annotations</code>(<strong><code>annotations_file</code></strong>, <strong><code>annotations</code></strong>)</p>
+<h4 id="MultiCategoryAdapter.write" class="doc_header"><code>MultiCategoryAdapter.write</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L74" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAdapter.write</code>(<strong><code>annotations</code></strong>)</p>
 </blockquote>
-<p>Reads a multi classification CSV annotations file.
-<code>annotations_file</code>: the path to the CSV annotation file to write
+<p>Writes a multi classification CSV annotations file and copy the corresponding source files.
 <code>annotations</code>: the annotations to write</p>
 
 </div>
 
 </div>
 
-</div>
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="MultiCategoryAdapter.argparse" class="doc_header"><code>MultiCategoryAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L103" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Returns the argument parser containing argument definition for command line use.
+<code>prefix</code>: a parameter prefix to set, if needed
+return: the argument parser</p>
+
 </div>
 
 </div>
-    {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
+</div>
+</div>
 
 </div>
     {% endraw %}
@@ -136,7 +164,7 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L76" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L124" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 <p>:param logging_level: The logging level to use.</p>
@@ -151,38 +179,6 @@ return: the annotations as dictionary</p>
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Run-from-command-line">Run from command line<a class="anchor-link" href="#Run-from-command-line"> </a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>To run the data-set builder from command line, use the following command:
-<code>python -m mlcore.annotation.multi_category_adapter [parameters]</code></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The following parameters are supported:</p>
-<ul>
-<li><code>[annotation]</code>: The path to the multi classification CSV annotation file (e.g.: <em>imagesets/segmentation/car_damage/annotations.csv</em>)</li>
-<li><code>--files_source</code>: The path to the folder containing the source files (e.g.: <em>imagesets/segmentation/car_damage/trainval</em>)</li>
-</ul>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
