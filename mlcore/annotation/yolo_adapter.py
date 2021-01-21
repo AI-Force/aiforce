@@ -166,6 +166,9 @@ class YOLOAdapter(AnnotationAdapter):
                 if len(skipped_regions) == len(annotation.regions):
                     logger.warning("{}: All regions skipped, skip annotation.".format(annotation.file_path))
                     skipped_annotations.append(annotation.file_path)
+                    continue
+            # copy the file
+            shutil.copy2(annotation.file_path, target_file)
 
         logger.info('Finished write annotations')
         logger.info('Annotations written: {}'.format(len(annotations) - len(skipped_annotations)))

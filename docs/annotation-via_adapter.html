@@ -6,8 +6,8 @@ title: VIA Annotation Adapter
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "VIA annotation adapter. To use the VIA annotation tool, refer to the <a href='http://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.6.html'>Homepage</a>."
-description: "VIA annotation adapter. To use the VIA annotation tool, refer to the <a href='http://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.6.html'>Homepage</a>."
+summary: "VIA annotation adapter. To use the VIA annotation tool, refer to the <a href='http://www.robots.ox.ac.uk/~vgg/software/via/'>Homepage</a>."
+description: "VIA annotation adapter. To use the VIA annotation tool, refer to the <a href='http://www.robots.ox.ac.uk/~vgg/software/via/'>Homepage</a>."
 nb_path: "nbs/annotation-via_adapter.ipynb"
 ---
 <!--
@@ -64,6 +64,16 @@ nb_path: "nbs/annotation-via_adapter.ipynb"
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Current supported annotation tool versions:</p>
+<ul>
+<li><a href="https://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.6.html">VIA version 1 (v1.0.6)</a></li>
+</ul>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -75,50 +85,72 @@ nb_path: "nbs/annotation-via_adapter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_annotations" class="doc_header"><code>read_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L30" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_annotations</code>(<strong><code>annotations_file</code></strong>, <strong><code>files_source</code></strong>, <strong><code>category_id</code></strong>=<em><code>'category'</code></em>)</p>
+<h2 id="VIAAdapter" class="doc_header"><code>class</code> <code>VIAAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L32" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>VIAAdapter</code>(<strong><code>args</code></strong>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
+</blockquote>
+<p>Adapter to read and write annotations in the VIA annotation.
+<code>args</code>: the arguments containing the parameters</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="VIAAdapter.read" class="doc_header"><code>VIAAdapter.read</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L44" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>VIAAdapter.read</code>()</p>
 </blockquote>
 <p>Reads a VIA annotations file.
 Supports JSON and CSV file format.
-<code>annotations_file</code>: the path to the annotation file to read
-<code>files_source</code>: the path to the folder containing the source files
-<code>category_id</code>: the ID of the category label
-return: the annotations</p>
+return: the annotations as dictionary</p>
 
 </div>
 
 </div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
 
 <div class="output_area">
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="write_annotations" class="doc_header"><code>write_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L44" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>write_annotations</code>(<strong><code>annotations_file</code></strong>, <strong><code>annotations</code></strong>, <strong><code>category_id</code></strong>=<em><code>'category'</code></em>)</p>
+<h4 id="VIAAdapter.write" class="doc_header"><code>VIAAdapter.write</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L158" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>VIAAdapter.write</code>(<strong><code>annotations</code></strong>)</p>
 </blockquote>
-<p>Writes a VIA annotations file.
-Supports JSON and CSV file format.
-<code>annotations_file</code>: the path to the annotation file to write
-<code>annotations</code>: the annotations to write
-<code>category_id</code>: the ID of the category label</p>
+<p>Writes a VIA annotations file and copy the corresponding source files.
+Supports JSON and CSV file format. Format is inferred from the annotations_file setting.
+<code>annotations</code>: the annotations to write</p>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="VIAAdapter.argparse" class="doc_header"><code>VIAAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L362" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>VIAAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Returns the argument parser containing argument definition for command line use.
+<code>prefix</code>: a parameter prefix to set, if needed
+return: the argument parser</p>
 
 </div>
 
@@ -126,81 +158,18 @@ Supports JSON and CSV file format.
 
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="VIA-Annotation-Tool-v1">VIA Annotation Tool v1<a class="anchor-link" href="#VIA-Annotation-Tool-v1"> </a></h2><p>Read or write annotation files made with the <a href="http://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.6.html">VIA Annotation Tool v1</a>.
+<h2 id="VIA-Annotation-Tool-v1">VIA Annotation Tool v1<a class="anchor-link" href="#VIA-Annotation-Tool-v1"> </a></h2><p>Read or write annotation files made with the <a href="http://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.6.html">VIA Annotation Tool Version 1</a>.
 Supported annotation file format are JSON and CSV.</p>
 
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Helper-Methods">Helper Methods<a class="anchor-link" href="#Helper-Methods"> </a></h2>
@@ -218,7 +187,7 @@ Supported annotation file format are JSON and CSV.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L323" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/via_adapter.py#L388" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 <p>:param logging_level: The logging level to use.</p>
@@ -233,39 +202,6 @@ Supported annotation file format are JSON and CSV.</p>
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Run-from-command-line">Run from command line<a class="anchor-link" href="#Run-from-command-line"> </a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>To run the data-set builder from command line, use the following command:
-<code>python -m mlcore.annotation.via_adapter [parameters]</code></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The following parameters are supported:</p>
-<ul>
-<li><code>[annotation]</code>: The path to the VIA annotation file (e.g.: <em>imagesets/segmentation/car_damage/via_region_data.json</em>)</li>
-<li><code>--files_source</code>: The path to the folder containing the source files (e.g.: <em>imagesets/segmentation/car_damage/trainval</em>)</li>
-<li><code>--category-label-key</code>: The key, the category name can be found in the annotation file, default to <em>category</em>.</li>
-</ul>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">

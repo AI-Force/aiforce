@@ -9,7 +9,7 @@ import sys
 import argparse
 import shutil
 import logging
-from os.path import join, basename, isfile
+from os.path import join, basename, isfile, dirname
 from ..io.core import create_folder
 from .core import Annotation, AnnotationAdapter, Region
 
@@ -77,6 +77,7 @@ class MultiCategoryAdapter(AnnotationAdapter):
         `annotations`: the annotations to write
         """
         target_folder = create_folder(self.files_path)
+        create_folder(dirname(self.annotations_file))
         logger.info('Write annotations to {}'.format(self.annotations_file))
         logger.info('Write file sources to {}'.format(target_folder))
         fieldnames = ['image_name', 'tags']
@@ -97,6 +98,7 @@ class MultiCategoryAdapter(AnnotationAdapter):
                     skipped_annotations.append(annotation.file_path)
                     continue
 
+                # copy the file
                 shutil.copy2(annotation.file_path, target_file)
                 writer.writerow({'image_name': basename(annotation.file_path),
                                  'tags': ' '.join(annotation.labels())})

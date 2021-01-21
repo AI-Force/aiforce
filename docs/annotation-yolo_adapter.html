@@ -6,8 +6,8 @@ title: YOLO Annotation Adapter
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "YOLO annotation adapter. Converts the bounding boxes into YOLO format."
-description: "YOLO annotation adapter. Converts the bounding boxes into YOLO format."
+summary: "YOLO annotation adapter."
+description: "YOLO annotation adapter."
 nb_path: "nbs/annotation-yolo_adapter.ipynb"
 ---
 <!--
@@ -50,6 +50,50 @@ nb_path: "nbs/annotation-yolo_adapter.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This adapter is tested with the <a href="https://github.com/ultralytics/yolov3">YOLOv3 Pytorch</a> and <a href="https://github.com/ultralytics/yolov5">YOLOv5 Pytorch</a> repositories.
+Bounding boxes are normalized between [0,1].
+Images should be in a separate folder (named e.g. <em>images/</em>).
+Annotations should be in a separate folder (named e.g. <em>labels/</em>) and must have the same file name as corresponding image source file with the ending <em>.txt</em>. Below is an example structure:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>categories.txt
+images/
+    image1.jpg
+labels/
+    image1.txt</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Supported annotations:</p>
+<ul>
+<li>rectangle</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The <code>args</code> parameter contains the following options:</p>
+<ul>
+<li><code>files_path</code>: the path to the folder containing the source files (e.g.: <em>data/image_object_detection/my_collection/trainval/images</em>)</li>
+<li><code>annotations_path</code>: The path to the multi classification CSV annotation file (e.g.: data/image_object_detection/my_collection/trainval/labels)</li>
+<li><code>categories_file</code>: The path to the categories file. If not explicitly set try to infer the file <em>categories.txt</em> from files_path (e.g.: data/image_object_detection/my_collection/categories.txt)</li>
+</ul>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -61,48 +105,70 @@ nb_path: "nbs/annotation-yolo_adapter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_annotations" class="doc_header"><code>read_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L27" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_annotations</code>(<strong><code>annotations_folder</code></strong>, <strong><code>files_source</code></strong>, <strong><code>categories</code></strong>)</p>
+<h2 id="YOLOAdapter" class="doc_header"><code>class</code> <code>YOLOAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>YOLOAdapter</code>(<strong><code>args</code></strong>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
+</blockquote>
+<p>Adapter to read and write annotations in the YOLO format.
+<code>args</code>: the arguments containing the parameters</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="YOLOAdapter.read" class="doc_header"><code>YOLOAdapter.read</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L44" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAdapter.read</code>()</p>
 </blockquote>
 <p>Reads YOLO annotations from the annotations folder.
-<code>annotations_folder</code>: the path to the folder containing the annotation files
-<code>files_source</code>: the path to the folder containing the source files
-<code>categories</code>: the categories used
-return: the annotations</p>
+return: the annotations as dictionary</p>
 
 </div>
 
 </div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
 
 <div class="output_area">
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="write_annotations" class="doc_header"><code>write_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L74" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>write_annotations</code>(<strong><code>annotations_folder</code></strong>, <strong><code>annotations</code></strong>, <strong><code>categories</code></strong>)</p>
+<h4 id="YOLOAdapter.write" class="doc_header"><code>YOLOAdapter.write</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L104" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAdapter.write</code>(<strong><code>annotations</code></strong>)</p>
 </blockquote>
-<p>Writes YOLO annotations to the annotations folder.
-<code>annotations_folder</code>: the path to the folder containing the annotation files
-<code>annotations</code>: the annotations to write
-<code>categories</code>: the categories used</p>
+<p>Writes YOLO annotations to the annotations folder and copy the corresponding source files.
+<code>annotations</code>: the annotations to write</p>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="YOLOAdapter.argparse" class="doc_header"><code>YOLOAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L178" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Returns the argument parser containing argument definition for command line use.
+<code>prefix</code>: a parameter prefix to set, if needed
+return: the argument parser</p>
 
 </div>
 
@@ -110,13 +176,6 @@ return: the annotations</p>
 
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -152,7 +211,7 @@ return: the annotations</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L138" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L227" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 <p>:param logging_level: The logging level to use.</p>
@@ -167,39 +226,6 @@ return: the annotations</p>
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Run-from-command-line">Run from command line<a class="anchor-link" href="#Run-from-command-line"> </a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>To run the data-set builder from command line, use the following command:
-<code>python -m mlcore.annotation.yolo_adapter [parameters]</code></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The following parameters are supported:</p>
-<ul>
-<li><code>[annotations_folder]</code>: The path to the YOLO annotations folder. (e.g.: <em>imagesets/image_object_detection/car_damage/labels/trainval</em>)</li>
-<li><code>--files_source</code>: The path to the folder containing the source files (e.g.: <em>imagesets/image_object_detection/car_damage/images/trainval</em>)</li>
-<li><code>--categories</code>: The path to the categories file. (e.g.: <em>imagesets/image_object_detection/car_damage/categories.txt</em>)</li>
-</ul>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">

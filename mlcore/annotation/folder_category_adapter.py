@@ -91,6 +91,7 @@ class FolderCategoryAdapter(AnnotationAdapter):
                     logger.warning("{}: Target file already exist, skip label {}.".format(annotation.file_path, label))
                     skipped_labels.append(label)
                     continue
+                # copy the file
                 shutil.copy2(annotation.file_path, target_file)
             if len(skipped_labels) == len(annotation.labels):
                 logger.warning("{}: All labels skipped, skip annotation.".format(annotation.file_path))
