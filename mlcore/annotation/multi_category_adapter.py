@@ -31,7 +31,7 @@ class MultiCategoryAdapter(AnnotationAdapter):
     """
 
     def __init__(self, args):
-        super().__init__()
+        super().__init__(args)
         self.files_path = args.files_path
         self.annotations_file = args.annotations_file
 

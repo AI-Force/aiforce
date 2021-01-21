@@ -33,7 +33,7 @@ class YOLOAdapter(AnnotationAdapter):
     """
 
     def __init__(self, args):
-        super().__init__()
+        super().__init__(args)
         self.files_path = args.files_path
         self.annotations_path = args.annotations_path
         if args.categories_file is None:

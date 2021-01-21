@@ -30,7 +30,7 @@ class FolderCategoryAdapter(AnnotationAdapter):
     """
 
     def __init__(self, args):
-        super().__init__()
+        super().__init__(args)
         self.files_path = args.files_path
         self.category_index = args.category_index if args.category_index is not None else DEFAULT_CATEGORY_FOLDER_INDEX
 

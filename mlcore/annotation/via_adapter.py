@@ -36,7 +36,7 @@ class VIAAdapter(AnnotationAdapter):
     """
 
     def __init__(self, args):
-        super().__init__()
+        super().__init__(args)
         self.files_path = args.files_path
         self.annotations_file = args.annotations_file
         self.category_label_key = DEFAULT_CATEGORY_ID if args.category_label_key is None else args.category_label_key

@@ -160,6 +160,13 @@ class AnnotationAdapter(ABC):
     Abstract Base Adapter to inherit for writing custom adapters
     """
 
+    def __init__(self, args):
+        """
+        Base Adapter to read and write annotations.
+        `args`: the arguments containing the parameters
+        """
+        pass
+
     @abstractmethod
     def read(self):
         """

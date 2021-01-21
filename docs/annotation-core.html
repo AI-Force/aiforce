@@ -282,7 +282,7 @@ return: a tuple of points_x and points_y</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="AnnotationAdapter" class="doc_header"><code>class</code> <code>AnnotationAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L158" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>AnnotationAdapter</code>() :: <code>ABC</code></p>
+<h2 id="AnnotationAdapter" class="doc_header"><code>class</code> <code>AnnotationAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L158" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>AnnotationAdapter</code>(<strong><code>args</code></strong>) :: <code>ABC</code></p>
 </blockquote>
 <p>Abstract Base Adapter to inherit for writing custom adapters</p>
 
@@ -314,7 +314,7 @@ return: a tuple of points_x and points_y</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.read" class="doc_header"><code>AnnotationAdapter.read</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L163" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.read</code>()</p>
+<h4 id="AnnotationAdapter.read" class="doc_header"><code>AnnotationAdapter.read</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L170" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.read</code>()</p>
 </blockquote>
 <p>Read annotations.
 return: the annotations as dictionary</p>
@@ -327,7 +327,7 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.write" class="doc_header"><code>AnnotationAdapter.write</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L171" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write</code>(<strong><code>annotations</code></strong>)</p>
+<h4 id="AnnotationAdapter.write" class="doc_header"><code>AnnotationAdapter.write</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L178" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write</code>(<strong><code>annotations</code></strong>)</p>
 </blockquote>
 <p>Write annotations.
 <code>annotations</code>: the annotations to write</p>
@@ -340,7 +340,7 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.argparse" class="doc_header"><code>AnnotationAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L179" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="AnnotationAdapter.argparse" class="doc_header"><code>AnnotationAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L186" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Returns the argument parser containing argument definition for command line use.
 <code>prefix</code>: a parameter prefix to set, if needed
@@ -354,7 +354,7 @@ return: the argument parser</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.assign_prefix" class="doc_header"><code>AnnotationAdapter.assign_prefix</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L189" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.assign_prefix</code>(<strong><code>arg_name</code></strong>, <strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="AnnotationAdapter.assign_prefix" class="doc_header"><code>AnnotationAdapter.assign_prefix</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L196" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.assign_prefix</code>(<strong><code>arg_name</code></strong>, <strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Assign a parameter prefix to a given argument name. (e.g --prefix_<arg_name>)
 <code>arg_name</code>: the argument name to prefix

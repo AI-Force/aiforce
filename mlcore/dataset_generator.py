@@ -149,14 +149,14 @@ if __name__ == '__main__' and '__file__' in globals():
 
     args, rest_args = parser.parse_known_args()
 
-    adapter_class = adapters[args.input]
-
+    adapter_input_class = adapters[args.input]
     # parse the input arguments
-    input_parser = getattr(adapters[args.input], 'argparse')(prefix='input')
+    input_parser = getattr(adapter_input_class, 'argparse')(prefix='input')
     input_args, rest_args = input_parser.parse_known_args(rest_args)
 
+    adapter_output_class = adapters[args.input]
     # parse the output arguments
-    output_parser = getattr(adapters[args.output], 'argparse')(prefix='output')
+    output_parser = getattr(adapter_output_class, 'argparse')(prefix='output')
     output_args, rest_args = output_parser.parse_known_args(rest_args)
 
 #     parser = argparse.ArgumentParser()
