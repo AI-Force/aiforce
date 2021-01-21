@@ -44,8 +44,8 @@ class MultiCategoryAdapter(AnnotationAdapter):
 
         logger.info('Read annotations from {}'.format(self.annotations_file))
 
-        with open(self.annotations_file, newline='') as csvfile:
-            reader = csv.DictReader(csvfile)
+        with open(self.annotations_file, newline='') as csv_file:
+            reader = csv.DictReader(csv_file)
 
             skipped_annotations = []
             for row in reader:
@@ -65,7 +65,7 @@ class MultiCategoryAdapter(AnnotationAdapter):
                     region = Region(labels=[category])
                     annotation.regions.append(region)
 
-        logger.info('Finnished read annotations')
+        logger.info('Finished read annotations')
         logger.info('Annotations read: {}'.format(len(annotations)))
         if skipped_annotations:
             logger.info('Annotations skipped: {}'.format(len(skipped_annotations)))
@@ -80,22 +80,28 @@ class MultiCategoryAdapter(AnnotationAdapter):
         logger.info('Write annotations to {}'.format(self.annotations_file))
         logger.info('Write file sources to {}'.format(target_folder))
         fieldnames = ['image_name', 'tags']
-        with open(self.annotations_file, 'w', newline='') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=',', quotechar='"',
+        with open(self.annotations_file, 'w', newline='') as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames, delimiter=',', quotechar='"',
                                     quoting=csv.QUOTE_MINIMAL)
             writer.writeheader()
             skipped_annotations = []
             for annotation in annotations.values():
+                target_file = join(target_folder, basename(annotation.file_path))
+
                 if not isfile(annotation.file_path):
                     logger.warning("{}: Source file not found, skip annotation.".format(annotation.file_path))
                     skipped_annotations.append(annotation.file_path)
                     continue
+                if isfile(target_file):
+                    logger.warning("{}: Target file already exist, skip annotation.".format(annotation.file_path))
+                    skipped_annotations.append(annotation.file_path)
+                    continue
 
-                shutil.copy2(annotation.file_path, join(target_folder, basename(annotation.file_path)))
+                shutil.copy2(annotation.file_path, target_file)
                 writer.writerow({'image_name': basename(annotation.file_path),
                                  'tags': ' '.join(annotation.labels())})
 
-        logger.info('Finnished write annotations')
+        logger.info('Finished write annotations')
         logger.info('Annotations written: {}'.format(len(annotations) - len(skipped_annotations)))
         if skipped_annotations:
             logger.info('Annotations skipped: {}'.format(len(skipped_annotations)))

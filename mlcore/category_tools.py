@@ -8,6 +8,7 @@ __all__ = ['DEFAULT_CATEGORIES_FILE', 'NOT_CATEGORIZED', 'BACKGROUND_CLASS', 'BA
 import sys
 import argparse
 import logging
+from os.path import isfile
 from .dataset.type import DatasetType
 
 # Cell
@@ -36,10 +37,16 @@ def read_categories(categories_file=None, dataset_type=DatasetType.IMAGE_CLASSIF
     if categories_file is None:
         categories_file = DEFAULT_CATEGORIES_FILE
 
+    if not isfile(categories_file):
+        logger.warning('Categories file not found at: {}'.format(categories_file))
+        return []
     with open(categories_file) as f:
         categories = f.read().strip().split('\n')
+        logger.info('Read {} categories from categories file at: {}'.format(len(categories), categories_file))
     if dataset_type in [DatasetType.IMAGE_OBJECT_DETECTION, DatasetType.IMAGE_SEGMENTATION]:
         categories = [BACKGROUND_CLASS] + categories
+        logger.info('Prepend background class {} to the categories'.format(BACKGROUND_CLASS))
+
     return categories
 
 # Cell
@@ -71,5 +78,4 @@ if __name__ == '__main__' and '__file__' in globals():
 
     args = parser.parse_args()
 
-    categories = read_categories(args.categories)
-    print(categories)
+    print(read_categories(args.categories))

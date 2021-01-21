@@ -63,7 +63,7 @@ class FolderCategoryAdapter(AnnotationAdapter):
             region = Region(labels=[category])
             annotation.regions.append(region)
 
-        logger.info('Finnished read annotations')
+        logger.info('Finished read annotations')
         logger.info('Annotations read: {}'.format(len(annotations)))
         if skipped_annotations:
             logger.info('Annotations skipped: {}'.format(len(skipped_annotations)))
@@ -83,11 +83,20 @@ class FolderCategoryAdapter(AnnotationAdapter):
                 skipped_annotations.append(annotation.file_path)
                 continue
 
+            skipped_labels = []
             for label in annotation.labels():
                 category_folder = create_folder(join(self.files_path, label))
-                shutil.copy2(annotation.file_path, join(category_folder, basename(annotation.file_path)))
+                target_file = join(category_folder, basename(annotation.file_path))
+                if isfile(target_file):
+                    logger.warning("{}: Target file already exist, skip label {}.".format(annotation.file_path, label))
+                    skipped_labels.append(label)
+                    continue
+                shutil.copy2(annotation.file_path, target_file)
+            if len(skipped_labels) == len(annotation.labels):
+                logger.warning("{}: All labels skipped, skip annotation.".format(annotation.file_path))
+                skipped_annotations.append(annotation.file_path)
 
-        logger.info('Finnished write annotations')
+        logger.info('Finished write annotations')
         logger.info('Annotations written: {}'.format(len(annotations) - len(skipped_annotations)))
         if skipped_annotations:
             logger.info('Annotations skipped: {}'.format(len(skipped_annotations)))
