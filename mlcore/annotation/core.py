@@ -201,4 +201,4 @@ class AnnotationAdapter(ABC):
         `prefix`: the prefix
         return: the prefixed argument name
         """
-        return re.sub(r'^(-{0,2})([\w-]+)$', r'\1{}_\2'.format('' if prefix is None else prefix), arg_name)
+        return arg_name if prefix is None else re.sub(r'^(-{0,2})([\w-]+)$', r'\1{}_\2'.format(prefix), arg_name)

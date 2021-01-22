@@ -95,7 +95,7 @@ class VIAAdapter(AnnotationAdapter):
                 if annotation_id not in annotations:
                     annotations[annotation_id] = Annotation(annotation_id=annotation_id, file_path=file_path)
 
-                annotation = annotations[file_path]
+                annotation = annotations[annotation_id]
 
                 region_shape_attributes = json.loads(row['region_shape_attributes'])
                 region = self._parse_region_shape_attributes(region_shape_attributes)
@@ -146,7 +146,7 @@ class VIAAdapter(AnnotationAdapter):
                     if region_attributes and self.category_label_key in region_attributes:
                         category = region_attributes[self.category_label_key]
                     region.labels = [category] if category else []
-                    annotation.regions.append(annotation)
+                    annotation.regions.append(region)
 
         logger.info('Finished read annotations')
         logger.info('Annotations read: {}'.format(len(annotations)))

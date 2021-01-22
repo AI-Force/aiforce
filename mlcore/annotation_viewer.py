@@ -9,6 +9,8 @@ import argparse
 import logging
 import cv2
 import numpy as np
+from .core import import_modules, parse_known_help
+from mlcore import annotation as annotation_package
 from .annotation.core import AnnotationAdapter
 from .image.opencv_tools import fit_to_max_size
 from .annotation.core import RegionShape
@@ -113,6 +115,7 @@ if __name__ == '__main__' and '__file__' in globals():
     configure_logging()
 
     # read annotation adapters to use
+    import_modules(annotation_package)
     adapter_classes = AnnotationAdapter.__subclasses__()
     adapters = dict(zip(map(lambda c: c.__name__, adapter_classes), adapter_classes))
 
@@ -132,12 +135,13 @@ if __name__ == '__main__' and '__file__' in globals():
                         type=int,
                         default=0)
 
-    args, rest_args = parser.parse_known_args()
-
-    adapter_class = adapters[args.input]
+    argv, argv_help_rest = parse_known_help(sys.argv)
+    args, rest_args = parser.parse_known_args(argv)
+    rest_args = rest_args + argv_help_rest
+    adapter_class = adapters[args.annotation]
 
     # parse the annotation arguments
-    annotation_parser = getattr(adapters[args.input], 'argparse')()
+    annotation_parser = getattr(adapters[args.annotation], 'argparse')()
     annotation_args, _ = annotation_parser.parse_known_args(rest_args)
 
     annotation_adapter = adapter_class(annotation_args)
