@@ -25,6 +25,9 @@ entries:
       title: YOLO Annotation Adapter
       url: annotation-yolo_adapter.html
     - output: web,pdf
+      title: Annotation Converter
+      url: annotation_converter.html
+    - output: web,pdf
       title: Annotation Viewer
       url: annotation_viewer.html
     - output: web,pdf

@@ -54,8 +54,8 @@ nb_path: "nbs/annotation-multi_category_adapter.ipynb"
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The <code>args</code> parameter contains the following options:</p>
 <ul>
-<li><code>files_path</code>: the path to the folder containing the source files (e.g.: <em>data/segmentation/my_collection/trainval</em>)</li>
-<li><code>annotations_file</code>: The path to the multi classification CSV annotation file (e.g.: data/segmentation/my_collection/annotations.csv)</li>
+<li><code>files_path</code>: the path to the folder containing the source files (e.g.: <em>data/image_classification/my_collection/trainval</em>)</li>
+<li><code>annotations_file</code>: The path to the multi classification CSV annotation file. if not set, the default name is <em>annotations.csv</em> in the parent folder of <em>files_path</em> (e.g.: data/image_classification/my_collection/annotations.csv)</li>
 </ul>
 
 </div>
@@ -72,7 +72,7 @@ nb_path: "nbs/annotation-multi_category_adapter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="MultiCategoryAdapter" class="doc_header"><code>class</code> <code>MultiCategoryAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L27" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>MultiCategoryAdapter</code>(<strong><code>args</code></strong>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
+<h2 id="MultiCategoryAdapter" class="doc_header"><code>class</code> <code>MultiCategoryAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L28" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>MultiCategoryAdapter</code>(<strong><code>args</code></strong>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
 </blockquote>
 <p>Adapter to read and write annotations for multi label classification.
 <code>args</code>: the arguments containing the parameters</p>
@@ -105,7 +105,7 @@ nb_path: "nbs/annotation-multi_category_adapter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="MultiCategoryAdapter.read" class="doc_header"><code>MultiCategoryAdapter.read</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L38" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAdapter.read</code>()</p>
+<h4 id="MultiCategoryAdapter.read" class="doc_header"><code>MultiCategoryAdapter.read</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L42" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAdapter.read</code>()</p>
 </blockquote>
 <p>Read annotations from a multi classification CSV annotations file.
 return: the annotations as dictionary</p>
@@ -118,7 +118,7 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="MultiCategoryAdapter.write" class="doc_header"><code>MultiCategoryAdapter.write</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L74" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAdapter.write</code>(<strong><code>annotations</code></strong>)</p>
+<h4 id="MultiCategoryAdapter.write" class="doc_header"><code>MultiCategoryAdapter.write</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L78" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAdapter.write</code>(<strong><code>annotations</code></strong>)</p>
 </blockquote>
 <p>Writes a multi classification CSV annotations file and copy the corresponding source files.
 <code>annotations</code>: the annotations to write</p>
@@ -131,7 +131,7 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="MultiCategoryAdapter.argparse" class="doc_header"><code>MultiCategoryAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L111" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="MultiCategoryAdapter.argparse" class="doc_header"><code>MultiCategoryAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L121" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Returns the argument parser containing argument definition for command line use.
 <code>prefix</code>: a parameter prefix to set, if needed
@@ -143,45 +143,6 @@ return: the argument parser</p>
 
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Helper-Methods">Helper Methods<a class="anchor-link" href="#Helper-Methods"> </a></h2>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L132" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
-</blockquote>
-<p>Configures logging for the system.</p>
-<p>:param logging_level: The logging level to use.</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}

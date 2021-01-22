@@ -55,7 +55,7 @@ nb_path: "nbs/annotation-folder_category_adapter.ipynb"
 <p>The <code>args</code> parameter contains the following options:</p>
 <ul>
 <li><code>files_path</code>: the path to the folder containing subfolders as category label with source files (e.g.: <em>data/segmentation/my_collection/trainval</em>)</li>
-<li><code>category_index</code>: The folder index, representing the category, default to <em>-2</em> (the parent folder of the file)</li>
+<li><code>category_index</code>: The folder index, representing the category, default to <em>-1</em> (the parent folder of the file)</li>
 </ul>
 
 </div>
@@ -72,7 +72,7 @@ nb_path: "nbs/annotation-folder_category_adapter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="FolderCategoryAdapter" class="doc_header"><code>class</code> <code>FolderCategoryAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FolderCategoryAdapter</code>(<strong><code>args</code></strong>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
+<h2 id="FolderCategoryAdapter" class="doc_header"><code>class</code> <code>FolderCategoryAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L25" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>FolderCategoryAdapter</code>(<strong><code>args</code></strong>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
 </blockquote>
 <p>Adapter to read and write annotations where the folder structure represents the categories.
 <code>args</code>: the arguments containing the parameters</p>
@@ -105,7 +105,7 @@ nb_path: "nbs/annotation-folder_category_adapter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="FolderCategoryAdapter.read" class="doc_header"><code>FolderCategoryAdapter.read</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L37" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>FolderCategoryAdapter.read</code>()</p>
+<h4 id="FolderCategoryAdapter.read" class="doc_header"><code>FolderCategoryAdapter.read</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L36" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>FolderCategoryAdapter.read</code>()</p>
 </blockquote>
 <p>Read annotations from folder structure representing the categories.
 return: the annotations as dictionary</p>
@@ -118,7 +118,7 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="FolderCategoryAdapter.write" class="doc_header"><code>FolderCategoryAdapter.write</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L72" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>FolderCategoryAdapter.write</code>(<strong><code>annotations</code></strong>)</p>
+<h4 id="FolderCategoryAdapter.write" class="doc_header"><code>FolderCategoryAdapter.write</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L71" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>FolderCategoryAdapter.write</code>(<strong><code>annotations</code></strong>)</p>
 </blockquote>
 <p>Write annotations to folder structure representing the categories.
 The category folder is created, if not exist, and corresponding files are copied into the labeled folder.
@@ -144,45 +144,6 @@ return: the argument parser</p>
 
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Helper-Methods">Helper Methods<a class="anchor-link" href="#Helper-Methods"> </a></h2>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/folder_category_adapter.py#L139" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
-</blockquote>
-<p>Configures logging for the system.</p>
-<p>:param logging_level: The logging level to use.</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}

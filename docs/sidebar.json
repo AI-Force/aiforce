@@ -6,6 +6,7 @@
     "Multi Category Annotation Adapter": "annotation-multi_category_adapter.html",
     "VIA Annotation Adapter": "annotation-via_adapter.html",
     "YOLO Annotation Adapter": "annotation-yolo_adapter.html",
+    "Annotation Converter": "annotation_converter.html",
     "Annotation Viewer": "annotation_viewer.html",
     "Category File Tools": "category_tools.html",
     "Core classes and functions": "core.html",

@@ -126,14 +126,17 @@ if __name__ == '__main__' and '__file__' in globals():
                         type=int,
                         default=0)
 
-    argv, argv_help_rest = parse_known_help(sys.argv)
+    argv = sys.argv
+    argv, argv_help_rest = parse_known_help(argv)
     args, rest_args = parser.parse_known_args(argv)
-    rest_args = rest_args + argv_help_rest
+    argv = rest_args + argv_help_rest
     adapter_class = adapters[args.annotation]
 
     # parse the annotation arguments
-    annotation_parser = getattr(adapters[args.annotation], 'argparse')()
-    annotation_args, _ = annotation_parser.parse_known_args(rest_args)
+    annotation_parser = getattr(adapter_class, 'argparse')()
+    argv, argv_help_rest = parse_known_help(argv)
+    annotation_args, _ = annotation_parser.parse_known_args(argv)
+    argv = rest_args + argv_help_rest
 
     annotation_adapter = adapter_class(annotation_args)
     show_annotated_images(annotation_adapter.read(), args.max_width, args.max_height)
