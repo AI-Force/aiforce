@@ -7,21 +7,23 @@ __all__ = ['convert', 'configure_logging']
 import sys
 import argparse
 import logging
-from .core import import_modules, parse_known_help
+from .core import list_subclasses, parse_known_args_with_help
 from mlcore import annotation as annotation_package
-from .annotation.core import AnnotationAdapter
+from .annotation.core import AnnotationAdapter, SubsetType
 
 # Cell
 
 
-def convert(input_annotation_adapter: AnnotationAdapter, output_annotation_adapter: AnnotationAdapter):
+def convert(input_adapter: AnnotationAdapter, output_adapter: AnnotationAdapter):
     """
     Convert input annotations to output annotations.
-    `input_annotation_adapter`: the input annotation adapter
-    `output_annotation_adapter`: the output annotation adapter
+    `input_adapter`: the input annotation adapter
+    `output_adapter`: the output annotation adapter
     """
-    annotations = input_annotation_adapter.read()
-    output_annotation_adapter.write(annotations)
+    categories = input_adapter.read_categories()
+    annotations = input_adapter.read_annotations(SubsetType.TRAINVAL)
+    output_adapter.write_categories(categories)
+    output_adapter.write_annotations(annotations, SubsetType.TRAINVAL)
 
 # Cell
 
@@ -42,44 +44,31 @@ if __name__ == '__main__' and '__file__' in globals():
     configure_logging()
 
     # read annotation adapters to use
-    import_modules(annotation_package)
-    adapter_classes = AnnotationAdapter.__subclasses__()
-    adapters = dict(zip(map(lambda c: c.__name__, adapter_classes), adapter_classes))
+    adapters = list_subclasses(annotation_package, AnnotationAdapter)
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-i",
-                        "--input",
-                        help="The annotation input adapter.",
+                        "--input_adapter",
+                        help="The annotation adapter to read the annotations.",
                         type=str,
-                        choices=adapters.keys(),
-                        required=True)
+                        choices=adapters.keys())
     parser.add_argument("-o",
-                        "--output",
-                        help="The annotation output adapter.",
+                        "--output_adapter",
+                        help="The annotation adapter to write the annotations.",
                         type=str,
-                        choices=adapters.keys(),
-                        required=True)
+                        choices=adapters.keys())
 
     argv = sys.argv
-    argv, argv_help_rest = parse_known_help(argv)
-    args, rest_args = parser.parse_known_args(argv)
-    argv = rest_args + argv_help_rest
-    input_adapter_class = adapters[args.input]
-    output_adapter_class = adapters[args.output]
+    args, argv = parse_known_args_with_help(parser, argv)
+    input_adapter_class = adapters[args.input_adapter]
+    output_adapter_class = adapters[args.output_adapter]
 
     # parse the input arguments
     input_parser = getattr(input_adapter_class, 'argparse')(prefix='input')
-    argv, argv_help_rest = parse_known_help(argv)
-    input_args, rest_args = input_parser.parse_known_args(argv)
-    argv = rest_args + argv_help_rest
+    input_args, argv = parse_known_args_with_help(input_parser, argv)
 
     # parse the output arguments
     output_parser = getattr(output_adapter_class, 'argparse')(prefix='output')
-    argv, argv_help_rest = parse_known_help(argv)
-    output_args, rest_args = output_parser.parse_known_args(argv)
-    argv = rest_args + argv_help_rest
+    output_args, argv = parse_known_args_with_help(output_parser, argv)
 
-    input_adapter = input_adapter_class(input_args)
-    output_adapter = output_adapter_class(output_args)
-
-    convert(input_adapter, output_adapter)
+    convert(input_adapter_class(**vars(input_args)), output_adapter_class(**vars(output_args)))

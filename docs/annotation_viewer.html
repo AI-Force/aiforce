@@ -6,8 +6,8 @@ title: Annotation Viewer
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Annotation Viewer Notes."
-description: "Annotation Viewer Notes."
+summary: "Simple Annotation Viewer using OpenCV."
+description: "Simple Annotation Viewer using OpenCV."
 nb_path: "nbs/annotation_viewer.ipynb"
 ---
 <!--
@@ -40,6 +40,46 @@ nb_path: "nbs/annotation_viewer.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>{% include image.html alt="AnnotationViewer" caption="The Annotation Viewer." max-width="800" file="/ML-Core-Docs/assets/annotation_viewer.png" %}</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Current supported annotations:</p>
+<ul>
+<li>circle</li>
+<li>ellipse</li>
+<li>point</li>
+<li>polyline</li>
+<li>rectangle</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Supported keyboard commands:</p>
+<ul>
+<li><strong>n</strong>: Go to next annotation</li>
+<li><strong>b</strong>: Go to previous annotation</li>
+<li><strong>q</strong>: Quit</li>
+</ul>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
 <div class="output_wrapper">
 <div class="output">
 
@@ -47,11 +87,11 @@ nb_path: "nbs/annotation_viewer.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="show_annotated_images" class="doc_header"><code>show_annotated_images</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation_viewer.py#L21" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>show_annotated_images</code>(<strong><code>annotations</code></strong>, <strong><code>max_width</code></strong>=<em><code>0</code></em>, <strong><code>max_height</code></strong>=<em><code>0</code></em>)</p>
+<h4 id="show_annotated_images" class="doc_header"><code>show_annotated_images</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation_viewer.py#L25" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>show_annotated_images</code>(<strong><code>annotation_adapter</code></strong>, <strong><code>max_width</code></strong>=<em><code>0</code></em>, <strong><code>max_height</code></strong>=<em><code>0</code></em>)</p>
 </blockquote>
 <p>Show images with corresponding annotations.
 Images are shown one at a time with switching by using the arrow left/right keys.
-<code>annotations</code>: The annotations for the images
+<code>annotation_adapter</code>: The annotation adapter to use
 <code>max_width</code>: The maximum width to scale the image for visibility.
 <code>max_height</code>: The maximum height to scale the image for visibility.</p>
 
@@ -89,7 +129,7 @@ Images are shown one at a time with switching by using the arrow left/right keys
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation_viewer.py#L93" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation_viewer.py#L101" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 <p>:param logging_level: The logging level to use.</p>
@@ -119,7 +159,7 @@ Images are shown one at a time with switching by using the arrow left/right keys
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>To run the data-set builder from command line, use the following command:
+<p>To run the annotation viewer from command line, use the following command:
 <code>python -m mlcore.via.annotation_viewer [parameters]</code></p>
 
 </div>
@@ -129,9 +169,9 @@ Images are shown one at a time with switching by using the arrow left/right keys
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The following parameters are supported:</p>
 <ul>
-<li><code>path</code>: The path to the images to view. (e.g.: <em>imagesets/segmentation/car_damage/trainval</em>)</li>
-<li><code>--annotation</code>: The path to the VIA annotation file (e.g.: <em>imagesets/segmentation/car_damage/via_region_data.json</em>)</li>
-<li><code>--category-label-key</code>: The category label key used, default to <code>category</code></li>
+<li><code>-a</code>, <code>--annotation</code>: The annotation adapter to read the annotations (e.g.: <em>VIAAnnotationAdapter</em>)</li>
+<li><code>--max-width</code>: The maximum width to scale the image for visibility, default is no scale</li>
+<li><code>--max-height</code>: The maximum height to scale the image for visibility, default is no scale</li>
 </ul>
 
 </div>

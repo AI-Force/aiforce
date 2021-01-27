@@ -6,8 +6,8 @@ title: Annotation Converter
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Annotation Converter Notes."
-description: "Annotation Converter Notes."
+summary: "Converter to covert annotations into different formats."
+description: "Converter to covert annotations into different formats."
 nb_path: "nbs/annotation_converter.ipynb"
 ---
 <!--
@@ -36,6 +36,13 @@ nb_path: "nbs/annotation_converter.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>{% include image.html alt="AnnotationConverter" caption="The Annotation Converter." max-width="800" file="/ML-Core-Docs/assets/annotation_converter.png" %}</p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -47,11 +54,11 @@ nb_path: "nbs/annotation_converter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="convert" class="doc_header"><code>convert</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation_converter.py#L17" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>convert</code>(<strong><code>input_annotation_adapter</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a>, <strong><code>output_annotation_adapter</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a>)</p>
+<h4 id="convert" class="doc_header"><code>convert</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation_converter.py#L17" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>convert</code>(<strong><code>input_adapter</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a>, <strong><code>output_adapter</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a>)</p>
 </blockquote>
 <p>Convert input annotations to output annotations.
-<code>input_annotation_adapter</code>: the input annotation adapter
-<code>output_annotation_adapter</code>: the output annotation adapter</p>
+<code>input_adapter</code>: the input annotation adapter
+<code>output_adapter</code>: the output annotation adapter</p>
 
 </div>
 
@@ -87,7 +94,7 @@ nb_path: "nbs/annotation_converter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation_converter.py#L29" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation_converter.py#L31" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 <p>:param logging_level: The logging level to use.</p>
@@ -117,8 +124,8 @@ nb_path: "nbs/annotation_converter.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>To run the data-set builder from command line, use the following command:
-<code>python -m mlcore.via.annotation_viewer [parameters]</code></p>
+<p>To run the annotation converter from command line, use the following command:
+<code>python -m mlcore.annotation_converter [parameters]</code></p>
 
 </div>
 </div>
@@ -127,9 +134,8 @@ nb_path: "nbs/annotation_converter.ipynb"
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The following parameters are supported:</p>
 <ul>
-<li><code>path</code>: The path to the images to view. (e.g.: <em>imagesets/segmentation/car_damage/trainval</em>)</li>
-<li><code>--annotation</code>: The path to the VIA annotation file (e.g.: <em>imagesets/segmentation/car_damage/via_region_data.json</em>)</li>
-<li><code>--category-label-key</code>: The category label key used, default to <code>category</code></li>
+<li><code>-i</code>, <code>--input_adapter</code>: The annotation adapter to the annotations to convert from (e.g.: <em>VIAAnnotationAdapter</em>)</li>
+<li><code>-o</code>, <code>--output_adapter</code>: The annotation adapter to the annotations to convert to (e.g.: <em>MultiCategoryAnnotationAdapter</em>)</li>
 </ul>
 
 </div>
@@ -142,6 +148,26 @@ nb_path: "nbs/annotation_converter.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Example:-Image-Object-Detection-to-Multi-Category-Image-Classification">Example: Image Object Detection to Multi Category Image Classification<a class="anchor-link" href="#Example:-Image-Object-Detection-to-Multi-Category-Image-Classification"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To convert image object detection annotations to multi category image classifications, run the following command:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>python -m mlcore.annotation_converter --input_adapter VIAAnnotationAdapter --input_path data/image_object_detection/my_collection --output_adapter MultiCategoryAnnotationAdapter --output_path data/image_classification/my_collection</code></p>
+
+</div>
+</div>
+</div>
 </div>
  
 

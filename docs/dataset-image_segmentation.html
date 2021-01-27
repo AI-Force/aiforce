@@ -43,13 +43,6 @@ nb_path: "nbs/dataset-image_segmentation.ipynb"
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Creating a data-set for a classification or segmentation task. If an annotation file is present, the annotations are also prepared.
@@ -143,7 +136,7 @@ All images are validated against the annotations, if they contain at least one a
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ImageSegmentationDataset" class="doc_header"><code>class</code> <code>ImageSegmentationDataset</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/image_segmentation.py#L48" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ImageSegmentationDataset</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>imageset_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>annotations_path</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/dataset-image_object_detection.html#ImageObjectDetectionDataset"><code>ImageObjectDetectionDataset</code></a></p>
+<h2 id="ImageSegmentationDataset" class="doc_header"><code>class</code> <code>ImageSegmentationDataset</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/image_segmentation.py#L25" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ImageSegmentationDataset</code>(<strong><code>input_adapter</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a>, <strong><code>output_adapter</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a>, <strong><code>split</code></strong>=<em><code>None</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>None</code></em>, <strong><code>tfrecord</code></strong>=<em><code>False</code></em>, <strong><code>join_overlapping_regions</code></strong>=<em><code>False</code></em>, <strong><code>annotation_area_threshold</code></strong>=<em><code>None</code></em>, <strong><code>generate_semantic_masks</code></strong>=<em><code>True</code></em>) :: <a href="/ML-Core-Docs/dataset-image_object_detection.html#ImageObjectDetectionDataset"><code>ImageObjectDetectionDataset</code></a></p>
 </blockquote>
 <p>Object detection dataset.
 <code>name</code>: The name of the dataset.
@@ -165,101 +158,6 @@ All images are validated against the annotations, if they contain at least one a
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Build-a-data-set">Build a data-set<a class="anchor-link" href="#Build-a-data-set"> </a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>To build a data-set from an image-set. Handles currently classification and segmentation image-sets taken from the image-set-type, which is the parent folder, the image-set folder is located in.</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="build_dataset" class="doc_header"><code>build_dataset</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/image_segmentation.py#L215" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>build_dataset</code>(<strong><code>category_file_path</code></strong>, <strong><code>output</code></strong>, <strong><code>annotation_file_path</code></strong>=<em><code>None</code></em>, <strong><code>split</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>0</code></em>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>, <strong><code>dataset_name</code></strong>=<em><code>None</code></em>)</p>
-</blockquote>
-<p>Build the dataset for training, Validation and test
-<code>category_file_path</code>: the filename of the categories file
-<code>output</code>: the dataset base folder to build the dataset in
-<code>annotation_file_path</code>: the file path to the annotation file
-<code>split</code>: the size of the validation set as percentage
-<code>seed</code>: random seed to reproduce splits
-<code>sample</code>: the size of the sample set as percentage
-<code>create_tfrecord</code>: Also create .tfrecord files.
-<code>dataset_name</code>: the name of the dataset, if not set infer from the category file path</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Run-from-command-line">Run from command line<a class="anchor-link" href="#Run-from-command-line"> </a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>To run the dataset builder from command line, use the following command:
-<code>python -m mlcore.dataset.image_segmentation [parameters]</code></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The following parameters are supported:</p>
-<ul>
-<li><code>[categories]</code>: The path to the categories file. (e.g.: <em>categories.txt</em>)</li>
-<li><code>--annotation</code>: The path to the image-set annotation file, the data-set is build from. (e.g.: <em>imagesets/classification/car_damage/annotations.csv</em> for classification, <em>imagesets/segmentation/car_damage/via_region_data.json</em> for segmentation)</li>
-<li><code>--split</code>: The percentage of the data which belongs to validation set, default to <em>0.2</em> (=20%)</li>
-<li><code>--seed</code>: A random seed to reproduce splits, default to None</li>
-<li><code>--category-label-key</code>: The key, the category name can be found in the annotation file, default to <em>category</em>.</li>
-<li><code>--sample</code>: The percentage of the data which will be copied as a sample set with in a separate folder with "_sample" suffix. If not set, no sample data-set will be created.</li>
-<li><code>--type</code>: The type of the data-set, if not explicitly set try to infer from categories file path.</li>
-<li><code>--tfrecord</code>: Also create .tfrecord files.</li>
-<li><code>--join-overlapping-regions</code>: Whether overlapping regions of same category should be joined.</li>
-<li><code>--annotation-area-thresh</code>: Keep only annotations with minimum size (width or height) related to image size.</li>
-<li><code>--output</code>: The path of the dataset folder, default to <em>../datasets</em>.</li>
-<li><code>--name</code>: The name of the data-set, if not explicitly set try to infer from categories file path.</li>
-</ul>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">

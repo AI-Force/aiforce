@@ -60,7 +60,7 @@ nb_path: "nbs/tensorflow-tfrecord_builder.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="create_tfrecord_entry" class="doc_header"><code>create_tfrecord_entry</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L29" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_tfrecord_entry</code>(<strong><code>categories</code></strong>, <strong><code>annotation</code></strong>)</p>
+<h4 id="create_tfrecord_entry" class="doc_header"><code>create_tfrecord_entry</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L23" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_tfrecord_entry</code>(<strong><code>categories</code></strong>, <strong><code>annotation</code></strong>)</p>
 </blockquote>
 <p>Create tfrecord entry with annotations for one file / image.
 <code>categories</code>: the categories used
@@ -95,7 +95,7 @@ return: the tfrecord entry</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="create_tfrecord_file" class="doc_header"><code>create_tfrecord_file</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L82" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_tfrecord_file</code>(<strong><code>output_path</code></strong>, <strong><code>categories</code></strong>, <strong><code>annotations</code></strong>)</p>
+<h4 id="create_tfrecord_file" class="doc_header"><code>create_tfrecord_file</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L76" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_tfrecord_file</code>(<strong><code>output_path</code></strong>, <strong><code>categories</code></strong>, <strong><code>annotations</code></strong>)</p>
 </blockquote>
 <p>Create a tfrecord file for a sub-data-set, which can be one of the following: training, validation, test
 <code>output_path</code>: the path including the filename of the tfrecord file
@@ -136,7 +136,7 @@ return: the tfrecord entry</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="int64_feature" class="doc_header"><code>int64_feature</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L99" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>int64_feature</code>(<strong><code>value</code></strong>)</p>
+<h4 id="int64_feature" class="doc_header"><code>int64_feature</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L93" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>int64_feature</code>(<strong><code>value</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -160,7 +160,7 @@ return: the tfrecord entry</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="int64_list_feature" class="doc_header"><code>int64_list_feature</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L103" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>int64_list_feature</code>(<strong><code>value</code></strong>)</p>
+<h4 id="int64_list_feature" class="doc_header"><code>int64_list_feature</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L97" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>int64_list_feature</code>(<strong><code>value</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -184,7 +184,7 @@ return: the tfrecord entry</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bytes_feature" class="doc_header"><code>bytes_feature</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L107" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bytes_feature</code>(<strong><code>value</code></strong>)</p>
+<h4 id="bytes_feature" class="doc_header"><code>bytes_feature</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L101" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bytes_feature</code>(<strong><code>value</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -208,7 +208,7 @@ return: the tfrecord entry</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="bytes_list_feature" class="doc_header"><code>bytes_list_feature</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L111" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bytes_list_feature</code>(<strong><code>value</code></strong>)</p>
+<h4 id="bytes_list_feature" class="doc_header"><code>bytes_list_feature</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L105" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bytes_list_feature</code>(<strong><code>value</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -232,7 +232,7 @@ return: the tfrecord entry</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="float_list_feature" class="doc_header"><code>float_list_feature</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L115" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>float_list_feature</code>(<strong><code>value</code></strong>)</p>
+<h4 id="float_list_feature" class="doc_header"><code>float_list_feature</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L109" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>float_list_feature</code>(<strong><code>value</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -269,7 +269,7 @@ return: the tfrecord entry</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="create_labelmap_file" class="doc_header"><code>create_labelmap_file</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L121" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_labelmap_file</code>(<strong><code>output_path</code></strong>, <strong><code>categories</code></strong>, <strong><code>start</code></strong>=<em><code>1</code></em>)</p>
+<h4 id="create_labelmap_file" class="doc_header"><code>create_labelmap_file</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L115" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_labelmap_file</code>(<strong><code>output_path</code></strong>, <strong><code>categories</code></strong>, <strong><code>start</code></strong>=<em><code>1</code></em>)</p>
 </blockquote>
 <p>Create labelmap protobuffer text file containing the categories.
 Format is compatible with Tensorflow Object Detection API.
@@ -288,80 +288,6 @@ For object detection data-sets, the categories should exclude the background cla
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Helper-Methods">Helper Methods<a class="anchor-link" href="#Helper-Methods"> </a></h2>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tfrecord_builder.py#L146" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
-</blockquote>
-<p>Configures logging for the system.</p>
-<p>:param logging_level: The logging level to use.</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Run-from-command-line">Run from command line<a class="anchor-link" href="#Run-from-command-line"> </a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>To run the image size calculator from command line, use the following command:
-<code>python -m mlcore.tensorflow.tfrecord_builder [parameters]</code></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The following parameters are supported:</p>
-<ul>
-<li><code>--output</code>: The path to store the TFRecord file. (e.g.:  <em>datasets/image_object_detection/car_damage/train/train.record</em>)</li>
-<li><code>--source</code>: The path to The path to the data-set source files. (e.g.:  <em>datasets/image_object_detection/car_damage/train</em>)</li>
-<li><code>--categories</code>: The path to the data-set categories file. (e.g.: <em>datasets/image_object_detection/car_damage/categories.txt</em>)</li>
-<li><code>--type</code>: The type of the data-set, if not explicitly set try to infer from categories file path.</li>
-<li><code>--annotation</code>: The path to the image-set annotation file, the data-set is build from. (e.g.: <em>datasets/image_object_detection/car_damage/train/via_region_data.json</em>)</li>
-</ul>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">

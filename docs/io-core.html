@@ -61,7 +61,7 @@ nb_path: "nbs/io-core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="scan_files" class="doc_header"><code>scan_files</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L29" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scan_files</code>(<strong><code>folder</code></strong>, <strong><code>file_extensions</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="scan_files" class="doc_header"><code>scan_files</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L28" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scan_files</code>(<strong><code>folder</code></strong>, <strong><code>file_extensions</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Scan the folder for files and filter files by file extension.
 If the optional <code>file_extension</code> is not set, <strong>.jpg</strong> as file extension is used by default.
@@ -97,9 +97,9 @@ return: the file path list</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="scan_path" class="doc_header"><code>scan_path</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L55" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scan_path</code>(<strong><code>path</code></strong>)</p>
+<h4 id="scan_path" class="doc_header"><code>scan_path</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L54" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>scan_path</code>(<strong><code>path</code></strong>)</p>
 </blockquote>
-<p>Scan a folder and subfolders until the file level.
+<p>Scan a folder and sub-folders until the file level.
 <code>path</code>: the current directory to parse for folders
 return: a list of folders prefixed with base directory</p>
 
@@ -131,7 +131,7 @@ return: a list of folders prefixed with base directory</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="delete_folder" class="doc_header"><code>delete_folder</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L76" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>delete_folder</code>(<strong><code>path</code></strong>)</p>
+<h4 id="delete_folder" class="doc_header"><code>delete_folder</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L75" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>delete_folder</code>(<strong><code>path</code></strong>)</p>
 </blockquote>
 <p>Deletes a Folder, if exist.
 <code>path</code>: the folder path including the folder name
@@ -165,11 +165,11 @@ return: the created folder path</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="create_folder" class="doc_header"><code>create_folder</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L89" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_folder</code>(<strong><code>path</code></strong>, <strong><code>clear</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="create_folder" class="doc_header"><code>create_folder</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L88" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_folder</code>(<strong><code>path</code></strong>, <strong><code>clear</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Creates a Folder, if not exist.
 <code>path</code>: the folder path including the folder name
-<code>clear</code>: wherether or not the created folder should be empty
+<code>clear</code>: whether or not the created folder should be empty
 return: the created folder path</p>
 
 </div>
@@ -200,7 +200,7 @@ return: the created folder path</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_file_sha" class="doc_header"><code>get_file_sha</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L109" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_file_sha</code>(<strong><code>file_path</code></strong>)</p>
+<h4 id="get_file_sha" class="doc_header"><code>get_file_sha</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L108" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_file_sha</code>(<strong><code>file_path</code></strong>)</p>
 </blockquote>
 <p>Calculates the SHA1 of a given file.
 <code>file_path</code>: the file path
@@ -223,12 +223,6 @@ return: the calculated SHA1 as hex</p>
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Helper-Methods">Helper Methods<a class="anchor-link" href="#Helper-Methods"> </a></h2>
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -240,10 +234,12 @@ return: the calculated SHA1 as hex</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L130" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="assign_filename_suffix" class="doc_header"><code>assign_filename_suffix</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L129" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>assign_filename_suffix</code>(<strong><code>file_path</code></strong>, <strong><code>suffix</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
-<p>Configures logging for the system.</p>
-<p>:param logging_level: The logging level to use.</p>
+<p>Assign a filename suffix to a given file<em>path. (e.g <path>/filename</em><suffix>.txt)
+<code>file_path</code>: the file path to suffix
+<code>suffix</code>: the suffix
+return: the suffixed file path</p>
 
 </div>
 
@@ -262,30 +258,33 @@ return: the calculated SHA1 as hex</p>
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Run-from-command-line">Run from command line<a class="anchor-link" href="#Run-from-command-line"> </a></h2>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="strip_path" class="doc_header"><code>strip_path</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/io/core.py#L144" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>strip_path</code>(<strong><code>file_path</code></strong>, <strong><code>strip</code></strong>=<em><code>'/'</code></em>)</p>
+</blockquote>
+<p>Strip trailing separators from a path
+<code>file_path</code>: the file path to strip
+return: the striped file path</p>
+
 </div>
+
 </div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>To run the data-set builder from command line, use the following command:
-<code>python -m mlcore.via.converter [parameters]</code></p>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The following parameters are supported:</p>
-<ul>
-<li><code>[annotation]</code>: The path to the VIA annotation file (e.g.: <em>imagesets/segmentation/car_damage/via_region_data.json</em>)</li>
-</ul>
 
 </div>
-</div>
-</div>
+    {% endraw %}
+
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">

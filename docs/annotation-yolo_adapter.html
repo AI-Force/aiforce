@@ -55,7 +55,7 @@ nb_path: "nbs/annotation-yolo_adapter.ipynb"
 <p>This adapter is tested with the <a href="https://github.com/ultralytics/yolov3">YOLOv3 Pytorch</a> and <a href="https://github.com/ultralytics/yolov5">YOLOv5 Pytorch</a> repositories.
 Bounding boxes are normalized between [0,1].
 Images should be in a separate folder (named e.g. <em>images/</em>).
-Annotations should be in a separate folder (named e.g. <em>labels/</em>) and must have the same file name as corresponding image source file with the ending <em>.txt</em>. Below is an example structure:</p>
+Annotations should be in a separate folder (named e.g. <em>labels/</em>) and must have the same file name as corresponding image source file but with the ending <em>.txt</em>. The <em>categories.txt</em> file in the parent folder list all category labels which position (index) is used to label the bounding box class (see <strong>Annotation Format</strong> paragraph below). Below is an example structure:</p>
 
 </div>
 </div>
@@ -84,11 +84,84 @@ labels/
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The <code>args</code> parameter contains the following options:</p>
+<h2 id="Bounding-Box-Format">Bounding Box Format<a class="anchor-link" href="#Bounding-Box-Format"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The bounding box values are normalized between 0 and 1.</p>
 <ul>
-<li><code>files_path</code>: the path to the folder containing the source files (e.g.: <em>data/image_object_detection/my_collection/trainval/images</em>)</li>
-<li><code>annotations_path</code>: The path to the multi classification CSV annotation file (e.g.: data/image_object_detection/my_collection/trainval/labels)</li>
-<li><code>categories_file</code>: The path to the categories file (e.g.: data/image_object_detection/my_collection/categories.txt)</li>
+<li>Normalization Formula: <code>x / image_width</code> or <code>y / image height</code> </li>
+<li>Normalization Formula: <code>x * image_width</code> or <code>y * image height</code></li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A bounding box has the following 4 parameters:</p>
+<ul>
+<li>Center X (bx)</li>
+<li>Center Y (by)</li>
+<li>Width (bw)</li>
+<li>Height (bh)</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>{% include image.html alt="YOLO-BoundingBox" caption="YOLO bounding box parameters." max-width="640" file="/ML-Core-Docs/assets/yolo_bbox.png" %}</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Source: <a href="https://robocademy.com/2020/05/01/a-gentle-introduction-to-yolo-v4-for-object-detection-in-ubuntu-20-04/">A Gentle Introduction to YOLO v4 for Object detection in Ubuntu 20.04</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Annotation-Format">Annotation Format<a class="anchor-link" href="#Annotation-Format"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Each annotation file (e.g. <em>image1.txt</em>) is a space separated CSV file where every row represents a bounding box in the image. 
+A row has the following format: 
+<code>&lt;class_number&gt; &lt;center_x&gt; &lt;center_y&gt; &lt;width&gt; &lt;height&gt;</code></p>
+<ul>
+<li><em>class_number</em>: The index of the class as listed in <em>categories.txt</em></li>
+<li><em>center_x</em>: The normalized bounding box center x value</li>
+<li><em>center_y</em>: The normalized bounding box center y value</li>
+<li><em>width</em>: The normalized bounding box width value</li>
+<li><em>height</em>: The normalized bounding box height value</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The adapter has the following parameters:</p>
+<ul>
+<li><code>--path</code>: the path to the base folder containing the annotations (e.g.: <em>data/object_detection/my_collection</em>)</li>
+<li><code>--categories_file_name</code>: tThe path to the categories file if not set, default to <em>categories.txt</em></li>
+<li><code>--images_folder_name</code>: the name of the folder containing the image files, if not set, default to <em>images</em></li>
+<li><code>--annotations_folder_name</code>: The name of the folder containing the image annotations, if not set, default to <em>labels</em></li>
 </ul>
 
 </div>
@@ -105,10 +178,9 @@ labels/
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="YOLOAdapter" class="doc_header"><code>class</code> <code>YOLOAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L30" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>YOLOAdapter</code>(<strong><code>args</code></strong>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
+<h2 id="YOLOAnnotationAdapter" class="doc_header"><code>class</code> <code>YOLOAnnotationAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L31" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>YOLOAnnotationAdapter</code>(<strong><code>path</code></strong>, <strong><code>categories_file_name</code></strong>=<em><code>None</code></em>, <strong><code>images_folder_name</code></strong>=<em><code>None</code></em>, <strong><code>annotations_folder_name</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
 </blockquote>
-<p>Adapter to read and write annotations in the YOLO format.
-<code>args</code>: the arguments containing the parameters</p>
+<p>Adapter to read and write annotations in the YOLO format.</p>
 
 </div>
 
@@ -138,9 +210,24 @@ labels/
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="YOLOAdapter.read" class="doc_header"><code>YOLOAdapter.read</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L45" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAdapter.read</code>()</p>
+<h4 id="AnnotationAdapter.list_files" class="doc_header"><code>AnnotationAdapter.list_files</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L199" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.list_files</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
-<p>Reads YOLO annotations from the annotations folder.
+<p>List all physical files in a sub-set.
+<code>subset_type</code>: the subset type to list
+return: a list of file paths if subset type exist, else an empty list</p>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="YOLOAnnotationAdapter.read_annotations" class="doc_header"><code>YOLOAnnotationAdapter.read_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L74" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAnnotationAdapter.read_annotations</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+</blockquote>
+<p>Reads YOLO annotations.
+<code>subset_type</code>: the subset type to read
 return: the annotations as dictionary</p>
 
 </div>
@@ -151,10 +238,10 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="YOLOAdapter.write" class="doc_header"><code>YOLOAdapter.write</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L105" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAdapter.write</code>(<strong><code>annotations</code></strong>)</p>
+<h4 id="AnnotationAdapter.read_categories" class="doc_header"><code>AnnotationAdapter.read_categories</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L234" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.read_categories</code>()</p>
 </blockquote>
-<p>Writes YOLO annotations to the annotations folder and copy the corresponding source files.
-<code>annotations</code>: the annotations to write</p>
+<p>Read categories.
+return: a list of category names</p>
 
 </div>
 
@@ -164,7 +251,50 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="YOLOAdapter.argparse" class="doc_header"><code>YOLOAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L202" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="AnnotationAdapter.write_files" class="doc_header"><code>AnnotationAdapter.write_files</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L208" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_files</code>(<strong><code>file_paths</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+</blockquote>
+<p>Write physical files in a sub-set.
+<code>file_paths</code>: a list of file paths to write
+<code>subset_type</code>: the subset type to write into
+return: a list of written target file paths</p>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="YOLOAnnotationAdapter.write_annotations" class="doc_header"><code>YOLOAnnotationAdapter.write_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L139" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAnnotationAdapter.write_annotations</code>(<strong><code>annotations</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+</blockquote>
+<p>Writes YOLO annotations to the annotations folder and copy the corresponding source files.
+<code>annotations</code>: the annotations as dictionary
+<code>subset_type</code>: the subset type to write
+return: a list of written target file paths</p>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="AnnotationAdapter.write_categories" class="doc_header"><code>AnnotationAdapter.write_categories</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L253" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_categories</code>(<strong><code>categories</code></strong>)</p>
+</blockquote>
+<p>Write categories.
+<code>categories</code>: a list of category names</p>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="YOLOAnnotationAdapter.argparse" class="doc_header"><code>YOLOAnnotationAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L56" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAnnotationAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Returns the argument parser containing argument definition for command line use.
 <code>prefix</code>: a parameter prefix to set, if needed

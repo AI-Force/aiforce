@@ -135,7 +135,7 @@ where <code>[dataset_type]</code> is the same as the corresponding <code>[images
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset_generator.py#L31" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset_generator.py#L30" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 
@@ -180,20 +180,11 @@ where <code>[dataset_type]</code> is the same as the corresponding <code>[images
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="build_dataset" class="doc_header"><code>build_dataset</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset_generator.py#L51" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>build_dataset</code>(<strong><code>category_file_path</code></strong>, <strong><code>output</code></strong>, <strong><code>annotation_file_path</code></strong>=<em><code>None</code></em>, <strong><code>split</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>0</code></em>, <strong><code>dataset_type</code></strong>=<em><code>None</code></em>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>, <strong><code>join_overlapping_regions</code></strong>=<em><code>False</code></em>, <strong><code>annotation_area_threshold</code></strong>=<em><code>None</code></em>, <strong><code>dataset_name</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="generate" class="doc_header"><code>generate</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset_generator.py#L52" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generate</code>(<strong><code>dataset</code></strong>:<a href="/ML-Core-Docs/dataset-core.html#Dataset"><code>Dataset</code></a>, <strong><code>log_memory_handler</code></strong>)</p>
 </blockquote>
-<p>Build the dataset for training, Validation and test
-<code>category_file_path</code>: the filename of the categories file
-<code>output</code>: the dataset base folder to build the dataset in
-<code>annotation_file_path</code>: the file path to the annotation file
-<code>split</code>: the size of the validation set as percentage
-<code>seed</code>: random seed to reproduce splits
-<code>sample</code>: the size of the sample set as percentage
-<code>dataset_type</code>: the type of the dataset, if not set infer from the category file path
-<code>create_tfrecord</code>: Also create .tfrecord files.
-<code>join_overlapping_regions</code>: Whether overlapping regions of same category should be joined.
-<code>annotation_area_threshold</code>: Keep only annotations with minimum size (width or height) related to image size
-<code>dataset_name</code>: the name of the dataset, if not set infer from the category file path</p>
+<p>Generate a dataset.
+<code>dataset</code>: the dataset to build
+<code>log_memory_handler</code>: the log handler for the build log</p>
 
 </div>
 
@@ -201,6 +192,13 @@ where <code>[dataset_type]</code> is the same as the corresponding <code>[images
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}

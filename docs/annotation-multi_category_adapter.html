@@ -52,10 +52,11 @@ nb_path: "nbs/annotation-multi_category_adapter.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The <code>args</code> parameter contains the following options:</p>
+<p>The adapter has the following parameters:</p>
 <ul>
-<li><code>files_path</code>: the path to the folder containing the source files (e.g.: <em>data/image_classification/my_collection/trainval</em>)</li>
-<li><code>annotations_file</code>: The path to the multi classification CSV annotation file. if not set, the default name is <em>annotations.csv</em> in the parent folder of <em>files_path</em> (e.g.: data/image_classification/my_collection/annotations.csv)</li>
+<li><code>--path</code>: the path to the base folder containing the annotations (e.g.: <em>data/image_classification/my_collection</em>)</li>
+<li><code>--categories_file_name</code>: tThe path to the categories file if not set, default to <em>categories.txt</em></li>
+<li><code>--annotations_file_name</code>: The name of annotations file. if not set, default to <em>annotations.csv</em></li>
 </ul>
 
 </div>
@@ -72,10 +73,9 @@ nb_path: "nbs/annotation-multi_category_adapter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="MultiCategoryAdapter" class="doc_header"><code>class</code> <code>MultiCategoryAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L28" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>MultiCategoryAdapter</code>(<strong><code>args</code></strong>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
+<h2 id="MultiCategoryAnnotationAdapter" class="doc_header"><code>class</code> <code>MultiCategoryAnnotationAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L27" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>MultiCategoryAnnotationAdapter</code>(<strong><code>path</code></strong>, <strong><code>categories_file_name</code></strong>=<em><code>None</code></em>, <strong><code>annotations_file_name</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
 </blockquote>
-<p>Adapter to read and write annotations for multi label classification.
-<code>args</code>: the arguments containing the parameters</p>
+<p>Adapter to read and write annotations for multi label classification.</p>
 
 </div>
 
@@ -105,9 +105,24 @@ nb_path: "nbs/annotation-multi_category_adapter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="MultiCategoryAdapter.read" class="doc_header"><code>MultiCategoryAdapter.read</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L42" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAdapter.read</code>()</p>
+<h4 id="AnnotationAdapter.list_files" class="doc_header"><code>AnnotationAdapter.list_files</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L199" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.list_files</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+</blockquote>
+<p>List all physical files in a sub-set.
+<code>subset_type</code>: the subset type to list
+return: a list of file paths if subset type exist, else an empty list</p>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="MultiCategoryAnnotationAdapter.read_annotations" class="doc_header"><code>MultiCategoryAnnotationAdapter.read_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L60" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAnnotationAdapter.read_annotations</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>Read annotations from a multi classification CSV annotations file.
+<code>subset_type</code>: the subset type to read
 return: the annotations as dictionary</p>
 
 </div>
@@ -118,10 +133,10 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="MultiCategoryAdapter.write" class="doc_header"><code>MultiCategoryAdapter.write</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L78" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAdapter.write</code>(<strong><code>annotations</code></strong>)</p>
+<h4 id="AnnotationAdapter.read_categories" class="doc_header"><code>AnnotationAdapter.read_categories</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L234" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.read_categories</code>()</p>
 </blockquote>
-<p>Writes a multi classification CSV annotations file and copy the corresponding source files.
-<code>annotations</code>: the annotations to write</p>
+<p>Read categories.
+return: a list of category names</p>
 
 </div>
 
@@ -131,7 +146,50 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="MultiCategoryAdapter.argparse" class="doc_header"><code>MultiCategoryAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L121" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="AnnotationAdapter.write_files" class="doc_header"><code>AnnotationAdapter.write_files</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L208" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_files</code>(<strong><code>file_paths</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+</blockquote>
+<p>Write physical files in a sub-set.
+<code>file_paths</code>: a list of file paths to write
+<code>subset_type</code>: the subset type to write into
+return: a list of written target file paths</p>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="MultiCategoryAnnotationAdapter.write_annotations" class="doc_header"><code>MultiCategoryAnnotationAdapter.write_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L101" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAnnotationAdapter.write_annotations</code>(<strong><code>annotations</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+</blockquote>
+<p>Writes a multi classification CSV annotations file and copy the corresponding source files.
+<code>annotations</code>: the annotations as dictionary
+<code>subset_type</code>: the subset type to write
+return: a list of written target file paths</p>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="AnnotationAdapter.write_categories" class="doc_header"><code>AnnotationAdapter.write_categories</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L253" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_categories</code>(<strong><code>categories</code></strong>)</p>
+</blockquote>
+<p>Write categories.
+<code>categories</code>: a list of category names</p>
+
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="MultiCategoryAnnotationAdapter.argparse" class="doc_header"><code>MultiCategoryAnnotationAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/multi_category_adapter.py#L46" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MultiCategoryAnnotationAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Returns the argument parser containing argument definition for command line use.
 <code>prefix</code>: a parameter prefix to set, if needed

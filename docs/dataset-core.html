@@ -43,13 +43,6 @@ nb_path: "nbs/dataset-core.ipynb"
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Creating a dataset for a classification or segmentation task. If an annotation file is present, the annotations are also prepared.
@@ -129,154 +122,10 @@ where <code>[dataset_type]</code> is the same as the corresponding <code>[images
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Dataset" class="doc_header"><code>class</code> <code>Dataset</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L35" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Dataset</code>(<strong><code>name</code></strong>, <strong><code>base_path</code></strong>, <strong><code>imageset_path</code></strong>, <strong><code>categories_path</code></strong>, <strong><code>dataset_type</code></strong>, <strong><code>create_tfrecord</code></strong>=<em><code>False</code></em>)</p>
+<h2 id="Dataset" class="doc_header"><code>class</code> <code>Dataset</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L23" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Dataset</code>(<strong><code>input_adapter</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a>, <strong><code>output_adapter</code></strong>:<a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a>, <strong><code>split</code></strong>=<em><code>None</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>, <strong><code>sample</code></strong>=<em><code>None</code></em>) :: <code>ABC</code></p>
 </blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="split_train_val_data" class="doc_header"><code>split_train_val_data</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L286" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>split_train_val_data</code>(<strong><code>data</code></strong>, <strong><code>val_size</code></strong>=<em><code>0.2</code></em>, <strong><code>seed</code></strong>=<em><code>None</code></em>)</p>
-</blockquote>
-<p>Splits the images in train and validation set
-<code>data</code>: the data to split
-<code>val_size</code>: the size of the validation set in percentage
-<code>seed</code>: A random seed to reproduce splits.
-return: the splitted train, validation images</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="copy_image_and_assign_orientation" class="doc_header"><code>copy_image_and_assign_orientation</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L302" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>copy_image_and_assign_orientation</code>(<strong><code>source_folder</code></strong>, <strong><code>file_name</code></strong>, <strong><code>target_folder</code></strong>)</p>
-</blockquote>
-<p>Copy an image file from source to target and assign the EXIF metadata orientation.
-<code>source_folder</code>: the source folder of the image file
-<code>file_name</code>: the image file name to copy
-<code>target_folder</code>: the target folder to copy the image file to
-return: <code>True</code> if modified EXIF metadata could be saved, else <code>False</code></p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="input_feedback" class="doc_header"><code>input_feedback</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L322" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>input_feedback</code>(<strong><code>msg</code></strong>, <strong><code>choice</code></strong>, <strong><code>choices</code></strong>)</p>
-</blockquote>
-<p>User input request wrapper.
-<code>msg</code>: the message to dosplay
-<code>choice</code>: if previous choice exist
-<code>choices</code>: the possible choices
-:return: the choice input</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Helper-Methods">Helper Methods<a class="anchor-link" href="#Helper-Methods"> </a></h2>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/dataset/core.py#L343" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
-</blockquote>
-<p>Configures logging for the system.</p>
+<p>Dataset base class to build datasets.
+<code>args</code>: the arguments containing the parameters</p>
 
 </div>
 

@@ -54,7 +54,7 @@ nb_path: "nbs/core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="import_modules" class="doc_header"><code>import_modules</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/core.py#L16" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>import_modules</code>(<strong><code>package</code></strong>)</p>
+<h4 id="import_modules" class="doc_header"><code>import_modules</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/core.py#L18" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>import_modules</code>(<strong><code>package</code></strong>)</p>
 </blockquote>
 <p>Dynamically import all modules but not submodules in a package.
 <code>package</code>: the package to import all modules</p>
@@ -87,13 +87,188 @@ nb_path: "nbs/core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="parse_known_help" class="doc_header"><code>parse_known_help</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/core.py#L29" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>parse_known_help</code>(<strong><code>argv</code></strong>)</p>
+<h4 id="list_subclasses" class="doc_header"><code>list_subclasses</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/core.py#L31" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>list_subclasses</code>(<strong><code>package</code></strong>, <strong><code>base_class</code></strong>)</p>
+</blockquote>
+<p>Dynamically import all modules in a package and scan for all subclasses of a base class.
+<code>package</code>: the package to import
+<code>base_class</code>: the base class to scan for subclasses
+return: a dictionary of possible subclasses with class name as key and class type information as value</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="all_subclasses" class="doc_header"><code>all_subclasses</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/core.py#L45" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>all_subclasses</code>(<strong><code>base_class</code></strong>)</p>
+</blockquote>
+<p>Scan recursively for all subclasses of a base class.
+<code>base_class</code>: the base class to scan for subclasses
+return: a set of subclasses type information</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="parse_known_help" class="doc_header"><code>parse_known_help</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/core.py#L56" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>parse_known_help</code>(<strong><code>argv</code></strong>)</p>
 </blockquote>
 <p>Parse the command line arguments for help parameter and decide,
 if the help parameter should be assigned to current argument parser.
 <code>argv</code>: the command line arguments to parse
 <code>root_parser</code>: True if the arguments are assigned to the root parser, else False
-return: a tuple containing [known, rest], where argv are the arguments assigned to current parser</p>
+return: a tuple containing [known, rest], where known are the arguments assigned to current parser</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="parse_known_args_with_help" class="doc_header"><code>parse_known_args_with_help</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/core.py#L75" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>parse_known_args_with_help</code>(<strong><code>parser</code></strong>, <strong><code>argv</code></strong>)</p>
+</blockquote>
+<p>Parse the command line arguments and validate, if help parameter should be assigned to current argument parser.
+If the help parameter is not assigned to current parser, then keep it in the remaining argv.
+<code>parser</code>: the argument parser to handle
+return: a tuple containing [args, argv], where args are the consumed arguments and argv are the remaining arguments</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="assign_arg_prefix" class="doc_header"><code>assign_arg_prefix</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/core.py#L90" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>assign_arg_prefix</code>(<strong><code>arg_name</code></strong>, <strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Assign a parameter prefix to a given argument name. (e.g --prefix_<arg_name>)
+<code>arg_name</code>: the argument name to prefix
+<code>prefix</code>: the prefix
+return: the prefixed argument name</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="input_feedback" class="doc_header"><code>input_feedback</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/core.py#L102" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>input_feedback</code>(<strong><code>msg</code></strong>, <strong><code>choice</code></strong>, <strong><code>choices</code></strong>)</p>
+</blockquote>
+<p>User input request wrapper.
+<code>msg</code>: the message to display
+<code>choice</code>: if previous choice exist
+<code>choices</code>: the possible choices
+:return: the choice input</p>
 
 </div>
 
