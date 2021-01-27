@@ -10,11 +10,26 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: VIA Annotation Tools
-      url: annotation-via.html
+      title: Annotation
+      url: annotation-core.html
     - output: web,pdf
-      title: VIA Annotation Viewer
-      url: annotation-viewer.html
+      title: Folder Category Annotation Adapter
+      url: annotation-folder_category_adapter.html
+    - output: web,pdf
+      title: Multi Category Annotation Adapter
+      url: annotation-multi_category_adapter.html
+    - output: web,pdf
+      title: VIA Annotation Adapter
+      url: annotation-via_adapter.html
+    - output: web,pdf
+      title: YOLO Annotation Adapter
+      url: annotation-yolo_adapter.html
+    - output: web,pdf
+      title: Annotation Converter
+      url: annotation_converter.html
+    - output: web,pdf
+      title: Annotation Viewer
+      url: annotation_viewer.html
     - output: web,pdf
       title: Category File Tools
       url: category_tools.html
@@ -22,11 +37,29 @@ entries:
       title: Core classes and functions
       url: core.html
     - output: web,pdf
-      title: Data-Set
-      url: dataset.html
+      title: Dataset
+      url: dataset-core.html
+    - output: web,pdf
+      title: Dataset for image classification
+      url: dataset-image_classification.html
+    - output: web,pdf
+      title: Dataset for image object detection
+      url: dataset-image_object_detection.html
+    - output: web,pdf
+      title: Dataset for image segmentation
+      url: dataset-image_segmentation.html
+    - output: web,pdf
+      title: DataSet type
+      url: dataset-type.html
+    - output: web,pdf
+      title: Dataset Generator
+      url: dataset_generator.html
     - output: web,pdf
       title: Evaluation Core functions
       url: evaluation-core.html
+    - output: web,pdf
+      title: Geometry toolbox
+      url: geometry.html
     - output: web,pdf
       title: Color Palettes
       url: image-color_palette.html
