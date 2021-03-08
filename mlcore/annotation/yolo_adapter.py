@@ -85,7 +85,7 @@ class YOLOAnnotationAdapter(AnnotationAdapter):
         logger.info('Read annotations from {}'.format(annotations_path))
 
         annotation_files = scan_files(annotations_path, file_extensions='.txt')
-        categories = read_categories(self.path, self.categories_file_name)
+        categories = read_categories(join(self.path, self.categories_file_name))
         categories_len = len(categories)
         skipped_annotations = []
 
@@ -149,7 +149,7 @@ class YOLOAnnotationAdapter(AnnotationAdapter):
         annotations_folder = create_folder(annotations_path)
         images_path = join(path, self.images_folder_name)
         images_folder = create_folder(images_path)
-        categories = read_categories(self.path, self.categories_file_name)
+        categories = read_categories(join(self.path, self.categories_file_name))
 
         logger.info('Write images to {}'.format(images_folder))
         logger.info('Write annotations to {}'.format(annotations_folder))
