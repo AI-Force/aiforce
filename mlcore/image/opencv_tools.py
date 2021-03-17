@@ -8,8 +8,6 @@ import cv2
 
 
 # Cell
-
-
 def limit_to_max_size(img, max_size):
     """
     Limit the image size to max size and scale the image,
@@ -26,8 +24,6 @@ def limit_to_max_size(img, max_size):
 
 
 # Cell
-
-
 def fit_to_max_size(img, max_width, max_height):
     """
     Limit the image size to maximum width and height and scale the image,
@@ -46,8 +42,6 @@ def fit_to_max_size(img, max_width, max_height):
 
 
 # Cell
-
-
 def get_image_size(fname):
     """
     Calculates image size of a given image file.

@@ -5,7 +5,6 @@ __all__ = ['logger', 'create_tfrecord_entry', 'create_tfrecord_file', 'int64_fea
 
 
 # Cell
-
 import logging
 import io
 import tensorflow as tf
@@ -15,15 +14,12 @@ from ..image.pillow_tools import get_image_size
 
 
 # Cell
-
 environ['TF_CPP_MIN_LOG_LEVEL'] = '2'    # Suppress TensorFlow logging (1)
 
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 def create_tfrecord_entry(categories, annotation):
     """
     Create tfrecord entry with annotations for one file / image.
@@ -76,8 +72,6 @@ def create_tfrecord_entry(categories, annotation):
 
 
 # Cell
-
-
 def create_tfrecord_file(output_path, categories, annotations):
     """
     Create a tfrecord file for a sub-data-set, which can be one of the following: training, validation, test
@@ -94,8 +88,6 @@ def create_tfrecord_file(output_path, categories, annotations):
 
 
 # Cell
-
-
 def int64_feature(value):
     return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
@@ -117,8 +109,6 @@ def float_list_feature(value):
 
 
 # Cell
-
-
 def create_labelmap_file(output_path, categories, start=1):
     """
     Create labelmap protobuffer text file containing the categories.

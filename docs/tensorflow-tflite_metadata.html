@@ -61,7 +61,7 @@ nb_path: "nbs/tensorflow-tflite_metadata.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="MetaInfo" class="doc_header"><code>class</code> <code>MetaInfo</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tflite_metadata.py#L31" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>MetaInfo</code>(<strong><code>name</code></strong>=<em><code>None</code></em>, <strong><code>desc</code></strong>=<em><code>None</code></em>, <strong><code>prop</code></strong>=<em><code>None</code></em>, <strong><code>prop_type</code></strong>=<em><code>None</code></em>, <strong><code>range_min</code></strong>=<em><code>None</code></em>, <strong><code>range_max</code></strong>=<em><code>None</code></em>, <strong><code>stats_min</code></strong>=<em><code>None</code></em>, <strong><code>stats_max</code></strong>=<em><code>None</code></em>, <strong><code>associated_files</code></strong>=<em><code>None</code></em>)</p>
+<h2 id="MetaInfo" class="doc_header"><code>class</code> <code>MetaInfo</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tflite_metadata.py#L30" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>MetaInfo</code>(<strong><code>name</code></strong>=<em><code>None</code></em>, <strong><code>desc</code></strong>=<em><code>None</code></em>, <strong><code>prop</code></strong>=<em><code>None</code></em>, <strong><code>prop_type</code></strong>=<em><code>None</code></em>, <strong><code>range_min</code></strong>=<em><code>None</code></em>, <strong><code>range_max</code></strong>=<em><code>None</code></em>, <strong><code>stats_min</code></strong>=<em><code>None</code></em>, <strong><code>stats_max</code></strong>=<em><code>None</code></em>, <strong><code>associated_files</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Metadata information.
 <code>name</code>: The metadata name.
@@ -102,7 +102,7 @@ nb_path: "nbs/tensorflow-tflite_metadata.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="create_metadata" class="doc_header"><code>create_metadata</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tflite_metadata.py#L66" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_metadata</code>(<strong><code>saved_model_dir</code></strong>, <strong><code>categories_file_path</code></strong>, <strong><code>model_type</code></strong>, <strong><code>model_name</code></strong>, <strong><code>model_version</code></strong>=<em><code>1</code></em>)</p>
+<h4 id="create_metadata" class="doc_header"><code>create_metadata</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tflite_metadata.py#L64" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>create_metadata</code>(<strong><code>saved_model_dir</code></strong>, <strong><code>categories_file_path</code></strong>, <strong><code>model_type</code></strong>, <strong><code>model_name</code></strong>, <strong><code>model_version</code></strong>=<em><code>1</code></em>)</p>
 </blockquote>
 <p>Write metadata to the Tensowflow Lite model on disk.
 <code>saved_model_dir</code>: the path to the folder containing the SavedModel
@@ -140,7 +140,7 @@ returns: the model metadata</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="write_metadata" class="doc_header"><code>write_metadata</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tflite_metadata.py#L116" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>write_metadata</code>(<strong><code>model_meta</code></strong>, <strong><code>model_path</code></strong>, <strong><code>categories_file_path</code></strong>)</p>
+<h4 id="write_metadata" class="doc_header"><code>write_metadata</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tflite_metadata.py#L113" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>write_metadata</code>(<strong><code>model_meta</code></strong>, <strong><code>model_path</code></strong>, <strong><code>categories_file_path</code></strong>)</p>
 </blockquote>
 <p>Write metadata to the Tensowflow Lite model on disk.
 <code>model_meta</code>: the model metadata
@@ -175,7 +175,7 @@ returns: the model metadata</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_metadata" class="doc_header"><code>read_metadata</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tflite_metadata.py#L138" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_metadata</code>(<strong><code>model_path</code></strong>)</p>
+<h4 id="read_metadata" class="doc_header"><code>read_metadata</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tflite_metadata.py#L134" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_metadata</code>(<strong><code>model_path</code></strong>)</p>
 </blockquote>
 <p>Read meta-data from the Tensowflow Lite model on disk.
 <code>model_path</code>: the path to the Tensorflow Lite model
@@ -250,7 +250,7 @@ returns: the metadata in JSON format</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tflite_metadata.py#L334" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/tensorflow/tflite_metadata.py#L324" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 <p><code>logging_level</code>: The logging level to use.</p>

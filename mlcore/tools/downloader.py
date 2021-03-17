@@ -4,7 +4,6 @@ __all__ = ['Downloader', 'SaveToDirectory']
 
 
 # Cell
-
 import errno
 import logging
 import binascii
@@ -16,8 +15,6 @@ from multiprocessing.dummy import Pool as ThreadPool
 
 
 # Cell
-
-
 class Downloader:
     """Multi-threaded downloader that can retry a download on failure."""
 
@@ -135,8 +132,6 @@ class Downloader:
 
 
 # Cell
-
-
 class SaveToDirectory:
     """Callback to download file to a specific directory."""
     def __init__(self, file_path):

@@ -4,7 +4,6 @@ __all__ = ['DATASET_FOLDER', 'logger', 'configure_logging', 'generate']
 
 
 # Cell
-
 import sys
 import argparse
 import logging
@@ -19,18 +18,14 @@ from .dataset.core import Dataset
 
 
 # Cell
-
 DATASET_FOLDER = 'datasets'
 
 
 # Cell
-
 logger = logging.getLogger('mlcore.dataset')
 
 
 # Cell
-
-
 def configure_logging(logging_level=logging.INFO):
     """
     Configures logging for the system.
@@ -52,8 +47,6 @@ def configure_logging(logging_level=logging.INFO):
 
 
 # Cell
-
-
 def generate(dataset: Dataset, log_memory_handler):
     """
     Generate a dataset.
@@ -77,86 +70,6 @@ def generate(dataset: Dataset, log_memory_handler):
 
 
 # Cell
-
-
-# def build_dataset(category_file_path, output, annotation_file_path=None, split=DEFAULT_SPLIT, seed=None, sample=0,
-#                   dataset_type=None, create_tfrecord=False, join_overlapping_regions=False,
-#                   annotation_area_threshold=None, dataset_name=None):
-#     """
-#     Build the dataset for training, Validation and test
-#     `category_file_path`: the filename of the categories file
-#     `output`: the dataset base folder to build the dataset in
-#     `annotation_file_path`: the file path to the annotation file
-#     `split`: the size of the validation set as percentage
-#     `seed`: random seed to reproduce splits
-#     `sample`: the size of the sample set as percentage
-#     `dataset_type`: the type of the dataset, if not set infer from the category file path
-#     `create_tfrecord`: Also create .tfrecord files.
-#     `join_overlapping_regions`: Whether overlapping regions of same category should be joined.
-#     `annotation_area_threshold`: Keep only annotations with minimum size (width or height) related to image size
-#     `dataset_name`: the name of the dataset, if not set infer from the category file path
-#     """
-#     log_memory_handler = configure_logging()
-
-#     # try to infer the dataset type if not explicitly set
-#     if dataset_type is None:
-#         try:
-#             dataset_type = infer_dataset_type(category_file_path)
-#         except ValueError as e:
-#             logger.error(e)
-#             return
-
-#     path = dirname(category_file_path)
-
-#     # try to infer the dataset name if not explicitly set
-#     if dataset_name is None:
-#         dataset_name = basename(path)
-
-#     logger.info('Build parameters:')
-#     logger.info(' '.join(sys.argv[1:]))
-#     logger.info('Build configuration:')
-#     logger.info('category_file_path: {}'.format(category_file_path))
-#     logger.info('annotation_file_path: {}'.format(annotation_file_path))
-#     logger.info('split: {}'.format(split))
-#     logger.info('seed: {}'.format(seed))
-#     logger.info('sample: {}'.format(sample))
-#     logger.info('type: {}'.format(dataset_type))
-#     logger.info('output: {}'.format(output))
-#     logger.info('join_overlapping_regions: {}'.format(join_overlapping_regions))
-#     logger.info('annotation_area_threshold: {}'.format(annotation_area_threshold))
-#     logger.info('name: {}'.format(dataset_name))
-
-#     dataset = None
-#     logger.info('Start build {} dataset {} at {}'.format(dataset_type, dataset_name, output))
-
-#     if dataset_type == DatasetType.IMAGE_CLASSIFICATION:
-#         dataset = ImageClassificationDataset(dataset_name, output, path, category_file_path, annotation_file_path)
-#     elif dataset_type == DatasetType.IMAGE_SEGMENTATION:
-#         dataset = ImageSegmentationDataset(dataset_name, output, path, category_file_path, annotation_file_path)
-#     elif dataset_type == DatasetType.IMAGE_OBJECT_DETECTION:
-#         dataset = ImageObjectDetectionDataset(dataset_name, output, path, category_file_path, annotation_file_path,
-#                                               create_tfrecord, join_overlapping_regions, annotation_area_threshold)
-
-#     if dataset:
-#         # create the dataset folders
-#         logger.info("Start create the dataset folders at {}".format(dataset.base_path))
-#         dataset.create_folders()
-#         logger.info("Finished create the dataset folders at {}".format(dataset.base_path))
-
-#         # create the build log file
-#         log_file_name = datetime.now().strftime("build_%Y.%m.%d-%H.%M.%S.log")
-#         file_handler = logging.FileHandler(join(dataset.folder, log_file_name), encoding="utf-8")
-#         log_memory_handler.setTarget(file_handler)
-
-#         # build the dataset
-#         dataset.build(split, seed, sample)
-
-#     logger.info('Finished build {} dataset {} at {}'.format(dataset_type, dataset_name, output))
-
-
-# Cell
-
-
 if __name__ == '__main__' and '__file__' in globals():
     # for direct shell execution
     log_handler = configure_logging()
@@ -215,53 +128,3 @@ if __name__ == '__main__' and '__file__' in globals():
     logger.info(' '.join(sys.argv[1:]))
 
     generate(target_dataset, log_handler)
-
-
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument("categories",
-#                         help="The path to the imageset categories file.")
-#     parser.add_argument("--annotation",
-#                         help="The path to the imageset annotation file, the data-set is build from.",
-#                         default=None)
-#     parser.add_argument("--split",
-#                         help="Percentage of the data which belongs to validation set.",
-#                         type=float,
-#                         default=0.2)
-#     parser.add_argument("--seed",
-#                         help="A random seed to reproduce splits.",
-#                         type=int,
-#                         default=None)
-#     parser.add_argument("--category-label-key",
-#                         help="The key of the category name.",
-#                         default=CATEGORY_LABEL_KEY)
-#     parser.add_argument("--sample",
-#                         help="Percentage of the data which will be copied as a sample set.",
-#                         type=float,
-#                         default=0)
-#     parser.add_argument("--type",
-#                         help="The type of the dataset, if not explicitly set try to infer from categories file path.",
-#                         choices=list(DatasetType),
-#                         type=DatasetType,
-#                         default=None)
-#     parser.add_argument("--tfrecord",
-#                         help="Also create .tfrecord files.",
-#                         action="store_true")
-#     parser.add_argument("--join-overlapping-regions",
-#                         help="Whether overlapping regions of same category should be joined.",
-#                         action="store_true")
-#     parser.add_argument("--annotation-area-thresh",
-#                         help="Keep only annotations with minimum size (width or height) related to image size.",
-#                         type=float,
-#                         default=None)
-#     parser.add_argument("--output",
-#                         help="The path of the dataset folder.",
-#                         default=DATASET_FOLDER)
-#     parser.add_argument("--name",
-#                         help="The name of the dataset, if not explicitly set try to infer from categories file path.",
-#                         default=None)
-#     args = parser.parse_args()
-
-#     CATEGORY_LABEL_KEY = args.category_label_key
-
-#     build_dataset(args.categories, args.output, args.annotation, args.split, args.seed, args.sample, args.type,
-#                   args.tfrecord, args.join_overlapping_regions, args.annotation_area_thresh, args.name)

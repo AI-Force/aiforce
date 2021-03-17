@@ -4,8 +4,6 @@ __all__ = ['pascal_voc_palette', 'ade20k_palette', 'cityscapes_palette', 'mhp_pa
 
 
 # Cell
-
-
 def pascal_voc_palette(num_cls=None):
     """
     Generates the PASCAL Visual Object Classes (PASCAL VOC) data-set color palette.
@@ -38,8 +36,6 @@ def pascal_voc_palette(num_cls=None):
 
 
 # Cell
-
-
 def ade20k_palette(num_cls=None):
     """
     Generates the ADE20K data-set color palette.
@@ -82,8 +78,6 @@ def ade20k_palette(num_cls=None):
 
 
 # Cell
-
-
 def cityscapes_palette(num_cls=None):
     """
     Generates the Cityscapes data-set color palette.
@@ -127,8 +121,6 @@ def cityscapes_palette(num_cls=None):
 
 
 # Cell
-
-
 def mhp_palette_v1(num_cls=None):
     """
     Generates the Multi-Human Parsing (MHP) v1.0 data-set color palette.

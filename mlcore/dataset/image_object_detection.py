@@ -4,7 +4,6 @@ __all__ = ['logger', 'ImageObjectDetectionDataset']
 
 
 # Cell
-
 import logging
 from os.path import join, isfile
 from functools import partial
@@ -23,8 +22,6 @@ logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 class ImageObjectDetectionDataset(ImageClassificationDataset):
     """
     Object detection dataset.

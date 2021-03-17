@@ -5,7 +5,6 @@ __all__ = ['DEFAULT_CATEGORIES_FILE', 'NOT_CATEGORIZED', 'BACKGROUND_CLASS', 'BA
 
 
 # Cell
-
 import argparse
 import logging
 from os.path import isfile
@@ -13,7 +12,6 @@ from .dataset.type import DatasetType
 
 
 # Cell
-
 DEFAULT_CATEGORIES_FILE = 'categories.txt'
 NOT_CATEGORIZED = '[NOT_CATEGORIZED]'
 BACKGROUND_CLASS = '_background_'
@@ -26,8 +24,6 @@ logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 def read_categories(categories_file=None, dataset_type=DatasetType.IMAGE_CLASSIFICATION):
     """
     Reads the categories from a categories file.
@@ -54,8 +50,6 @@ def read_categories(categories_file=None, dataset_type=DatasetType.IMAGE_CLASSIF
 
 
 # Cell
-
-
 def write_categories(categories, categories_file=None):
     """
     Write the categories to a categories file.
@@ -77,8 +71,6 @@ def write_categories(categories, categories_file=None):
 
 
 # Cell
-
-
 def configure_logging(logging_level=logging.INFO):
     """
     Configures logging for the system.
@@ -89,8 +81,6 @@ def configure_logging(logging_level=logging.INFO):
 
 
 # Cell
-
-
 if __name__ == '__main__' and '__file__' in globals():
     # for direct shell execution
     configure_logging()

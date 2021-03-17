@@ -4,7 +4,6 @@ __all__ = ['logger', 'ImageSizeCalculator', 'configure_logging']
 
 
 # Cell
-
 import logging
 import logging.handlers
 import argparse
@@ -15,13 +14,10 @@ from ..io.core import scan_path
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 class ImageSizeCalculator:
     """
     Calculates image sizes in a given folder and subfolders. Summarize unique image sizes at the end.
@@ -59,8 +55,6 @@ class ImageSizeCalculator:
 
 
 # Cell
-
-
 def configure_logging(logging_level=logging.INFO):
     """
     Configures logging for the system.
@@ -76,8 +70,6 @@ def configure_logging(logging_level=logging.INFO):
 
 
 # Cell
-
-
 if __name__ == '__main__' and '__file__' in globals():
     configure_logging()
 

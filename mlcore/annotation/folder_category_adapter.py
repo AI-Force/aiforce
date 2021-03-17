@@ -4,7 +4,6 @@ __all__ = ['DEFAULT_CATEGORY_FOLDER_INDEX', 'logger', 'FolderCategoryAnnotationA
 
 
 # Cell
-
 import logging
 import shutil
 from os.path import join, normpath, sep, basename, isfile
@@ -14,18 +13,14 @@ from .core import Annotation, AnnotationAdapter, Region, SubsetType
 
 
 # Cell
-
 DEFAULT_CATEGORY_FOLDER_INDEX = -1
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 class FolderCategoryAnnotationAdapter(AnnotationAdapter):
     """
     Adapter to read and write annotations where the folder structure represents the categories.

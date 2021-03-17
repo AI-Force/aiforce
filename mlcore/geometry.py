@@ -4,14 +4,11 @@ __all__ = ['create_ellipse', 'ellipse_intersection_area']
 
 
 # Cell
-
 from shapely.geometry.point import Point
 from shapely import affinity
 
 
 # Cell
-
-
 def create_ellipse(center, lengths, angle=0):
     """
     Create a shapely ellipse.
@@ -28,8 +25,6 @@ def create_ellipse(center, lengths, angle=0):
 
 
 # Cell
-
-
 def ellipse_intersection_area(ellipse1, ellipse2):
     """
     Calculates the intersection of two ellipses.

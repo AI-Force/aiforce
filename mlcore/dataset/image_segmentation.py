@@ -4,7 +4,6 @@ __all__ = ['logger', 'ImageSegmentationDataset']
 
 
 # Cell
-
 import numpy as np
 import logging
 from os.path import join, isfile, splitext, basename
@@ -18,13 +17,10 @@ from ..annotation.core import RegionShape, convert_region, region_bounding_box
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 class ImageSegmentationDataset(ImageObjectDetectionDataset):
 
     SEMANTIC_MASK_FOLDER = 'semantic_masks'

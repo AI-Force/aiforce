@@ -4,14 +4,11 @@ __all__ = ['DatasetType', 'infer_dataset_type']
 
 
 # Cell
-
 from enum import Enum
 from os.path import dirname, basename
 
 
 # Cell
-
-
 class DatasetType(Enum):
     """
     Currently supported Machine Learning Types.
@@ -26,8 +23,6 @@ class DatasetType(Enum):
 
 
 # Cell
-
-
 def infer_dataset_type(category_file_path):
     """
     Try to infer the dataset type from the category file path.

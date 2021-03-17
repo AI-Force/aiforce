@@ -178,7 +178,7 @@ A row has the following format:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="YOLOAnnotationAdapter" class="doc_header"><code>class</code> <code>YOLOAnnotationAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L35" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>YOLOAnnotationAdapter</code>(<strong><code>path</code></strong>, <strong><code>categories_file_name</code></strong>=<em><code>None</code></em>, <strong><code>images_folder_name</code></strong>=<em><code>None</code></em>, <strong><code>annotations_folder_name</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
+<h2 id="YOLOAnnotationAdapter" class="doc_header"><code>class</code> <code>YOLOAnnotationAdapter</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L30" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>YOLOAnnotationAdapter</code>(<strong><code>path</code></strong>, <strong><code>categories_file_name</code></strong>=<em><code>None</code></em>, <strong><code>images_folder_name</code></strong>=<em><code>None</code></em>, <strong><code>annotations_folder_name</code></strong>=<em><code>None</code></em>) :: <a href="/ML-Core-Docs/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
 </blockquote>
 <p>Adapter to read and write annotations in the YOLO format.</p>
 
@@ -210,7 +210,7 @@ A row has the following format:
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.list_files" class="doc_header"><code>AnnotationAdapter.list_files</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L209" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.list_files</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+<h4 id="AnnotationAdapter.list_files" class="doc_header"><code>AnnotationAdapter.list_files</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L191" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.list_files</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>List all physical files in a sub-set.
 <code>subset_type</code>: the subset type to list
@@ -224,7 +224,7 @@ return: a list of file paths if subset type exist, else an empty list</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="YOLOAnnotationAdapter.read_annotations" class="doc_header"><code>YOLOAnnotationAdapter.read_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L78" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAnnotationAdapter.read_annotations</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+<h4 id="YOLOAnnotationAdapter.read_annotations" class="doc_header"><code>YOLOAnnotationAdapter.read_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L73" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAnnotationAdapter.read_annotations</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>Reads YOLO annotations.
 <code>subset_type</code>: the subset type to read
@@ -238,7 +238,7 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.read_categories" class="doc_header"><code>AnnotationAdapter.read_categories</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L244" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.read_categories</code>()</p>
+<h4 id="AnnotationAdapter.read_categories" class="doc_header"><code>AnnotationAdapter.read_categories</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L226" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.read_categories</code>()</p>
 </blockquote>
 <p>Read categories.
 return: a list of category names</p>
@@ -251,7 +251,7 @@ return: a list of category names</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.write_files" class="doc_header"><code>AnnotationAdapter.write_files</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L218" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_files</code>(<strong><code>file_paths</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+<h4 id="AnnotationAdapter.write_files" class="doc_header"><code>AnnotationAdapter.write_files</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L200" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_files</code>(<strong><code>file_paths</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>Write physical files in a sub-set.
 <code>file_paths</code>: a list of file paths to write
@@ -266,7 +266,7 @@ return: a list of written target file paths</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="YOLOAnnotationAdapter.write_annotations" class="doc_header"><code>YOLOAnnotationAdapter.write_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L143" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAnnotationAdapter.write_annotations</code>(<strong><code>annotations</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+<h4 id="YOLOAnnotationAdapter.write_annotations" class="doc_header"><code>YOLOAnnotationAdapter.write_annotations</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L138" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAnnotationAdapter.write_annotations</code>(<strong><code>annotations</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>Writes YOLO annotations to the annotations folder and copy the corresponding source files.
 <code>annotations</code>: the annotations as dictionary
@@ -281,7 +281,7 @@ return: a list of written target file paths</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.write_categories" class="doc_header"><code>AnnotationAdapter.write_categories</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L263" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_categories</code>(<strong><code>categories</code></strong>)</p>
+<h4 id="AnnotationAdapter.write_categories" class="doc_header"><code>AnnotationAdapter.write_categories</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/core.py#L245" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_categories</code>(<strong><code>categories</code></strong>)</p>
 </blockquote>
 <p>Write categories.
 <code>categories</code>: a list of category names</p>
@@ -294,7 +294,7 @@ return: a list of written target file paths</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="YOLOAnnotationAdapter.argparse" class="doc_header"><code>YOLOAnnotationAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L60" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAnnotationAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="YOLOAnnotationAdapter.argparse" class="doc_header"><code>YOLOAnnotationAdapter.argparse</code><a href="https://github.com/ai-force/ML-Core/tree/master/mlcore/annotation/yolo_adapter.py#L55" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>YOLOAnnotationAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Returns the argument parser containing argument definition for command line use.
 <code>prefix</code>: a parameter prefix to set, if needed
