@@ -190,7 +190,12 @@ class Dataset(ABC):
         sample_train_annotation_keys = []
         sample_val_annotation_keys = []
 
-        train, val = self.split_train_val_data(list(self.annotations.keys()), self.split, self.seed)
+        if self.split == 0:
+            train, val = (list(self.annotations.keys()), [])
+        elif self.split == 1:
+            train, val = ([], list(self.annotations.keys()))
+        else:
+            train, val = self.split_train_val_data(list(self.annotations.keys()), self.split, self.seed)
         train_annotation_keys.extend(train)
         val_annotation_keys.extend(val)
 
