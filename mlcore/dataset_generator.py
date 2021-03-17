@@ -2,6 +2,7 @@
 
 __all__ = ['DATASET_FOLDER', 'logger', 'configure_logging', 'generate']
 
+
 # Cell
 
 import sys
@@ -16,13 +17,16 @@ from .annotation.core import AnnotationAdapter
 from mlcore import dataset as dataset_package
 from .dataset.core import Dataset
 
+
 # Cell
 
 DATASET_FOLDER = 'datasets'
 
+
 # Cell
 
 logger = logging.getLogger('mlcore.dataset')
+
 
 # Cell
 
@@ -45,6 +49,7 @@ def configure_logging(logging_level=logging.INFO):
     logger.setLevel(logging_level)
 
     return log_memory_handler
+
 
 # Cell
 
@@ -69,6 +74,7 @@ def generate(dataset: Dataset, log_memory_handler):
     dataset.build()
 
     logger.info('Finished build {} at {}'.format(type(dataset).__name__, dataset.output_adapter.path))
+
 
 # Cell
 
@@ -146,6 +152,7 @@ def generate(dataset: Dataset, log_memory_handler):
 #         dataset.build(split, seed, sample)
 
 #     logger.info('Finished build {} dataset {} at {}'.format(dataset_type, dataset_name, output))
+
 
 # Cell
 

@@ -2,12 +2,14 @@
 
 __all__ = ['setup_learner', 'fix_odd_sides', 'Inference', 'ClassificationInference', 'SegmentationInference']
 
+
 # Cell
 
 import asyncio
 import numpy as np
 from fastai.basic_train import load_learner
 from fastai import vision
+
 
 # Cell
 
@@ -31,6 +33,7 @@ async def setup_learner(path):
         else:
             raise
 
+
 # Cell
 
 
@@ -48,6 +51,7 @@ def fix_odd_sides(img):
         img = vision.crop_pad(img, size=(list(img.size)[0], list(img.size)[1] + 1), padding_mode='reflection')
 
     return img
+
 
 # Cell
 
@@ -84,6 +88,7 @@ class Inference:
         """
         pass
 
+
 # Cell
 
 
@@ -102,6 +107,7 @@ class ClassificationInference(Inference):
         """
         pred, labels, probs = self.learner.predict(x)
         return pred, labels, probs
+
 
 # Cell
 
@@ -122,5 +128,6 @@ class SegmentationInference(Inference):
         pred, labels, probs = self.learner.predict(x)
         mask = np.asarray(vision.image2np(pred.data), dtype=np.uint8)
         return mask, labels, probs
+
 
 # Cell

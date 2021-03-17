@@ -3,6 +3,7 @@
 __all__ = ['logger', 'BUF_SIZE', 'FILE_FILTER', 'IMAGE_EXTENSION', 'DoubleFileChecker', 'configure_logging',
            'get_file_sha', 'check_double_entries', 'remove_entries', 'scan_folder']
 
+
 # Cell
 
 import hashlib
@@ -13,9 +14,11 @@ import sys
 from os import listdir, remove
 from os.path import join, isfile, isdir
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 
@@ -23,6 +26,7 @@ BUF_SIZE = 65536  # lets read stuff in 64kb chunks!
 
 FILE_FILTER = ['.DS_Store']
 IMAGE_EXTENSION = '.jpg'
+
 
 # Cell
 
@@ -74,6 +78,7 @@ class DoubleFileChecker:
             remove_entries(contents, delete_entries, delete_files)
         return contents, delete_entries
 
+
 # Cell
 
 
@@ -89,6 +94,7 @@ def configure_logging(logging_level=logging.INFO):
     handler.setLevel(logging_level)
 
     logger.addHandler(handler)
+
 
 # Cell
 
@@ -111,6 +117,7 @@ def get_file_sha(fname):
                 sha1.update(data)
             result = sha1.hexdigest()
     return result
+
 
 # Cell
 
@@ -135,6 +142,7 @@ def check_double_entries(entries):
             double_hashes[key] = entrylist
     return double_hashes
 
+
 # Cell
 
 
@@ -157,6 +165,7 @@ def remove_entries(entries, to_remove, delete_source=False):
                 remove(entry[0])
 
     return entries
+
 
 # Cell
 
@@ -181,6 +190,7 @@ def scan_folder(folder):
         elif isfile(path):
             images.append(path)
     return images
+
 
 # Cell
 

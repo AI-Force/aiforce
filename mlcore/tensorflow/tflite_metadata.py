@@ -3,6 +3,7 @@
 __all__ = ['SAVED_MODEL_META_DEFAULT_KEY', 'AUTHOR', 'logger', 'MetaInfo', 'create_metadata', 'write_metadata',
            'read_metadata', 'configure_logging']
 
+
 # Cell
 
 import logging
@@ -16,14 +17,17 @@ from tflite_support import metadata_schema_py_generated as _metadata_fb
 from os.path import basename
 from ..dataset.type import DatasetType, infer_dataset_type
 
+
 # Cell
 
 SAVED_MODEL_META_DEFAULT_KEY = 'serving_default'
 AUTHOR = 'Protosolution'
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 
@@ -59,6 +63,7 @@ class MetaInfo:
 
     def has_stats(self):
         return self.stats_min or self.stats_max
+
 
 # Cell
 
@@ -110,6 +115,7 @@ def create_metadata(saved_model_dir, categories_file_path, model_type, model_nam
 
     return model_meta
 
+
 # Cell
 
 
@@ -132,6 +138,7 @@ def write_metadata(model_meta, model_path, categories_file_path):
     populator.load_associated_files([categories_file_path])
     populator.populate()
 
+
 # Cell
 
 
@@ -144,6 +151,7 @@ def read_metadata(model_path):
     displayer = _metadata.MetadataDisplayer.with_model_file(model_path)
     metadata = displayer.get_metadata_json()
     return metadata
+
 
 # Cell
 
@@ -197,6 +205,7 @@ def _create_input_metadata(saved_model_meta, input_min=0, input_max=255, norm_me
     input_meta.processUnits = [input_normalization]
 
     return [input_meta]
+
 
 # Cell
 
@@ -266,6 +275,7 @@ def _create_output_metadata(saved_model_meta, categories_file_path, model_type):
 
     return output_meta, output_groups
 
+
 # Cell
 
 
@@ -296,6 +306,7 @@ def _create_tensor_metadata(meta_info: MetaInfo):
 
     return meta
 
+
 # Cell
 
 
@@ -310,6 +321,7 @@ def _create_bbox_content_property_metadata(bbox_type=None, bbox_index=None):
     properties.index = [1, 0, 3, 2] if bbox_index is None else bbox_index
     properties.type = _metadata_fb.BoundingBoxType.BOUNDARIES if bbox_type is None else bbox_type
     return properties
+
 
 # Cell
 
@@ -328,6 +340,7 @@ def _create_associated_files_metadata(categories_file_path, desc, label_type=Non
     associated_file.type = _metadata_fb.AssociatedFileType.TENSOR_AXIS_LABELS if label_type is None else label_type
     return associated_file
 
+
 # Cell
 
 
@@ -343,6 +356,7 @@ def configure_logging(logging_level=logging.INFO):
     handler.setLevel(logging_level)
 
     logger.addHandler(handler)
+
 
 # Cell
 

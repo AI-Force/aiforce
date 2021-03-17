@@ -2,6 +2,7 @@
 
 __all__ = ['convert', 'configure_logging']
 
+
 # Cell
 
 import sys
@@ -10,6 +11,7 @@ import logging
 from .core import list_subclasses, parse_known_args_with_help
 from mlcore import annotation as annotation_package
 from .annotation.core import AnnotationAdapter, SubsetType
+
 
 # Cell
 
@@ -25,6 +27,7 @@ def convert(input_adapter: AnnotationAdapter, output_adapter: AnnotationAdapter)
     output_adapter.write_categories(categories)
     output_adapter.write_annotations(annotations, SubsetType.TRAINVAL)
 
+
 # Cell
 
 
@@ -35,6 +38,7 @@ def configure_logging(logging_level=logging.INFO):
     :param logging_level: The logging level to use.
     """
     logging.basicConfig(level=logging_level)
+
 
 # Cell
 

@@ -2,6 +2,7 @@
 
 __all__ = ['logger', 'Dataset']
 
+
 # Cell
 
 import argparse
@@ -13,9 +14,11 @@ from ..annotation.core import AnnotationAdapter, SubsetType
 from ..image.pillow_tools import assign_exif_orientation, write_exif_metadata
 from ..io.core import create_folder
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 
@@ -107,7 +110,7 @@ class Dataset(ABC):
                 region_valid = len_labels and len(set(region.labels) & set(self.categories)) == len_labels
                 if not region_valid:
                     message = '{} : Region {} with category {} is not in category list, skip region.'
-                    logger.info(message.format(annotation.file_name, index, ','.join(region.labels)))
+                    logger.info(message.format(annotation.file_path, index, ','.join(region.labels)))
 
                     delete_regions[index] = True
                 else:

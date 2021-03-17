@@ -2,6 +2,7 @@
 
 __all__ = ['DEFAULT_CATEGORY_FOLDER_INDEX', 'logger', 'FolderCategoryAnnotationAdapter']
 
+
 # Cell
 
 import logging
@@ -11,13 +12,16 @@ from ..core import assign_arg_prefix
 from ..io.core import create_folder, scan_files
 from .core import Annotation, AnnotationAdapter, Region, SubsetType
 
+
 # Cell
 
 DEFAULT_CATEGORY_FOLDER_INDEX = -1
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 
