@@ -2,6 +2,7 @@
 
 __all__ = ['logger', 'ImageSizeCalculator', 'configure_logging']
 
+
 # Cell
 
 import logging
@@ -12,9 +13,11 @@ from functools import reduce
 from ..image.pillow_tools import get_image_size
 from ..io.core import scan_path
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 
@@ -54,6 +57,7 @@ class ImageSizeCalculator:
 
         return unique_sizes
 
+
 # Cell
 
 
@@ -69,6 +73,7 @@ def configure_logging(logging_level=logging.INFO):
     handler.setLevel(logging_level)
 
     logger.addHandler(handler)
+
 
 # Cell
 

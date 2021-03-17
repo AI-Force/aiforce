@@ -2,6 +2,7 @@
 
 __all__ = ['Downloader', 'SaveToDirectory']
 
+
 # Cell
 
 import errno
@@ -12,6 +13,7 @@ import os.path
 import io
 import requests
 from multiprocessing.dummy import Pool as ThreadPool
+
 
 # Cell
 
@@ -130,6 +132,7 @@ class Downloader:
     def get_failed_downloads(self):
         """Returns a list of downloads that failed to complete."""
         return self.failed_downloads
+
 
 # Cell
 

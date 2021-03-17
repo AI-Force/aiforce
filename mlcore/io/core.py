@@ -3,6 +3,7 @@
 __all__ = ['BUF_SIZE', 'DEFAULT_IMAGE_EXTENSIONS', 'FOLDER_FILTER', 'logger', 'scan_files', 'scan_path',
            'delete_folder', 'create_folder', 'get_file_sha', 'assign_filename_suffix', 'strip_path']
 
+
 # Cell
 
 import hashlib
@@ -12,15 +13,18 @@ import os
 from os import listdir, makedirs
 from os.path import join, isfile, isdir, splitext
 
+
 # Cell
 
 BUF_SIZE = 65536  # lets read stuff in 64kb chunks!
 DEFAULT_IMAGE_EXTENSIONS = ['.jpg']
 FOLDER_FILTER = ['.DS_Store']
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 
@@ -48,6 +52,7 @@ def scan_files(folder, file_extensions=None):
                 results.extend(scan_files(file_path, file_extensions))
     return results
 
+
 # Cell
 
 
@@ -69,6 +74,7 @@ def scan_path(path):
         results.append(path)
     return results
 
+
 # Cell
 
 
@@ -81,6 +87,7 @@ def delete_folder(path):
     if isdir(path):
         shutil.rmtree(path)
     return path
+
 
 # Cell
 
@@ -101,6 +108,7 @@ def create_folder(path, clear=False):
         makedirs(path)
 
     return path
+
 
 # Cell
 
@@ -123,6 +131,7 @@ def get_file_sha(file_path):
             result = sha1.hexdigest()
     return result
 
+
 # Cell
 
 
@@ -137,6 +146,7 @@ def assign_filename_suffix(file_path, suffix=None):
         return file_path
     path, ext = splitext(file_path)
     return "{}_{}{}".format(path, suffix, ext)
+
 
 # Cell
 

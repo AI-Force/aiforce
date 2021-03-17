@@ -2,10 +2,12 @@
 
 __all__ = ['create_ellipse', 'ellipse_intersection_area']
 
+
 # Cell
 
 from shapely.geometry.point import Point
 from shapely import affinity
+
 
 # Cell
 
@@ -23,6 +25,7 @@ def create_ellipse(center, lengths, angle=0):
     ell = affinity.scale(circ, int(lengths[0]), int(lengths[1]))
     ellr = affinity.rotate(ell, angle)
     return ellr
+
 
 # Cell
 

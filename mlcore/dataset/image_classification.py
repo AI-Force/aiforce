@@ -2,6 +2,7 @@
 
 __all__ = ['logger', 'ImageClassificationDataset']
 
+
 # Cell
 
 import logging
@@ -11,9 +12,11 @@ from ..annotation.core import AnnotationAdapter
 from .core import Dataset
 from ..tensorflow.tfrecord_builder import create_labelmap_file
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 

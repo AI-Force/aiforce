@@ -3,6 +3,7 @@
 __all__ = ['logger', 'SubsetType', 'RegionShape', 'parse_region_shape', 'Region', 'Annotation', 'convert_region',
            'region_bounding_box', 'AnnotationAdapter']
 
+
 # Cell
 
 import argparse
@@ -16,9 +17,11 @@ from mlcore import category_tools
 from ..core import assign_arg_prefix
 from ..io.core import strip_path, scan_files, create_folder
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 
@@ -34,6 +37,7 @@ class SubsetType(Enum):
 
     def __str__(self):
         return self.value
+
 
 # Cell
 
@@ -52,6 +56,7 @@ class RegionShape(Enum):
     def __str__(self):
         return self.value
 
+
 # Cell
 
 
@@ -66,6 +71,7 @@ def parse_region_shape(shape_str):
         return RegionShape(shape_str)
     except ValueError:
         raise ValueError("Error, unsupported region shape: {}".format(shape_str))
+
 
 # Cell
 
@@ -88,6 +94,7 @@ class Region:
         self.radius_x = radius_x
         self.radius_y = radius_y
         self.labels = [] if labels is None else labels
+
 
 # Cell
 
@@ -116,6 +123,7 @@ class Annotation:
             for label in region.labels:
                 labels[label] = None
         return list(labels.keys())
+
 
 # Cell
 
@@ -162,6 +170,7 @@ def convert_region(region: Region, target_shape: RegionShape):
         else:
             raise NotImplementedError('unsupported conversion {} -> {}'.format(region.shape, target_shape))
 
+
 # Cell
 
 
@@ -174,6 +183,7 @@ def region_bounding_box(region: Region):
     bbox = deepcopy(region)
     convert_region(bbox, RegionShape.RECTANGLE)
     return bbox.points_x, bbox.points_y
+
 
 # Cell
 

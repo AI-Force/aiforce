@@ -2,8 +2,10 @@
 
 __all__ = ['limit_to_max_size', 'fit_to_max_size', 'get_image_size']
 
+
 # Cell
 import cv2
+
 
 # Cell
 
@@ -21,6 +23,7 @@ def limit_to_max_size(img, max_size):
         ratio = 1.0 * max_size / biggest_size
         img = cv2.resize(img, (int(ratio * img.shape[1]), int(ratio * img.shape[0])))
     return img
+
 
 # Cell
 
@@ -40,6 +43,7 @@ def fit_to_max_size(img, max_width, max_height):
         max_size = max(w - scale_delta, h - scale_delta)
         img = limit_to_max_size(img, max_size)
     return img
+
 
 # Cell
 

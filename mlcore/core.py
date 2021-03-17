@@ -3,14 +3,17 @@
 __all__ = ['DEFAULT_HELP_ARGUMENTS', 'import_modules', 'list_subclasses', 'all_subclasses', 'parse_known_help',
            'parse_known_args_with_help', 'assign_arg_prefix', 'input_feedback']
 
+
 # Cell
 
 import re
 from importlib import import_module, resources
 
+
 # Cell
 
 DEFAULT_HELP_ARGUMENTS = ['-h', '--help']
+
 
 # Cell
 
@@ -24,6 +27,7 @@ def import_modules(package):
     modules = [f[:-3] for f in files if f.endswith(".py") and f[0] != "_"]
     for module in modules:
         import_module(f"{package.__name__}.{module}")
+
 
 # Cell
 
@@ -39,6 +43,7 @@ def list_subclasses(package, base_class):
     subclasses = all_subclasses(base_class)
     return dict(zip(map(lambda c: c.__name__, subclasses), subclasses))
 
+
 # Cell
 
 
@@ -49,6 +54,7 @@ def all_subclasses(base_class):
     return: a set of subclasses type information
     """
     return set(base_class.__subclasses__()).union([s for c in base_class.__subclasses__() for s in all_subclasses(c)])
+
 
 # Cell
 
@@ -69,6 +75,7 @@ def parse_known_help(argv):
     rest = [] if only_help else help_argv
     return known, rest
 
+
 # Cell
 
 
@@ -84,6 +91,7 @@ def parse_known_args_with_help(parser, argv):
     argv = rest_args + argv_help_rest
     return args, argv
 
+
 # Cell
 
 
@@ -95,6 +103,7 @@ def assign_arg_prefix(arg_name, prefix=None):
     return: the prefixed argument name
     """
     return arg_name if prefix is None else re.sub(r'^(-{0,2})([\w-]+)$', r'\1{}_\2'.format(prefix), arg_name)
+
 
 # Cell
 

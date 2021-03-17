@@ -2,6 +2,7 @@
 
 __all__ = ['pascal_voc_palette', 'ade20k_palette', 'cityscapes_palette', 'mhp_palette_v1']
 
+
 # Cell
 
 
@@ -34,6 +35,7 @@ def pascal_voc_palette(num_cls=None):
             i = i + 1
             lab >>= 3
     return palette
+
 
 # Cell
 
@@ -78,6 +80,7 @@ def ade20k_palette(num_cls=None):
         palette = palette[:num_cls*3]
     return palette
 
+
 # Cell
 
 
@@ -121,6 +124,7 @@ def cityscapes_palette(num_cls=None):
             raise Exception("Palette Color Definition exceeded.")
         palette = palette[:num_cls*3]
     return palette
+
 
 # Cell
 
