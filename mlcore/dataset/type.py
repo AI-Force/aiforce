@@ -2,10 +2,12 @@
 
 __all__ = ['DatasetType', 'infer_dataset_type']
 
+
 # Cell
 
 from enum import Enum
 from os.path import dirname, basename
+
 
 # Cell
 
@@ -21,6 +23,7 @@ class DatasetType(Enum):
 
     def __str__(self):
         return self.value
+
 
 # Cell
 

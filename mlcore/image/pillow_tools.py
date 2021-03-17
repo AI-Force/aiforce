@@ -4,6 +4,7 @@ __all__ = ['EXIF_ORIENTATION_TAG', 'logger', 'limit_to_max_size', 'fit_to_max_si
            'get_image_orientation', 'read_exif_metadata', 'write_exif_metadata', 'assign_exif_orientation',
            'convert_to_base64', 'write_mask', 'configure_logging']
 
+
 # Cell
 import sys
 import argparse
@@ -15,14 +16,17 @@ from PIL import Image as PILImage
 from .tools import ImageOrientation
 from ..io.core import scan_files
 
+
 # Cell
 
 EXIF_ORIENTATION_TAG = 'Orientation'
 """The Image EXIF orientation tag"""
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 
@@ -40,6 +44,7 @@ def limit_to_max_size(img, max_size):
         ratio = 1.0 * max_size / biggest_size
         img = img.resize([int(ratio * s) for s in img.size])
     return img
+
 
 # Cell
 
@@ -60,6 +65,7 @@ def fit_to_max_size(img, max_width, max_height):
         img = limit_to_max_size(img, max_size)
     return img
 
+
 # Cell
 
 
@@ -72,6 +78,7 @@ def get_image_size(fname):
     image = PILImage.open(fname)
     w, h = image.size
     return image, w, h
+
 
 # Cell
 
@@ -93,6 +100,7 @@ def get_image_orientation(fname):
                 logger.error(e)
     return image, orientation
 
+
 # Cell
 
 
@@ -107,6 +115,7 @@ def read_exif_metadata(fname):
     if "exif" in image.info:
         exif_data = piexif.load(image.info["exif"])
     return image, exif_data
+
 
 # Cell
 
@@ -125,6 +134,7 @@ def write_exif_metadata(image, exif_data, fname):
         image.save(fname, exif=exif_bytes)
         return True
     return False
+
 
 # Cell
 
@@ -167,6 +177,7 @@ def assign_exif_orientation(fname):
 
     return image, exif_data, rotated
 
+
 # Cell
 
 
@@ -182,6 +193,7 @@ def convert_to_base64(image, image_type="PNG"):
     image.save(buffered, format=image_type)
     return base64.b64encode(buffered.getvalue()).decode('UTF-8')
 
+
 # Cell
 
 
@@ -195,6 +207,7 @@ def write_mask(mask, file_path):
     """
     im = PILImage.fromarray(mask)
     im.save(file_path)
+
 
 # Cell
 
@@ -211,6 +224,7 @@ def configure_logging(logging_level=logging.INFO):
     handler.setLevel(logging_level)
 
     logger.addHandler(handler)
+
 
 # Cell
 

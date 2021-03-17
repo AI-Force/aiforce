@@ -2,6 +2,7 @@
 
 __all__ = ['logger', 'ImageObjectDetectionDataset']
 
+
 # Cell
 
 import logging
@@ -15,9 +16,11 @@ from ..annotation.core import RegionShape, convert_region
 from ..tensorflow.tfrecord_builder import create_tfrecord_file
 from ..evaluation.core import box_area, intersection_box, union_box
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 

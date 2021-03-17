@@ -2,8 +2,10 @@
 
 __all__ = ['ImageOrientation', 'get_image_scale']
 
+
 # Cell
 from enum import Enum
+
 
 # Cell
 
@@ -23,6 +25,7 @@ class ImageOrientation(Enum):
 
     def __str__(self):
         return str(self.value)
+
 
 # Cell
 

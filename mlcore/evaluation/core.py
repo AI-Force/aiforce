@@ -2,15 +2,18 @@
 
 __all__ = ['logger', 'box_area', 'intersection_box', 'union_box', 'intersection_over_union', 'configure_logging']
 
+
 # Cell
 
 import argparse
 import logging
 import sys
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 
@@ -24,6 +27,7 @@ def box_area(box):
     return: the bounding box area
     """
     return max(0, box[0][1] - box[0][0] + 1) * max(0, box[1][1] - box[1][0] + 1)
+
 
 # Cell
 
@@ -44,6 +48,7 @@ def intersection_box(box_a, box_b):
     y_b = min(box_a[1][1], box_b[1][1])
     return (x_a, x_b), (y_a, y_b)
 
+
 # Cell
 
 
@@ -62,6 +67,7 @@ def union_box(box_a, box_b):
     x_b = max(box_a[0][1], box_b[0][1])
     y_b = max(box_a[1][1], box_b[1][1])
     return (x_a, x_b), (y_a, y_b)
+
 
 # Cell
 
@@ -91,6 +97,7 @@ def intersection_over_union(box_a, box_b):
     # return the intersection over union value
     return iou
 
+
 # Cell
 
 
@@ -106,6 +113,7 @@ def configure_logging(logging_level=logging.INFO):
     handler.setLevel(logging_level)
 
     logger.addHandler(handler)
+
 
 # Cell
 

@@ -3,19 +3,23 @@
 __all__ = ['logger', 'create_tfrecord_entry', 'create_tfrecord_file', 'int64_feature', 'int64_list_feature',
            'bytes_feature', 'bytes_list_feature', 'float_list_feature', 'create_labelmap_file']
 
+
 # Cell
 
 import logging
 import io
 import tensorflow as tf
 from os import environ
+from os.path import basename
 from ..image.pillow_tools import get_image_size
+
 
 # Cell
 
 environ['TF_CPP_MIN_LOG_LEVEL'] = '2'    # Suppress TensorFlow logging (1)
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 
@@ -31,7 +35,7 @@ def create_tfrecord_entry(categories, annotation):
         encoded_jpg = fid.read()
     _, width, height = get_image_size(io.BytesIO(encoded_jpg))
 
-    file_name = annotation.file_name.encode('utf8')
+    file_name = basename(annotation.file_path).encode('utf8')
     image_format = b'jpg'
     xmins = []
     xmaxs = []
@@ -70,6 +74,7 @@ def create_tfrecord_entry(categories, annotation):
     }))
     return tf_example
 
+
 # Cell
 
 
@@ -86,6 +91,7 @@ def create_tfrecord_file(output_path, categories, annotations):
         writer.write(tf_example.SerializeToString())
     writer.close()
     logger.info('Successfully created the TFRecord file: {}'.format(output_path))
+
 
 # Cell
 
@@ -108,6 +114,7 @@ def bytes_list_feature(value):
 
 def float_list_feature(value):
     return tf.train.Feature(float_list=tf.train.FloatList(value=value))
+
 
 # Cell
 

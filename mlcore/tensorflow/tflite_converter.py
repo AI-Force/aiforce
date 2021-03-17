@@ -3,6 +3,7 @@
 __all__ = ['TFLITE_MODEL_DEFAULT_NAME', 'logger', 'convert_model', 'save_model', 'read_pipeline_config',
            'configure_logging']
 
+
 # Cell
 
 import logging
@@ -15,13 +16,16 @@ from google.protobuf import text_format
 from ..dataset.type import DatasetType, infer_dataset_type
 from .tflite_metadata import create_metadata, write_metadata
 
+
 # Cell
 
 TFLITE_MODEL_DEFAULT_NAME = 'model.tflite'
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 
@@ -37,6 +41,7 @@ def convert_model(saved_model_dir):
     tflite_model = converter.convert()
     return tflite_model
 
+
 # Cell
 
 
@@ -49,6 +54,7 @@ def save_model(tflite_model, output_file):
     with open(output_file, 'wb') as f:
         f.write(tflite_model)
     logger.info('Successfully save model to file: {}'.format(output_file))
+
 
 # Cell
 
@@ -63,6 +69,7 @@ def read_pipeline_config(pipeline_config_path):
     with tf.io.gfile.GFile(pipeline_config_path, 'r') as f:
         text_format.Parse(f.read(), pipeline_config)
     return pipeline_config
+
 
 # Cell
 
@@ -79,6 +86,7 @@ def configure_logging(logging_level=logging.INFO):
     handler.setLevel(logging_level)
 
     logger.addHandler(handler)
+
 
 # Cell
 

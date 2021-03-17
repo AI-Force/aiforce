@@ -2,6 +2,7 @@
 
 __all__ = ['WINDOW_NAME', 'show_annotated_images', 'configure_logging']
 
+
 # Cell
 
 import sys
@@ -15,9 +16,11 @@ from .annotation.core import AnnotationAdapter, SubsetType
 from .image.opencv_tools import fit_to_max_size
 from .annotation.core import RegionShape
 
+
 # Cell
 
 WINDOW_NAME = 'Annotation'
+
 
 # Cell
 
@@ -95,6 +98,7 @@ def show_annotated_images(annotation_adapter, max_width=0, max_height=0):
 
     cv2.destroyAllWindows()
 
+
 # Cell
 
 
@@ -105,6 +109,7 @@ def configure_logging(logging_level=logging.INFO):
     :param logging_level: The logging level to use.
     """
     logging.basicConfig(level=logging_level)
+
 
 # Cell
 

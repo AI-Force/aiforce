@@ -2,6 +2,7 @@
 
 __all__ = ['DEFAULT_ANNOTATIONS_FILE', 'DEFAULT_CATEGORY_LABEL_KEY', 'CSV_FIELDNAMES', 'logger', 'VIAAnnotationAdapter']
 
+
 # Cell
 
 import json
@@ -13,6 +14,7 @@ from ..core import assign_arg_prefix
 from .core import Annotation, AnnotationAdapter, Region, RegionShape, parse_region_shape, SubsetType
 from ..io.core import create_folder
 
+
 # Cell
 
 DEFAULT_ANNOTATIONS_FILE = 'via_region_data.json'
@@ -20,9 +22,11 @@ DEFAULT_CATEGORY_LABEL_KEY = 'category'
 CSV_FIELDNAMES = ['#filename', 'file_size', 'file_attributes', 'region_count', 'region_id', 'region_shape_attributes',
                   'region_attributes']
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 

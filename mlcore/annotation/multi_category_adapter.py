@@ -2,6 +2,7 @@
 
 __all__ = ['DEFAULT_ANNOTATIONS_FILE', 'CSV_FIELDNAMES', 'logger', 'MultiCategoryAnnotationAdapter']
 
+
 # Cell
 
 import csv
@@ -12,14 +13,17 @@ from ..core import assign_arg_prefix
 from ..io.core import create_folder
 from .core import Annotation, AnnotationAdapter, Region, SubsetType
 
+
 # Cell
 
 DEFAULT_ANNOTATIONS_FILE = 'annotations.csv'
 CSV_FIELDNAMES = ['image_name', 'tags']
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 

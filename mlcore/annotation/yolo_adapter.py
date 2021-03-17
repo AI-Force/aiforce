@@ -3,6 +3,7 @@
 __all__ = ['FIELD_NAMES', 'DEFAULT_IMAGES_FOLDER', 'DEFAULT_IMAGE_ANNOTATIONS_FOLDER', 'logger',
            'YOLOAnnotationAdapter']
 
+
 # Cell
 
 import csv
@@ -15,15 +16,18 @@ from ..io.core import scan_files, create_folder
 from ..image.pillow_tools import get_image_size
 from .core import Annotation, AnnotationAdapter, Region, RegionShape, SubsetType
 
+
 # Cell
 
 FIELD_NAMES = ['class_number', 'c_x', 'c_y', 'width', 'height']
 DEFAULT_IMAGES_FOLDER = 'images'
 DEFAULT_IMAGE_ANNOTATIONS_FOLDER = 'labels'
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 

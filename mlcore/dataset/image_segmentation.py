@@ -2,6 +2,7 @@
 
 __all__ = ['logger', 'ImageSegmentationDataset']
 
+
 # Cell
 
 import numpy as np
@@ -15,9 +16,11 @@ from ..image.pillow_tools import assign_exif_orientation, get_image_size, write_
 from ..io.core import create_folder
 from ..annotation.core import RegionShape, convert_region, region_bounding_box
 
+
 # Cell
 
 logger = logging.getLogger(__name__)
+
 
 # Cell
 
