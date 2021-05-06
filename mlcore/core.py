@@ -5,19 +5,15 @@ __all__ = ['DEFAULT_HELP_ARGUMENTS', 'import_modules', 'list_subclasses', 'all_s
 
 
 # Cell
-
 import re
 from importlib import import_module, resources
 
 
 # Cell
-
 DEFAULT_HELP_ARGUMENTS = ['-h', '--help']
 
 
 # Cell
-
-
 def import_modules(package):
     """
     Dynamically import all modules but not submodules in a package.
@@ -30,8 +26,6 @@ def import_modules(package):
 
 
 # Cell
-
-
 def list_subclasses(package, base_class):
     """
     Dynamically import all modules in a package and scan for all subclasses of a base class.
@@ -45,8 +39,6 @@ def list_subclasses(package, base_class):
 
 
 # Cell
-
-
 def all_subclasses(base_class):
     """
     Scan recursively for all subclasses of a base class.
@@ -57,8 +49,6 @@ def all_subclasses(base_class):
 
 
 # Cell
-
-
 def parse_known_help(argv):
     """
     Parse the command line arguments for help parameter and decide,
@@ -77,8 +67,6 @@ def parse_known_help(argv):
 
 
 # Cell
-
-
 def parse_known_args_with_help(parser, argv):
     """
     Parse the command line arguments and validate, if help parameter should be assigned to current argument parser.
@@ -93,8 +81,6 @@ def parse_known_args_with_help(parser, argv):
 
 
 # Cell
-
-
 def assign_arg_prefix(arg_name, prefix=None):
     """
     Assign a parameter prefix to a given argument name. (e.g --prefix_<arg_name>)
@@ -106,8 +92,6 @@ def assign_arg_prefix(arg_name, prefix=None):
 
 
 # Cell
-
-
 def input_feedback(msg, choice, choices):
     """
     User input request wrapper.

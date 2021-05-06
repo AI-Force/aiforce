@@ -8,8 +8,6 @@ from enum import Enum
 
 
 # Cell
-
-
 class ImageOrientation(Enum):
     """
     Image EXIF orientations.
@@ -28,8 +26,6 @@ class ImageOrientation(Enum):
 
 
 # Cell
-
-
 def get_image_scale(image_size, target_size):
     """
     Calculates the scale of the image to fit the target size.

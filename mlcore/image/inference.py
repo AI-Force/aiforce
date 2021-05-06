@@ -4,7 +4,6 @@ __all__ = ['setup_learner', 'fix_odd_sides', 'Inference', 'ClassificationInferen
 
 
 # Cell
-
 import asyncio
 import numpy as np
 from fastai.basic_train import load_learner
@@ -12,8 +11,6 @@ from fastai import vision
 
 
 # Cell
-
-
 async def setup_learner(path):
     """
     Setup the learner with weights.
@@ -35,8 +32,6 @@ async def setup_learner(path):
 
 
 # Cell
-
-
 def fix_odd_sides(img):
     """
     Fix odd image sizes.
@@ -54,8 +49,6 @@ def fix_odd_sides(img):
 
 
 # Cell
-
-
 class Inference:
     """
     Base class for model inference.
@@ -90,8 +83,6 @@ class Inference:
 
 
 # Cell
-
-
 class ClassificationInference(Inference):
     """
     Inference of a classification model.
@@ -110,8 +101,6 @@ class ClassificationInference(Inference):
 
 
 # Cell
-
-
 class SegmentationInference(Inference):
     """
     Inference of a segmentation model.
@@ -128,6 +117,3 @@ class SegmentationInference(Inference):
         pred, labels, probs = self.learner.predict(x)
         mask = np.asarray(vision.image2np(pred.data), dtype=np.uint8)
         return mask, labels, probs
-
-
-# Cell

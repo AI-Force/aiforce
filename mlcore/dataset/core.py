@@ -4,7 +4,6 @@ __all__ = ['logger', 'Dataset']
 
 
 # Cell
-
 import argparse
 import logging
 from abc import ABC
@@ -16,13 +15,10 @@ from ..io.core import create_folder
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 class Dataset(ABC):
     """
     Dataset base class to build datasets.
@@ -174,71 +170,6 @@ class Dataset(ABC):
 
         return train_targets, val_targets, test_targets
 
-#     def copy_(self, train_file_keys, val_file_keys, test_file_names=None):
-#         """
-#         Copy the images to the dataset.
-#         `train_file_keys`: The list of training image keys
-#         `val_file_keys`: The list of validation image keys
-#         `test_file_names`: The list of test image file names
-#         return: A tuple containing dictionaries of train and val annotations
-#         """
-
-#         logger.info('Start copy files from {} to {}'.format(self.imageset_path, self.folder))
-
-#         # copy the categories files
-#         logger.info('Copy file {} to {}'.format(self.categories_path, self.folder))
-#         shutil.copy2(self.categories_path, join(self.folder, DEFAULT_CATEGORIES_FILE))
-
-#         # if create tfrecord, create a labelmap.pbtxt file containing the categories
-#         if self.create_tfrecord:
-#             labelmap_file_name = 'label_map.pbtxt'
-#             labelmap_output_file = join(self.folder, labelmap_file_name)
-#             logger.info('Generate file {} to {}'.format(labelmap_file_name, self.folder))
-#             create_labelmap_file(labelmap_output_file, list(self.categories)[1:], 1)
-
-#         annotations_train = {}
-#         annotations_val = {}
-
-#         num_files = len(train_file_keys)
-#         logger.info('Start copy {} files to {}'.format(num_files, self.train_folder))
-
-#         for key in train_file_keys:
-#             # copy image
-#             annotation = self.annotations[key]
-#             copy_image_and_assign_orientation(self.train_val_folder, annotation.file_name, self.train_folder)
-
-#             # add annotation
-#             annotations_train[key] = annotation
-#         logger.info('Finished copy {} files to {}'.format(num_files, self.train_folder))
-
-#         num_files = len(val_file_keys)
-#         logger.info('Start copy {} files to {}'.format(num_files, self.val_folder))
-
-#         for key in val_file_keys:
-#             # copy image
-#             annotation = self.annotations[key]
-#             copy_image_and_assign_orientation(self.train_val_folder, annotation.file_name, self.val_folder)
-
-#             # add annotation
-#             annotations_val[key] = annotation
-
-#         logger.info('Finished copy {} files to {}'.format(num_files, self.val_folder))
-
-#         # copy test_files, if exist
-#         if test_file_names:
-
-#             num_files = len(test_file_names)
-#             logger.info('Start copy {} files to {}'.format(num_files, self.test_target_folder))
-
-#             for file_name in test_file_names:
-#                 copy_image_and_assign_orientation(self.test_source_folder, file_name, self.test_target_folder)
-
-#             logger.info('Finished copy {} files to {}'.format(num_files, self.test_target_folder))
-
-#         logger.info('Finished copy files from {} to {}'.format(self.imageset_path, self.folder))
-
-#         return annotations_train, annotations_val
-
     def build(self, validate=True):
         """
         Build the data-set. This is the main logic.
@@ -253,24 +184,18 @@ class Dataset(ABC):
         # validate the image set
         skipped_annotations = self.validate() if validate else {}
 
-#         # sort filenames by assigned tags
-#         labels_to_keys = {}
-
-#         for annotation_id, annotation in self.annotations.items():
-#             labels = ' '.join(annotation.labels())
-
-#             if labels not in labels_to_keys:
-#                 labels_to_keys[labels] = []
-#             labels_to_keys[labels].append(annotation_id)
-
         # split category files into train & val and create the sample split, if set
         train_annotation_keys = []
         val_annotation_keys = []
         sample_train_annotation_keys = []
         sample_val_annotation_keys = []
 
-#         for annotation_ids in labels_to_keys.values():
-        train, val = self.split_train_val_data(list(self.annotations.keys()), self.split, self.seed)
+        if self.split == 0:
+            train, val = (list(self.annotations.keys()), [])
+        elif self.split == 1:
+            train, val = ([], list(self.annotations.keys()))
+        else:
+            train, val = self.split_train_val_data(list(self.annotations.keys()), self.split, self.seed)
         train_annotation_keys.extend(train)
         val_annotation_keys.extend(val)
 
@@ -310,85 +235,6 @@ class Dataset(ABC):
                                                                                           self.output_adapter.path))
             # restore original output path
             self.output_adapter.path = output_path
-
-#     def build_(self, split=DEFAULT_SPLIT, seed=None, sample=None):
-#         """
-#         Build the data-set. This is the main logic.
-#         This method validates the images against the annotations,
-#         split the image-set into train and val on given split percentage,
-#         creates the data-set folders and copies the image.
-#         If a sample percentage is given, a sub-set is created as sample.
-#         `split`: The percentage of images which will be copied into the validation set
-#         `seed`: A random seed to reproduce splits
-#         `sample`: The percentage of images from train, val and test which will also from a sample set
-#         """
-
-#         logger.info('Validation set contains {}% of the images.'.format(int(split * 100)))
-
-#         # validate the image set
-#         self.validate()
-
-#         # sort filenames by assigned tags
-#         labels_to_keys = {}
-
-#         for annotation_id, annotation in self.annotations.items():
-#             labels = ' '.join(annotation.labels())
-
-#             if labels not in labels_to_keys:
-#                 labels_to_keys[labels] = []
-#             labels_to_keys[labels].append(annotation_id)
-
-#         # split category files into train & val and create the sample split, if set
-#         train_file_keys = []
-#         val_file_keys = []
-#         sample_train_file_keys = []
-#         sample_val_file_keys = []
-
-#         for annotation_ids in labels_to_keys.values():
-#             train, val = self.split_train_val_data(annotation_ids, split, seed)
-#             train_file_keys.extend(train)
-#             val_file_keys.extend(val)
-
-#             # if a sample data set should be created, create the splits
-#             if sample:
-#                 _, sample_train = self.split_train_val_data(train, sample, seed)
-#                 _, sample_val = self.split_train_val_data(val, sample, seed)
-#                 sample_train_file_keys.extend(sample_train)
-#                 sample_val_file_keys.extend(sample_val)
-
-#         # scan the test images if exist
-#         if self.test_target_folder:
-#             test_file_names = list(map(lambda f: basename(f), scan_files(self.test_source_folder)))
-#         else:
-#             test_file_names = None
-
-#         if test_file_names and self.sample
-#         _, sample_test_file_names = self.split_train_val_data(test_file_names, sample, seed) if test_file_names and sample else (None, None)
-
-#         # copy the files
-#         self.copy(train_file_keys, val_file_keys, test_file_names)
-
-#         if sample:
-#             sample_name = "{}_sample".format(self.name)
-
-#             logger.info('Start build {} data-set containing {}% of images at {}'.format(sample_name,
-#                                                                                         int(sample * 100),
-#                                                                                         self.base_path))
-
-#             # create the sample data-set
-#             sample_data_set = self.__class__(sample_name, self.base_path, self.imageset_path, self.categories_path,
-#                                              self.dataset_type, create_tfrecord=self.create_tfrecord)
-#             # assign the converted annotations
-#             sample_data_set.annotations = self.annotations
-
-#             # create the data set folders
-#             sample_data_set.create_folders()
-#             # copy the sample images
-#             sample_data_set.copy(sample_train_file_keys, sample_val_file_keys, sample_test_file_names)
-
-#             logger.info('Finished build {} data-set containing {}% of images at {}'.format(sample_name,
-#                                                                                            int(sample * 100),
-#                                                                                            self.base_path))
 
     @classmethod
     def split_train_val_data(cls, data, val_size=0.2, seed=None):

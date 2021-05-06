@@ -4,7 +4,6 @@ __all__ = ['convert', 'configure_logging']
 
 
 # Cell
-
 import sys
 import argparse
 import logging
@@ -14,8 +13,6 @@ from .annotation.core import AnnotationAdapter, SubsetType
 
 
 # Cell
-
-
 def convert(input_adapter: AnnotationAdapter, output_adapter: AnnotationAdapter):
     """
     Convert input annotations to output annotations.
@@ -29,8 +26,6 @@ def convert(input_adapter: AnnotationAdapter, output_adapter: AnnotationAdapter)
 
 
 # Cell
-
-
 def configure_logging(logging_level=logging.INFO):
     """
     Configures logging for the system.
@@ -41,8 +36,6 @@ def configure_logging(logging_level=logging.INFO):
 
 
 # Cell
-
-
 if __name__ == '__main__' and '__file__' in globals():
     # for direct shell execution
     configure_logging()

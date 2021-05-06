@@ -5,7 +5,6 @@ __all__ = ['logger', 'BUF_SIZE', 'FILE_FILTER', 'IMAGE_EXTENSION', 'DoubleFileCh
 
 
 # Cell
-
 import hashlib
 import logging
 import logging.handlers
@@ -16,21 +15,16 @@ from os.path import join, isfile, isdir
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
 BUF_SIZE = 65536  # lets read stuff in 64kb chunks!
-
 FILE_FILTER = ['.DS_Store']
 IMAGE_EXTENSION = '.jpg'
 
 
 # Cell
-
-
 class DoubleFileChecker:
     """
     Checks a given folder and subfolders for double files by calculating the corresponding SHA1.
@@ -80,8 +74,6 @@ class DoubleFileChecker:
 
 
 # Cell
-
-
 def configure_logging(logging_level=logging.INFO):
     """
     Configures logging for the system.
@@ -97,8 +89,6 @@ def configure_logging(logging_level=logging.INFO):
 
 
 # Cell
-
-
 def get_file_sha(fname):
     """
     Calculates the SHA1 of a given file.
@@ -120,8 +110,6 @@ def get_file_sha(fname):
 
 
 # Cell
-
-
 def check_double_entries(entries):
     """
     Process a list of tuples of filenames and corresponding hash for double hashes.
@@ -144,8 +132,6 @@ def check_double_entries(entries):
 
 
 # Cell
-
-
 def remove_entries(entries, to_remove, delete_source=False):
     """
     Removes entries from list and optionally remove the source file as well.
@@ -168,8 +154,6 @@ def remove_entries(entries, to_remove, delete_source=False):
 
 
 # Cell
-
-
 def scan_folder(folder):
     """
     Scans a folder and subfolders for image content.
@@ -193,8 +177,6 @@ def scan_folder(folder):
 
 
 # Cell
-
-
 if __name__ == '__main__' and '__file__' in globals():
     configure_logging()
 

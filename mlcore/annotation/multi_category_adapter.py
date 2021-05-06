@@ -4,7 +4,6 @@ __all__ = ['DEFAULT_ANNOTATIONS_FILE', 'CSV_FIELDNAMES', 'logger', 'MultiCategor
 
 
 # Cell
-
 import csv
 import shutil
 import logging
@@ -15,19 +14,15 @@ from .core import Annotation, AnnotationAdapter, Region, SubsetType
 
 
 # Cell
-
 DEFAULT_ANNOTATIONS_FILE = 'annotations.csv'
 CSV_FIELDNAMES = ['image_name', 'tags']
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 class MultiCategoryAnnotationAdapter(AnnotationAdapter):
     """
     Adapter to read and write annotations for multi label classification.

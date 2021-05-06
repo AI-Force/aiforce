@@ -4,7 +4,6 @@ __all__ = ['DEFAULT_ANNOTATIONS_FILE', 'DEFAULT_CATEGORY_LABEL_KEY', 'CSV_FIELDN
 
 
 # Cell
-
 import json
 import csv
 import shutil
@@ -16,7 +15,6 @@ from ..io.core import create_folder
 
 
 # Cell
-
 DEFAULT_ANNOTATIONS_FILE = 'via_region_data.json'
 DEFAULT_CATEGORY_LABEL_KEY = 'category'
 CSV_FIELDNAMES = ['#filename', 'file_size', 'file_attributes', 'region_count', 'region_id', 'region_shape_attributes',
@@ -24,13 +22,10 @@ CSV_FIELDNAMES = ['#filename', 'file_size', 'file_attributes', 'region_count', '
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 class VIAAnnotationAdapter(AnnotationAdapter):
     """
     Adapter to read and write annotations in the VIA annotation.

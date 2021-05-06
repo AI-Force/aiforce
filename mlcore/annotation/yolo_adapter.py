@@ -5,7 +5,6 @@ __all__ = ['FIELD_NAMES', 'DEFAULT_IMAGES_FOLDER', 'DEFAULT_IMAGE_ANNOTATIONS_FO
 
 
 # Cell
-
 import csv
 import logging
 import shutil
@@ -18,20 +17,16 @@ from .core import Annotation, AnnotationAdapter, Region, RegionShape, SubsetType
 
 
 # Cell
-
 FIELD_NAMES = ['class_number', 'c_x', 'c_y', 'width', 'height']
 DEFAULT_IMAGES_FOLDER = 'images'
 DEFAULT_IMAGE_ANNOTATIONS_FOLDER = 'labels'
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 class YOLOAnnotationAdapter(AnnotationAdapter):
     """
     Adapter to read and write annotations in the YOLO format.

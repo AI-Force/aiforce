@@ -18,19 +18,15 @@ from ..io.core import scan_files
 
 
 # Cell
-
 EXIF_ORIENTATION_TAG = 'Orientation'
 """The Image EXIF orientation tag"""
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 def limit_to_max_size(img, max_size):
     """
     Limit the image size to max size and scale the image,
@@ -47,8 +43,6 @@ def limit_to_max_size(img, max_size):
 
 
 # Cell
-
-
 def fit_to_max_size(img, max_width, max_height):
     """
     Limit the image size to maximum width and height and scale the image,
@@ -67,8 +61,6 @@ def fit_to_max_size(img, max_width, max_height):
 
 
 # Cell
-
-
 def get_image_size(fname):
     """
     Calculates image size of a given image file path.
@@ -81,8 +73,6 @@ def get_image_size(fname):
 
 
 # Cell
-
-
 def get_image_orientation(fname):
     """
     Parses the EXIF orientation information from the image.
@@ -102,8 +92,6 @@ def get_image_orientation(fname):
 
 
 # Cell
-
-
 def read_exif_metadata(fname):
     """
     Read the EXIF metadata information from the image.
@@ -118,8 +106,6 @@ def read_exif_metadata(fname):
 
 
 # Cell
-
-
 def write_exif_metadata(image, exif_data, fname):
     """
     Write the EXIF metadata information to the image.
@@ -137,8 +123,6 @@ def write_exif_metadata(image, exif_data, fname):
 
 
 # Cell
-
-
 def assign_exif_orientation(fname):
     """
     Parses the EXIF orientation metadata from the image,
@@ -179,8 +163,6 @@ def assign_exif_orientation(fname):
 
 
 # Cell
-
-
 def convert_to_base64(image, image_type="PNG"):
     """
     Converts the specified image into a base64 version of itself.
@@ -195,8 +177,6 @@ def convert_to_base64(image, image_type="PNG"):
 
 
 # Cell
-
-
 def write_mask(mask, file_path):
     """
     Writes a mask as image.
@@ -210,8 +190,6 @@ def write_mask(mask, file_path):
 
 
 # Cell
-
-
 def configure_logging(logging_level=logging.INFO):
     """
     Configures logging for the system.
@@ -227,8 +205,6 @@ def configure_logging(logging_level=logging.INFO):
 
 
 # Cell
-
-
 if __name__ == '__main__' and '__file__' in globals():
     # for direct shell execution
     configure_logging()

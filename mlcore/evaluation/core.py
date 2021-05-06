@@ -4,20 +4,16 @@ __all__ = ['logger', 'box_area', 'intersection_box', 'union_box', 'intersection_
 
 
 # Cell
-
 import argparse
 import logging
 import sys
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 def box_area(box):
     """
     Calculates the area of a bounding box.
@@ -30,8 +26,6 @@ def box_area(box):
 
 
 # Cell
-
-
 def intersection_box(box_a, box_b):
     """
     Calculates the intersection box from two bounding boxes with the format ((x_min, x_max), (y_min, y_max)).
@@ -50,8 +44,6 @@ def intersection_box(box_a, box_b):
 
 
 # Cell
-
-
 def union_box(box_a, box_b):
     """
     Calculates the union box from two bounding boxes with the format ((x_min, x_max), (y_min, y_max)).
@@ -70,8 +62,6 @@ def union_box(box_a, box_b):
 
 
 # Cell
-
-
 def intersection_over_union(box_a, box_b):
     """
     Intersection over Union (IoU) algorithm.
@@ -99,8 +89,6 @@ def intersection_over_union(box_a, box_b):
 
 
 # Cell
-
-
 def configure_logging(logging_level=logging.INFO):
     """
     Configures logging for the system.
@@ -116,8 +104,6 @@ def configure_logging(logging_level=logging.INFO):
 
 
 # Cell
-
-
 if __name__ == '__main__' and '__file__' in globals():
     # for direct shell execution
     configure_logging()

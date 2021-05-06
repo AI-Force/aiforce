@@ -5,7 +5,6 @@ __all__ = ['logger', 'SubsetType', 'RegionShape', 'parse_region_shape', 'Region'
 
 
 # Cell
-
 import argparse
 import logging
 import shutil
@@ -19,13 +18,10 @@ from ..io.core import strip_path, scan_files, create_folder
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 class SubsetType(Enum):
     """
     The annotation subset type
@@ -40,8 +36,6 @@ class SubsetType(Enum):
 
 
 # Cell
-
-
 class RegionShape(Enum):
     """
     The supported region shape types
@@ -58,8 +52,6 @@ class RegionShape(Enum):
 
 
 # Cell
-
-
 def parse_region_shape(shape_str):
     """
     Try to parse the region shape from a string representation.
@@ -74,8 +66,6 @@ def parse_region_shape(shape_str):
 
 
 # Cell
-
-
 class Region:
     """
     A region
@@ -97,8 +87,6 @@ class Region:
 
 
 # Cell
-
-
 class Annotation:
     """
     A annotation for a file.
@@ -126,8 +114,6 @@ class Annotation:
 
 
 # Cell
-
-
 def convert_region(region: Region, target_shape: RegionShape):
     """
     Convert region to target shape.
@@ -172,8 +158,6 @@ def convert_region(region: Region, target_shape: RegionShape):
 
 
 # Cell
-
-
 def region_bounding_box(region: Region):
     """
     Calculates the region bounding box.
@@ -186,8 +170,6 @@ def region_bounding_box(region: Region):
 
 
 # Cell
-
-
 class AnnotationAdapter(ABC):
     """
     Abstract Base Adapter to inherit for writing custom adapters

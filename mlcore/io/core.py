@@ -5,7 +5,6 @@ __all__ = ['BUF_SIZE', 'DEFAULT_IMAGE_EXTENSIONS', 'FOLDER_FILTER', 'logger', 's
 
 
 # Cell
-
 import hashlib
 import logging
 import shutil
@@ -15,20 +14,16 @@ from os.path import join, isfile, isdir, splitext
 
 
 # Cell
-
 BUF_SIZE = 65536  # lets read stuff in 64kb chunks!
 DEFAULT_IMAGE_EXTENSIONS = ['.jpg']
 FOLDER_FILTER = ['.DS_Store']
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 def scan_files(folder, file_extensions=None):
     """
     Scan the folder for files and filter files by file extension.
@@ -54,8 +49,6 @@ def scan_files(folder, file_extensions=None):
 
 
 # Cell
-
-
 def scan_path(path):
     """
     Scan a folder and sub-folders until the file level.
@@ -76,8 +69,6 @@ def scan_path(path):
 
 
 # Cell
-
-
 def delete_folder(path):
     """
     Deletes a Folder, if exist.
@@ -90,8 +81,6 @@ def delete_folder(path):
 
 
 # Cell
-
-
 def create_folder(path, clear=False):
     """
     Creates a Folder, if not exist.
@@ -111,8 +100,6 @@ def create_folder(path, clear=False):
 
 
 # Cell
-
-
 def get_file_sha(file_path):
     """
     Calculates the SHA1 of a given file.
@@ -133,8 +120,6 @@ def get_file_sha(file_path):
 
 
 # Cell
-
-
 def assign_filename_suffix(file_path, suffix=None):
     """
     Assign a filename suffix to a given file_path. (e.g <path>/filename_<suffix>.txt)
@@ -149,8 +134,6 @@ def assign_filename_suffix(file_path, suffix=None):
 
 
 # Cell
-
-
 def strip_path(file_path, strip=os.sep):
     """
     Strip trailing separators from a path

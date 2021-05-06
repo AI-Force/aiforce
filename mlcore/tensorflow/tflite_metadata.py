@@ -5,7 +5,6 @@ __all__ = ['SAVED_MODEL_META_DEFAULT_KEY', 'AUTHOR', 'logger', 'MetaInfo', 'crea
 
 
 # Cell
-
 import logging
 import logging.handlers
 import argparse
@@ -19,19 +18,15 @@ from ..dataset.type import DatasetType, infer_dataset_type
 
 
 # Cell
-
 SAVED_MODEL_META_DEFAULT_KEY = 'serving_default'
 AUTHOR = 'Protosolution'
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 class MetaInfo:
     """
     Metadata information.
@@ -66,8 +61,6 @@ class MetaInfo:
 
 
 # Cell
-
-
 def create_metadata(saved_model_dir, categories_file_path, model_type, model_name, model_version=1):
     """
     Write metadata to the Tensowflow Lite model on disk.
@@ -117,8 +110,6 @@ def create_metadata(saved_model_dir, categories_file_path, model_type, model_nam
 
 
 # Cell
-
-
 def write_metadata(model_meta, model_path, categories_file_path):
     """
     Write metadata to the Tensowflow Lite model on disk.
@@ -140,8 +131,6 @@ def write_metadata(model_meta, model_path, categories_file_path):
 
 
 # Cell
-
-
 def read_metadata(model_path):
     """
     Read meta-data from the Tensowflow Lite model on disk.
@@ -154,8 +143,6 @@ def read_metadata(model_path):
 
 
 # Cell
-
-
 def _create_input_metadata(saved_model_meta, input_min=0, input_max=255, norm_mean=127.5, norm_std=127.5):
     """
     Creates input metadata
@@ -208,8 +195,6 @@ def _create_input_metadata(saved_model_meta, input_min=0, input_max=255, norm_me
 
 
 # Cell
-
-
 def _create_output_metadata(saved_model_meta, categories_file_path, model_type):
     """
     Creates output metadata
@@ -277,8 +262,6 @@ def _create_output_metadata(saved_model_meta, categories_file_path, model_type):
 
 
 # Cell
-
-
 def _create_tensor_metadata(meta_info: MetaInfo):
     """
     Creates tensor metadata
@@ -308,8 +291,6 @@ def _create_tensor_metadata(meta_info: MetaInfo):
 
 
 # Cell
-
-
 def _create_bbox_content_property_metadata(bbox_type=None, bbox_index=None):
     """
     Creates bounding box property content metadata
@@ -324,8 +305,6 @@ def _create_bbox_content_property_metadata(bbox_type=None, bbox_index=None):
 
 
 # Cell
-
-
 def _create_associated_files_metadata(categories_file_path, desc, label_type=None):
     """
     Creates associated files metadata
@@ -342,8 +321,6 @@ def _create_associated_files_metadata(categories_file_path, desc, label_type=Non
 
 
 # Cell
-
-
 def configure_logging(logging_level=logging.INFO):
     """
     Configures logging for the system.
@@ -359,8 +336,6 @@ def configure_logging(logging_level=logging.INFO):
 
 
 # Cell
-
-
 if __name__ == '__main__' and '__file__' in globals():
     configure_logging()
 

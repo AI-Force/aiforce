@@ -5,7 +5,6 @@ __all__ = ['TFLITE_MODEL_DEFAULT_NAME', 'logger', 'convert_model', 'save_model',
 
 
 # Cell
-
 import logging
 import logging.handlers
 import argparse
@@ -18,18 +17,14 @@ from .tflite_metadata import create_metadata, write_metadata
 
 
 # Cell
-
 TFLITE_MODEL_DEFAULT_NAME = 'model.tflite'
 
 
 # Cell
-
 logger = logging.getLogger(__name__)
 
 
 # Cell
-
-
 def convert_model(saved_model_dir):
     """
     Convert a SavedModel into Tensorflow Lite Format.
@@ -43,8 +38,6 @@ def convert_model(saved_model_dir):
 
 
 # Cell
-
-
 def save_model(tflite_model, output_file):
     """
     Save a Tensowflow Lite model to disk.
@@ -57,8 +50,6 @@ def save_model(tflite_model, output_file):
 
 
 # Cell
-
-
 def read_pipeline_config(pipeline_config_path):
     """
     Reads the pipeline config file.
@@ -72,8 +63,6 @@ def read_pipeline_config(pipeline_config_path):
 
 
 # Cell
-
-
 def configure_logging(logging_level=logging.INFO):
     """
     Configures logging for the system.
@@ -89,8 +78,6 @@ def configure_logging(logging_level=logging.INFO):
 
 
 # Cell
-
-
 if __name__ == '__main__' and '__file__' in globals():
     configure_logging()
 
