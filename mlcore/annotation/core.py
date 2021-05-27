@@ -11,7 +11,7 @@ import shutil
 from abc import ABC, abstractmethod
 from enum import Enum
 from copy import deepcopy
-from os.path import join, isdir
+from os.path import join, isdir, basename
 from mlcore import category_tools
 from ..core import assign_arg_prefix
 from ..io.core import strip_path, scan_files, create_folder
