@@ -32,7 +32,7 @@ class ImageSegmentationDataset(ImageObjectDetectionDataset):
         super().__init__(input_adapter, output_adapter, split, seed, sample, tfrecord, join_overlapping_regions,
                          annotation_area_threshold)
         self.generate_semantic_masks = generate_semantic_masks
-        self.palette = palette
+        self.palette = getattr(color_palette, palette)()
         self.semantic_mask_folder = join(self.output_adapter.path, self.SEMANTIC_MASK_FOLDER)
 
     @classmethod
