@@ -177,15 +177,18 @@ def convert_to_base64(image, image_type="PNG"):
 
 
 # Cell
-def write_mask(mask, file_path):
+def write_mask(mask, file_path, palette=None):
     """
     Writes a mask as image.
     The image format is set by the file extension in file_path.
 
     `mask`: The mask to write.
     `file_path`: The path including file name and file extension to write to.
+    `palette`: The color palette to assign, if set.
     """
     im = PILImage.fromarray(mask)
+    if palette is not None:
+        im.putpalette(palette)
     im.save(file_path)
 
 

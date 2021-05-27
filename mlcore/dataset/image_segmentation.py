@@ -11,6 +11,7 @@ from functools import partial
 from ..core import assign_arg_prefix, input_feedback
 from ..annotation.core import AnnotationAdapter
 from .image_object_detection import ImageObjectDetectionDataset
+from ..image import color_palette
 from ..image.pillow_tools import assign_exif_orientation, get_image_size, write_mask
 from ..io.core import create_folder
 from ..annotation.core import RegionShape, convert_region, region_bounding_box
@@ -27,10 +28,11 @@ class ImageSegmentationDataset(ImageObjectDetectionDataset):
 
     def __init__(self, input_adapter: AnnotationAdapter, output_adapter: AnnotationAdapter, split=None, seed=None,
                  sample=None, tfrecord=False, join_overlapping_regions=False, annotation_area_threshold=None,
-                 generate_semantic_masks=True):
+                 generate_semantic_masks=True, palette=color_palette.__all__[0]):
         super().__init__(input_adapter, output_adapter, split, seed, sample, tfrecord, join_overlapping_regions,
                          annotation_area_threshold)
         self.generate_semantic_masks = generate_semantic_masks
+        self.palette = palette
         self.semantic_mask_folder = join(self.output_adapter.path, self.SEMANTIC_MASK_FOLDER)
 
     @classmethod
@@ -46,6 +48,10 @@ class ImageSegmentationDataset(ImageObjectDetectionDataset):
                             help="Whether semantic masks should be generated.",
                             action="store_true",
                             default=True)
+        parser.add_argument("--palette",
+                            help="The color palette to use.",
+                            choices=color_palette.__all__,
+                            default=color_palette.__all__[0])
         return parser
 
     def create_folders(self):
@@ -205,7 +211,7 @@ class ImageSegmentationDataset(ImageObjectDetectionDataset):
             # save the semantic mask
             file_name = basename(annotation.file_path)
             mask_path = join(self.semantic_mask_folder, splitext(file_name)[0] + '.png')
-            write_mask(mask, mask_path)
+            write_mask(mask, mask_path, self.palette)
 
             logger.info('{} / {} - Created segmentation mask {}'.format(index + 1, num_masks, mask_path))
 
