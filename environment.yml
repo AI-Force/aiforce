@@ -16,5 +16,6 @@ dependencies:
       - opencv-python==4.1.2.30
       - tensorflow
       - tflite-support
+      - twine
 prefix: /Users/pdc-s-rettig/miniconda3/envs/aiforce
 

@@ -1,0 +1,32 @@
+{
+  "aiforce": {
+    "Overview": "/",
+    "Annotation": "annotation-core.html",
+    "Folder Category Annotation Adapter": "annotation-folder_category_adapter.html",
+    "Multi Category Annotation Adapter": "annotation-multi_category_adapter.html",
+    "VIA Annotation Adapter": "annotation-via_adapter.html",
+    "YOLO Annotation Adapter": "annotation-yolo_adapter.html",
+    "Annotation Converter": "annotation_converter.html",
+    "Annotation Viewer": "annotation_viewer.html",
+    "Category File Tools": "category_tools.html",
+    "Core classes and functions": "core.html",
+    "Dataset": "dataset-core.html",
+    "Dataset for image classification": "dataset-image_classification.html",
+    "Dataset for image object detection": "dataset-image_object_detection.html",
+    "Dataset for image segmentation": "dataset-image_segmentation.html",
+    "DataSet type": "dataset-type.html",
+    "Dataset Generator": "dataset_generator.html",
+    "Evaluation Core functions": "evaluation-core.html",
+    "Color Palettes": "image-color_palette.html",
+    "Image Tools for OpenCV": "image-opencv_tools.html",
+    "Image Tools for Pillow": "image-pillow_tools.html",
+    "Image Tools": "image-tools.html",
+    "IO Core functions": "io-core.html",
+    "Tensorflow Lite Model Converter": "tensorflow-tflite_converter.html",
+    "Tensorflow Lite Metadata": "tensorflow-tflite_metadata.html",
+    "Tensorflow TFRecord Builder": "tensorflow-tfrecord_builder.html",
+    "Double File Checker": "tools-check_double_images.html",
+    "File Downloader": "tools-downloader.html",
+    "Image Size Calculator": "tools-image_size_calculator.html"
+  }
+}
