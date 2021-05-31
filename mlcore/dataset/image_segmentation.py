@@ -131,9 +131,6 @@ class ImageSegmentationDataset(ImageObjectDetectionDataset):
 
             delete_regions = {}
             for index, region in enumerate(annotation.regions):
-                # convert from rect to polygon if needed
-                convert_region(region, RegionShape.POLYGON)
-
                 for step in steps:
                     # validate the shape size
                     (x_min, x_max), (y_min, y_max) = region_bounding_box(region)
@@ -204,8 +201,19 @@ class ImageSegmentationDataset(ImageObjectDetectionDataset):
             for region in sorted(annotation.regions, key=lambda r: self.categories.index(r.labels[0])):
                 class_id = self.categories.index(region.labels[0]) + 1
 
+                if region.shape == RegionShape.NONE:
+                    continue
+                if region.shape == RegionShape.RECTANGLE:
+                    rr, cc = draw.rectangle((region.points_y[0], region.points_x[0]),
+                                            (region.points_y[1], region.points_x[1]))
+                elif region.shape == RegionShape.POLYGON:
+                    rr, cc = draw.polygon(region.points_y, region.points_x)
+                else:
+                    # handle POINT, CIRCLE and ELLIPSE
+                    r_x, r_y = (1, 1) if region.shape == RegionShape.POINT else (region.radius_x, region.radius_y)
+                    rr, cc = draw.ellipse(region.points_y[0], region.points_x[0], r_y, r_x)
+
                 # Get indexes of pixels inside the polygon and set them to 1
-                rr, cc = draw.polygon(region.points_y, region.points_x)
                 mask[rr, cc] = class_id
 
             # save the semantic mask
