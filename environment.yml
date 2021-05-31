@@ -3,11 +3,13 @@ channels:
   - defaults
   - conda-forge
 dependencies:
+  - anaconda-client
+  - conda-build
   - jupyter_conda
   - piexif
   - pillow
   - pip
-  - python=3.8
+  - python=3.7
   - scikit-learn
   - scikit-image
   - shapely
