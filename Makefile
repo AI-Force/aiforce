@@ -1,10 +1,15 @@
-SRC = $(wildcard nbs/*.ipynb)
+.ONESHELL:
+SHELL := /bin/bash
+SRC = $(wildcard ./*.ipynb)
 
-all: mlcore docs
+all: aiforce docs
 
-mlcore: $(SRC)
+aiforce: $(SRC)
 	nbdev_build_lib
-	touch mlcore
+	touch aiforce
+
+sync:
+	nbdev_update_lib
 
 docs_serve: docs
 	cd docs && bundle exec jekyll serve
@@ -16,8 +21,11 @@ docs: $(SRC)
 test:
 	nbdev_test_nbs
 
-release: pypi
+release: pypi conda_release
 	nbdev_bump_version
+
+conda_release:
+	fastrelease_conda_package
 
 pypi: dist
 	twine upload --repository pypi dist/*
