@@ -10,7 +10,7 @@ import io
 import tensorflow as tf
 from os import environ
 from os.path import basename
-from mlcore.image.pillow_tools import get_image_size
+from ..image.pillow_tools import get_image_size
 
 
 # Cell

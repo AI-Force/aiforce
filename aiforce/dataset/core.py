@@ -8,10 +8,10 @@ import argparse
 import logging
 from abc import ABC
 from os.path import join, basename, dirname
-from mlcore.core import assign_arg_prefix
-from mlcore.annotation.core import AnnotationAdapter, SubsetType
-from mlcore.image.pillow_tools import assign_exif_orientation, write_exif_metadata
-from mlcore.io.core import create_folder
+from ..core import assign_arg_prefix
+from ..annotation.core import AnnotationAdapter, SubsetType
+from ..image.pillow_tools import assign_exif_orientation, write_exif_metadata
+from ..io.core import create_folder
 
 
 # Cell

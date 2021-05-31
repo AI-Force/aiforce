@@ -8,13 +8,13 @@ import numpy as np
 import logging
 from os.path import join, isfile, splitext, basename
 from functools import partial
-from mlcore.core import assign_arg_prefix, input_feedback
-from mlcore.annotation.core import AnnotationAdapter
-from mlcore.dataset.image_object_detection import ImageObjectDetectionDataset
-from mlcore.image import color_palette
-from mlcore.image.pillow_tools import assign_exif_orientation, get_image_size, write_mask
-from mlcore.io.core import create_folder
-from mlcore.annotation.core import RegionShape, convert_region, region_bounding_box
+from ..core import assign_arg_prefix, input_feedback
+from ..annotation.core import AnnotationAdapter
+from .image_object_detection import ImageObjectDetectionDataset
+from ..image import color_palette
+from ..image.pillow_tools import assign_exif_orientation, get_image_size, write_mask
+from ..io.core import create_folder
+from ..annotation.core import RegionShape, convert_region, region_bounding_box
 
 
 # Cell

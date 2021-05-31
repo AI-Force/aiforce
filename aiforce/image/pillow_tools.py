@@ -13,8 +13,8 @@ import base64
 import piexif
 from io import BytesIO
 from PIL import Image as PILImage
-from mlcore.image.tools import ImageOrientation
-from mlcore.io.core import scan_files
+from .tools import ImageOrientation
+from ..io.core import scan_files
 
 
 # Cell

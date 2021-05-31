@@ -9,11 +9,11 @@ import csv
 import logging
 import shutil
 from os.path import join, splitext, basename, isfile
-from mlcore.category_tools import read_categories
-from mlcore.core import assign_arg_prefix
-from mlcore.io.core import scan_files, create_folder
-from mlcore.image.pillow_tools import get_image_size
-from mlcore.annotation.core import Annotation, AnnotationAdapter, Region, RegionShape, SubsetType
+from ..category_tools import read_categories
+from ..core import assign_arg_prefix
+from ..io.core import scan_files, create_folder
+from ..image.pillow_tools import get_image_size
+from .core import Annotation, AnnotationAdapter, Region, RegionShape, SubsetType
 
 
 # Cell

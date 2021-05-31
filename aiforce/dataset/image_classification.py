@@ -7,10 +7,10 @@ __all__ = ['logger', 'ImageClassificationDataset']
 
 import logging
 from os.path import join
-from mlcore.core import assign_arg_prefix
-from mlcore.annotation.core import AnnotationAdapter
-from mlcore.dataset.core import Dataset
-from mlcore.tensorflow.tfrecord_builder import create_labelmap_file
+from ..core import assign_arg_prefix
+from ..annotation.core import AnnotationAdapter
+from .core import Dataset
+from ..tensorflow.tfrecord_builder import create_labelmap_file
 
 
 # Cell

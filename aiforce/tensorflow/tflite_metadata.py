@@ -14,7 +14,7 @@ from tflite_support import flatbuffers
 from tflite_support import metadata as _metadata
 from tflite_support import metadata_schema_py_generated as _metadata_fb
 from os.path import basename
-from mlcore.dataset.type import DatasetType, infer_dataset_type
+from ..dataset.type import DatasetType, infer_dataset_type
 
 
 # Cell

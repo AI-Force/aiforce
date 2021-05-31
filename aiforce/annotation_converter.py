@@ -7,9 +7,9 @@ __all__ = ['convert', 'configure_logging']
 import sys
 import argparse
 import logging
-from mlcore.core import list_subclasses, parse_known_args_with_help
-from mlcore import annotation as annotation_package
-from mlcore.annotation.core import AnnotationAdapter, SubsetType
+from .core import list_subclasses, parse_known_args_with_help
+from aiforce import annotation as annotation_package
+from .annotation.core import AnnotationAdapter, SubsetType
 
 
 # Cell

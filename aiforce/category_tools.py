@@ -8,7 +8,7 @@ __all__ = ['DEFAULT_CATEGORIES_FILE', 'NOT_CATEGORIZED', 'BACKGROUND_CLASS', 'BA
 import argparse
 import logging
 from os.path import isfile
-from mlcore.dataset.type import DatasetType
+from .dataset.type import DatasetType
 
 
 # Cell

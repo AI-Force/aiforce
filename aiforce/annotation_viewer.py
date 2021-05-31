@@ -9,11 +9,11 @@ import argparse
 import logging
 import cv2
 import numpy as np
-from mlcore.core import list_subclasses, parse_known_args_with_help
-from mlcore import annotation as annotation_package
-from mlcore.annotation.core import AnnotationAdapter, SubsetType
-from mlcore.image.opencv_tools import fit_to_max_size
-from mlcore.annotation.core import RegionShape
+from .core import list_subclasses, parse_known_args_with_help
+from aiforce import annotation as annotation_package
+from .annotation.core import AnnotationAdapter, SubsetType
+from .image.opencv_tools import fit_to_max_size
+from .annotation.core import RegionShape
 
 
 # Cell

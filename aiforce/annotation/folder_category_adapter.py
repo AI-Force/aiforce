@@ -7,9 +7,9 @@ __all__ = ['DEFAULT_CATEGORY_FOLDER_INDEX', 'logger', 'FolderCategoryAnnotationA
 import logging
 import shutil
 from os.path import join, normpath, sep, basename, isfile
-from mlcore.core import assign_arg_prefix
-from mlcore.io.core import create_folder, scan_files
-from mlcore.annotation.core import Annotation, AnnotationAdapter, Region, SubsetType
+from ..core import assign_arg_prefix
+from ..io.core import create_folder, scan_files
+from .core import Annotation, AnnotationAdapter, Region, SubsetType
 
 
 # Cell

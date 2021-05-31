@@ -12,8 +12,8 @@ import sys
 import tensorflow as tf
 from os.path import join
 from google.protobuf import text_format
-from mlcore.dataset.type import DatasetType, infer_dataset_type
-from mlcore.tensorflow.tflite_metadata import create_metadata, write_metadata
+from ..dataset.type import DatasetType, infer_dataset_type
+from .tflite_metadata import create_metadata, write_metadata
 
 
 # Cell

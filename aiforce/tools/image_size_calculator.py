@@ -9,8 +9,8 @@ import logging.handlers
 import argparse
 import sys
 from functools import reduce
-from mlcore.image.pillow_tools import get_image_size
-from mlcore.io.core import scan_path
+from ..image.pillow_tools import get_image_size
+from ..io.core import scan_path
 
 
 # Cell

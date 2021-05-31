@@ -7,13 +7,13 @@ __all__ = ['logger', 'ImageObjectDetectionDataset']
 import logging
 from os.path import join, isfile
 from functools import partial
-from mlcore.core import assign_arg_prefix, input_feedback
-from mlcore.annotation.core import AnnotationAdapter, SubsetType
-from mlcore.dataset.image_classification import ImageClassificationDataset
-from mlcore.image.pillow_tools import assign_exif_orientation
-from mlcore.annotation.core import RegionShape, convert_region
-from mlcore.tensorflow.tfrecord_builder import create_tfrecord_file
-from mlcore.evaluation.core import box_area, intersection_box, union_box
+from ..core import assign_arg_prefix, input_feedback
+from ..annotation.core import AnnotationAdapter, SubsetType
+from .image_classification import ImageClassificationDataset
+from ..image.pillow_tools import assign_exif_orientation
+from ..annotation.core import RegionShape, convert_region
+from ..tensorflow.tfrecord_builder import create_tfrecord_file
+from ..evaluation.core import box_area, intersection_box, union_box
 
 
 # Cell

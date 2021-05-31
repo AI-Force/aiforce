@@ -9,9 +9,9 @@ import csv
 import shutil
 import logging
 from os.path import join, splitext, getsize, basename, isfile
-from mlcore.core import assign_arg_prefix
-from mlcore.annotation.core import Annotation, AnnotationAdapter, Region, RegionShape, parse_region_shape, SubsetType
-from mlcore.io.core import create_folder
+from ..core import assign_arg_prefix
+from .core import Annotation, AnnotationAdapter, Region, RegionShape, parse_region_shape, SubsetType
+from ..io.core import create_folder
 
 
 # Cell

@@ -10,11 +10,11 @@ import logging
 from os.path import join
 from datetime import datetime
 from logging.handlers import MemoryHandler
-from mlcore.core import list_subclasses, parse_known_args_with_help
-from mlcore import annotation as annotation_package
-from mlcore.annotation.core import AnnotationAdapter
-from mlcore import dataset as dataset_package
-from mlcore.dataset.core import Dataset
+from .core import list_subclasses, parse_known_args_with_help
+from aiforce import annotation as annotation_package
+from .annotation.core import AnnotationAdapter
+from aiforce import dataset as dataset_package
+from .dataset.core import Dataset
 
 
 # Cell
