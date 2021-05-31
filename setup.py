@@ -61,4 +61,3 @@ setuptools.setup(
     zip_safe = False,
     entry_points = { 'console_scripts': cfg.get('console_scripts','').split() },
     **setup_cfg)
-
