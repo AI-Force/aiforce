@@ -1,28 +1,20 @@
-name: ML-Core
+name: aiforce
 channels:
   - defaults
   - conda-forge
-  - pytorch
-  - fastai
 dependencies:
-  - fastai
-  - flask
   - jupyter_conda
-  - optuna
   - piexif
+  - pillow
   - pip
-  - python=3.7
-  - pytorch
+  - python=3.8
   - scikit-learn
   - scikit-image
   - shapely
-  - starlette
-  - torchvision
-  - uvicorn
   - pip:
       - nbdev
       - opencv-python==4.1.2.30
       - tensorflow
       - tflite-support
-prefix: /Users/pdc-s-rettig/miniconda3/envs/ML-Core
+prefix: /Users/pdc-s-rettig/miniconda3/envs/aiforce
 
