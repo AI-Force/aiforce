@@ -1,12 +1,12 @@
-# AI-Force CLI
-> Summary description here.
+# AI-Force
+> A machine learning toolbox.
 
-
-This file will become your README and also the index of your documentation.
 
 ## Install
 
-`pip install your_project_name`
+You can install aiforce with `pip` from a terminal window with the following command:
+
+`pip install aiforce`
 
 ## How to use
 
