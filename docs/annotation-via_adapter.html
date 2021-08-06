@@ -57,6 +57,7 @@ nb_path: "annotation-via_adapter.ipynb"
 <li>circle</li>
 <li>ellipse</li>
 <li>point</li>
+<li>polygon</li>
 <li>polyline</li>
 <li>rectangle</li>
 </ul>
@@ -69,6 +70,7 @@ nb_path: "annotation-via_adapter.ipynb"
 <p>Current supported annotation tool versions:</p>
 <ul>
 <li><a href="https://www.robots.ox.ac.uk/~vgg/software/via/via-1.0.6.html">VIA version 1 (v1.0.6)</a></li>
+<li><a href="https://www.robots.ox.ac.uk/~vgg/software/via/via.html">VIA version 2 (v2.0.11)</a></li>
 </ul>
 
 </div>
@@ -79,8 +81,9 @@ nb_path: "annotation-via_adapter.ipynb"
 <p>The adapter has the following parameters:</p>
 <ul>
 <li><code>--path</code>: the path to the base folder containing the annotations (e.g.: <em>data/image_object_detection/my_collection</em>)</li>
-<li><code>--categories_file_name</code>: tThe path to the categories file if not set, default to <em>categories.txt</em></li>
-<li><code>--annotations_file_name</code>: The name of annotations file. if not set, default to <em>via_region_data.json</em></li>
+<li><code>--version</code>: The version format to read or write the anotations. If not set, parse the annotation-format on read, use version <em>2</em> on write annotation</li>
+<li><code>--categories_file_name</code>: The path to the categories file if not set, default to <em>categories.txt</em></li>
+<li><code>--annotations_file_name</code>: The name of annotations file. If not set, default to <em>via_region_data.json</em></li>
 <li><code>--category_label_key</code>: The key, the category label key is stored in the annotation file, default to <em>category</em>.</li>
 </ul>
 
@@ -98,7 +101,7 @@ nb_path: "annotation-via_adapter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="VIAAnnotationAdapter" class="doc_header"><code>class</code> <code>VIAAnnotationAdapter</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/via_adapter.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>VIAAnnotationAdapter</code>(<strong><code>path</code></strong>, <strong><code>categories_file_name</code></strong>=<em><code>None</code></em>, <strong><code>annotations_file_name</code></strong>=<em><code>None</code></em>, <strong><code>category_label_key</code></strong>=<em><code>None</code></em>) :: <a href="/aiforce/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
+<h2 id="VIAAnnotationAdapter" class="doc_header"><code>class</code> <code>VIAAnnotationAdapter</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/via_adapter.py#L33" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>VIAAnnotationAdapter</code>(<strong><code>path</code></strong>, <strong><code>version</code></strong>=<em><code>None</code></em>, <strong><code>categories_file_name</code></strong>=<em><code>None</code></em>, <strong><code>annotations_file_name</code></strong>=<em><code>None</code></em>, <strong><code>category_label_key</code></strong>=<em><code>None</code></em>) :: <a href="/aiforce/annotation-core.html#AnnotationAdapter"><code>AnnotationAdapter</code></a></p>
 </blockquote>
 <p>Adapter to read and write annotations in the VIA annotation.</p>
 
@@ -116,6 +119,29 @@ nb_path: "annotation-via_adapter.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-1-c5e42b6279ac&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># export</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">class</span> VIAAnnotationAdapter<span class="ansi-blue-fg">(</span>AnnotationAdapter<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span>     &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">      4</span>     Adapter to read <span class="ansi-green-fg">and</span> write annotations <span class="ansi-green-fg">in</span> the VIA annotation<span class="ansi-blue-fg">.</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>     &#34;&#34;&#34;
+
+<span class="ansi-red-fg">NameError</span>: name &#39;AnnotationAdapter&#39; is not defined</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
     {% endraw %}
 
@@ -130,7 +156,7 @@ nb_path: "annotation-via_adapter.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.list_files" class="doc_header"><code>AnnotationAdapter.list_files</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L191" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.list_files</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+<h4 id="AnnotationAdapter.list_files" class="doc_header"><code>AnnotationAdapter.list_files</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L200" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.list_files</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>List all physical files in a sub-set.
 <code>subset_type</code>: the subset type to list
@@ -144,11 +170,10 @@ return: a list of file paths if subset type exist, else an empty list</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="VIAAnnotationAdapter.read_annotations" class="doc_header"><code>VIAAnnotationAdapter.read_annotations</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/via_adapter.py#L72" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>VIAAnnotationAdapter.read_annotations</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+<h4 id="VIAAnnotationAdapter.read_annotations" class="doc_header"><code>VIAAnnotationAdapter.read_annotations</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/via_adapter.py#L83" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>VIAAnnotationAdapter.read_annotations</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>Reads a VIA annotations file.
 Supports JSON and CSV file format.
-Format is inferred from the annotations_file setting.
 <code>subset_type</code>: the subset type to read
 return: the annotations as dictionary</p>
 
@@ -160,7 +185,7 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.read_categories" class="doc_header"><code>AnnotationAdapter.read_categories</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L226" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.read_categories</code>()</p>
+<h4 id="AnnotationAdapter.read_categories" class="doc_header"><code>AnnotationAdapter.read_categories</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L235" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.read_categories</code>()</p>
 </blockquote>
 <p>Read categories.
 return: a list of category names</p>
@@ -173,7 +198,7 @@ return: a list of category names</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.write_files" class="doc_header"><code>AnnotationAdapter.write_files</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L200" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_files</code>(<strong><code>file_paths</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+<h4 id="AnnotationAdapter.write_files" class="doc_header"><code>AnnotationAdapter.write_files</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L209" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_files</code>(<strong><code>file_paths</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>Write physical files in a sub-set.
 <code>file_paths</code>: a list of file paths to write
@@ -188,7 +213,7 @@ return: a list of written target file paths</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="VIAAnnotationAdapter.write_annotations" class="doc_header"><code>VIAAnnotationAdapter.write_annotations</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/via_adapter.py#L197" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>VIAAnnotationAdapter.write_annotations</code>(<strong><code>annotations</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+<h4 id="VIAAnnotationAdapter.write_annotations" class="doc_header"><code>VIAAnnotationAdapter.write_annotations</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/via_adapter.py#L216" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>VIAAnnotationAdapter.write_annotations</code>(<strong><code>annotations</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>Writes a VIA annotations file and copy the corresponding source files.
 Supports JSON and CSV file format.
@@ -205,7 +230,7 @@ return: a list of written target file paths</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.write_categories" class="doc_header"><code>AnnotationAdapter.write_categories</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L245" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_categories</code>(<strong><code>categories</code></strong>)</p>
+<h4 id="AnnotationAdapter.write_categories" class="doc_header"><code>AnnotationAdapter.write_categories</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L254" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_categories</code>(<strong><code>categories</code></strong>)</p>
 </blockquote>
 <p>Write categories.
 <code>categories</code>: a list of category names</p>
@@ -218,7 +243,7 @@ return: a list of written target file paths</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="VIAAnnotationAdapter.argparse" class="doc_header"><code>VIAAnnotationAdapter.argparse</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/via_adapter.py#L53" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>VIAAnnotationAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="VIAAnnotationAdapter.argparse" class="doc_header"><code>VIAAnnotationAdapter.argparse</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/via_adapter.py#L59" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>VIAAnnotationAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Returns the argument parser containing argument definition for command line use.
 <code>prefix</code>: a parameter prefix to set, if needed

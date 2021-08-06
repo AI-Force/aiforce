@@ -45,6 +45,7 @@ class RegionShape(Enum):
     ELLIPSE = 'ellipse'
     POINT = 'point'
     POLYGON = 'polygon'
+    POLYLINE = 'polyline'
     RECTANGLE = 'rect'
 
     def __str__(self):
@@ -74,15 +75,18 @@ class Region:
     `points_y`: a list of points y-coordinates
     `radius_x`: a radius on x-coordinate
     `radius_y`: a radius on y-coordinate
+    `rotation`: a rotation factor
     `labels`: a set of region labels
     """
 
-    def __init__(self, shape=RegionShape.NONE, points_x=None, points_y=None, radius_x=0, radius_y=0, labels=None):
+    def __init__(self, shape=RegionShape.NONE, points_x=None, points_y=None, radius_x=0, radius_y=0, rotation=0,
+                 labels=None):
         self.shape = shape
         self.points_x = [] if points_x is None else points_x
         self.points_y = [] if points_y is None else points_y
         self.radius_x = radius_x
         self.radius_y = radius_y
+        self.rotation = rotation
         self.labels = [] if labels is None else labels
 
 
@@ -133,26 +137,31 @@ def convert_region(region: Region, target_shape: RegionShape):
             region.points_y = []
             region.radius_x = 0
             region.radius_y = 0
+            region.rotation = 0
         elif target_shape == RegionShape.CIRCLE or target_shape == RegionShape.ELLIPSE:
             region.points_x = [center_x]
             region.points_y = [center_y]
             region.radius_x = x_max - center_x
             region.radius_y = y_max - center_y
+            region.rotation = 0
         elif target_shape == RegionShape.POINT:
             region.points_x = [center_x]
             region.points_y = [center_y]
             region.radius_x = 0
             region.radius_y = 0
-        elif target_shape == RegionShape.POLYGON:
+            region.rotation = 0
+        elif target_shape == RegionShape.POLYGON or target_shape == RegionShape.POLYLINE:
             region.points_x = [x_min, x_min, x_max, x_max, x_min]
             region.points_y = [y_min, y_max, y_max, y_min, y_min]
             region.radius_x = 0
             region.radius_y = 0
+            region.rotation = 0
         elif target_shape == RegionShape.RECTANGLE:
             region.points_x = [x_min, x_max]
             region.points_y = [y_min, y_max]
             region.radius_x = 0
             region.radius_y = 0
+            region.rotation = 0
         else:
             raise NotImplementedError('unsupported conversion {} -> {}'.format(region.shape, target_shape))
 
