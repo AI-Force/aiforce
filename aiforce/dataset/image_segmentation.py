@@ -211,7 +211,7 @@ class ImageSegmentationDataset(ImageObjectDetectionDataset):
                 else:
                     # handle POINT, CIRCLE and ELLIPSE
                     r_x, r_y = (1, 1) if region.shape == RegionShape.POINT else (region.radius_x, region.radius_y)
-                    rr, cc = draw.ellipse(region.points_y[0], region.points_x[0], r_y, r_x)
+                    rr, cc = draw.ellipse(region.points_y[0], region.points_x[0], r_y, r_x, rotation=region.rotation)
 
                 # Get indexes of pixels inside the polygon and set them to 1
                 mask[rr, cc] = class_id

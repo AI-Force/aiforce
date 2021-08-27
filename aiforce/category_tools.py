@@ -69,7 +69,6 @@ def write_categories(categories, categories_file=None):
         logger.info('Write {} categories to categories file at: {}'.format(len(categories), categories_file))
 
 
-
 # Cell
 def configure_logging(logging_level=logging.INFO):
     """
