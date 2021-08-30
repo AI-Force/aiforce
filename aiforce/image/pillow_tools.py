@@ -140,7 +140,7 @@ def assign_exif_orientation(fname):
         try:
             orientation = ImageOrientation(orientation)
         except ValueError as e:
-            logger.error(e)
+            logger.warning("{}: {}. Set orientation to TOP by default.".format(fname, e))
 
         if orientation == ImageOrientation.TOP_FLIPPED:
             image = image.transpose(PILImage.FLIP_LEFT_RIGHT)
