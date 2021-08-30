@@ -13,10 +13,10 @@ import numpy as np
 import aiforce.image.opencv_tools as opencv_tools
 import aiforce.image.pillow_tools as pillow_tools
 from enum import Enum
+from os.path import basename
 from aiforce import annotation as annotation_package
 from .core import list_subclasses, parse_known_args_with_help
-from .annotation.core import AnnotationAdapter, SubsetType
-from .annotation.core import RegionShape
+from .annotation.core import AnnotationAdapter, annotation_filter, SubsetType, RegionShape
 
 
 # Cell
@@ -40,23 +40,29 @@ class ImageLoader(Enum):
 
 
 # Cell
-def show_annotated_images(annotation_adapter, subset_type, image_loader, max_width=0, max_height=0):
+def show_annotated_images(annotation_adapter, subset_type, image_loader, max_width=0, max_height=0, filter_names=None):
     """
     Show images with corresponding annotations.
     Images are shown one at a time with switching by using the arrow left/right keys.
     `annotation_adapter`: The annotation adapter to use
     `subset_type`: The subset to load
-    `image_loader`: The aimage loader library to use
+    `image_loader`: The image loader library to use
     `max_width`: The maximum width to scale the image for visibility.
     `max_height`: The maximum height to scale the image for visibility.
     """
     categories = annotation_adapter.read_categories()
     annotations = annotation_adapter.read_annotations(subset_type)
+
+    if filter_names:
+        annotations = annotation_filter(annotations, lambda _, anno: basename(anno.file_path) in filter_names)
+
     len_annotations = len(annotations)
 
     if len_annotations == 0:
         logging.error("No Annotations found")
         return
+
+    logging.info("Load images with {}".format(image_loader))
 
     index = 0
     annotation_keys = list(annotations.keys())
@@ -73,17 +79,21 @@ def show_annotated_images(annotation_adapter, subset_type, image_loader, max_wid
         annotation = annotations[annotation_id]
         logging.info("View Image {}/{}: {}".format(index + 1, len_annotations, annotation.file_path))
         if image_loader == ImageLoader.PILLOW:
-            img, _, __ = pillow_tools.get_image_size(annotation.file_path)
+            img, width, height = pillow_tools.get_image_size(annotation.file_path)
             img = opencv_tools.from_pillow_image(img)
         elif image_loader == ImageLoader.OPEN_CV:
-            img, _, __ = opencv_tools.get_image_size(annotation.file_path)
+            img, width, height = opencv_tools.get_image_size(annotation.file_path)
         else:
             logging.error("Unsupported image loader")
             img = None
+            width = 0
+            height = 0
 
         if img is None:
             logging.info("Image not found at {}".format(annotation.file_path))
             img = np.zeros(shape=(1, 1, 3))
+        else:
+            logging.info("Image size (WIDTH x HEIGHT): ({} x {})".format(width, height))
 
         if annotation.regions:
             logging.info("Found {} regions".format(len(annotation.regions)))
@@ -167,6 +177,10 @@ if __name__ == '__main__' and '__file__' in globals():
                         help="The maximum height to scale the image for visibility.",
                         type=int,
                         default=0)
+    parser.add_argument("--filter",
+                        help="Filter file names to view.",
+                        nargs="*",
+                        default=[])
     argv = sys.argv
     args, argv = parse_known_args_with_help(parser, argv)
 
@@ -177,4 +191,4 @@ if __name__ == '__main__' and '__file__' in globals():
     annotation_args, argv = parse_known_args_with_help(annotation_parser, argv)
 
     show_annotated_images(adapter_class(**vars(annotation_args)), args.subset, args.image_loader, args.max_width,
-                          args.max_height)
+                          args.max_height, args.filter)

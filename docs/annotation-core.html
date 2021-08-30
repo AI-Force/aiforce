@@ -254,7 +254,42 @@ return: a list of labels</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="convert_region" class="doc_header"><code>convert_region</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L121" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>convert_region</code>(<strong><code>region</code></strong>:<a href="/aiforce/annotation-core.html#Region"><code>Region</code></a>, <strong><code>target_shape</code></strong>:<a href="/aiforce/annotation-core.html#RegionShape"><code>RegionShape</code></a>)</p>
+<h4 id="annotation_filter" class="doc_header"><code>annotation_filter</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L121" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>annotation_filter</code>(<strong><code>annotations</code></strong>, <strong><code>condition</code></strong>)</p>
+</blockquote>
+<p>Filter annotations.
+<code>annotations</code>: the annotations to filter
+<code>condition</code>: the filter callback
+return: the filtered annotations</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="convert_region" class="doc_header"><code>convert_region</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L136" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>convert_region</code>(<strong><code>region</code></strong>:<a href="/aiforce/annotation-core.html#Region"><code>Region</code></a>, <strong><code>target_shape</code></strong>:<a href="/aiforce/annotation-core.html#RegionShape"><code>RegionShape</code></a>)</p>
 </blockquote>
 <p>Convert region to target shape.
 <code>region</code>: the region to convert
@@ -288,7 +323,7 @@ return: a list of labels</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="region_bounding_box" class="doc_header"><code>region_bounding_box</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L170" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>region_bounding_box</code>(<strong><code>region</code></strong>:<a href="/aiforce/annotation-core.html#Region"><code>Region</code></a>)</p>
+<h4 id="region_bounding_box" class="doc_header"><code>region_bounding_box</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L185" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>region_bounding_box</code>(<strong><code>region</code></strong>:<a href="/aiforce/annotation-core.html#Region"><code>Region</code></a>)</p>
 </blockquote>
 <p>Calculates the region bounding box.
 <code>region</code>: the region
@@ -322,7 +357,7 @@ return: a tuple of points_x and points_y</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="AnnotationAdapter" class="doc_header"><code>class</code> <code>AnnotationAdapter</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L182" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>AnnotationAdapter</code>(<strong><code>path</code></strong>, <strong><code>categories_file_name</code></strong>=<em><code>None</code></em>) :: <code>ABC</code></p>
+<h2 id="AnnotationAdapter" class="doc_header"><code>class</code> <code>AnnotationAdapter</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L197" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>AnnotationAdapter</code>(<strong><code>path</code></strong>, <strong><code>categories_file_name</code></strong>=<em><code>None</code></em>) :: <code>ABC</code></p>
 </blockquote>
 <p>Abstract Base Adapter to inherit for writing custom adapters</p>
 
@@ -354,7 +389,7 @@ return: a tuple of points_x and points_y</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.list_files" class="doc_header"><code>AnnotationAdapter.list_files</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L200" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.list_files</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+<h4 id="AnnotationAdapter.list_files" class="doc_header"><code>AnnotationAdapter.list_files</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L215" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.list_files</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>List all physical files in a sub-set.
 <code>subset_type</code>: the subset type to list
@@ -368,7 +403,7 @@ return: a list of file paths if subset type exist, else an empty list</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.read_annotations" class="doc_header"><code>AnnotationAdapter.read_annotations</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L226" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.read_annotations</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+<h4 id="AnnotationAdapter.read_annotations" class="doc_header"><code>AnnotationAdapter.read_annotations</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L241" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.read_annotations</code>(<strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>Read annotations.
 <code>subset_type</code>: the subset type to read
@@ -382,7 +417,7 @@ return: the annotations as dictionary</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.read_categories" class="doc_header"><code>AnnotationAdapter.read_categories</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L235" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.read_categories</code>()</p>
+<h4 id="AnnotationAdapter.read_categories" class="doc_header"><code>AnnotationAdapter.read_categories</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L250" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.read_categories</code>()</p>
 </blockquote>
 <p>Read categories.
 return: a list of category names</p>
@@ -395,7 +430,7 @@ return: a list of category names</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.write_files" class="doc_header"><code>AnnotationAdapter.write_files</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L209" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_files</code>(<strong><code>file_paths</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+<h4 id="AnnotationAdapter.write_files" class="doc_header"><code>AnnotationAdapter.write_files</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L224" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_files</code>(<strong><code>file_paths</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>Write physical files in a sub-set.
 <code>file_paths</code>: a list of file paths to write
@@ -410,7 +445,7 @@ return: a list of written target file paths</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.write_annotations" class="doc_header"><code>AnnotationAdapter.write_annotations</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L244" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_annotations</code>(<strong><code>annotations</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
+<h4 id="AnnotationAdapter.write_annotations" class="doc_header"><code>AnnotationAdapter.write_annotations</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L259" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_annotations</code>(<strong><code>annotations</code></strong>, <strong><code>subset_type</code></strong>=<em><code>&lt;SubsetType.TRAINVAL: 'trainval'&gt;</code></em>)</p>
 </blockquote>
 <p>Write annotations.
 <code>annotations</code>: the annotations as dictionary
@@ -425,7 +460,7 @@ return: a list of written target file paths</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.write_categories" class="doc_header"><code>AnnotationAdapter.write_categories</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L254" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_categories</code>(<strong><code>categories</code></strong>)</p>
+<h4 id="AnnotationAdapter.write_categories" class="doc_header"><code>AnnotationAdapter.write_categories</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L269" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.write_categories</code>(<strong><code>categories</code></strong>)</p>
 </blockquote>
 <p>Write categories.
 <code>categories</code>: a list of category names</p>
@@ -438,7 +473,7 @@ return: a list of written target file paths</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="AnnotationAdapter.argparse" class="doc_header"><code>AnnotationAdapter.argparse</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L264" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="AnnotationAdapter.argparse" class="doc_header"><code>AnnotationAdapter.argparse</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation/core.py#L279" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>AnnotationAdapter.argparse</code>(<strong><code>prefix</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Returns the argument parser containing argument definition for command line use.
 <code>prefix</code>: a parameter prefix to set, if needed
