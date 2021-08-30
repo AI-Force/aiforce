@@ -87,7 +87,7 @@ nb_path: "annotation_viewer.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ImageLoader" class="doc_header"><code>ImageLoader</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation_viewer.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Enum</code> = [OPEN_CV, PILLOW]</p>
+<h2 id="ImageLoader" class="doc_header"><code>ImageLoader</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation_viewer.py#L31" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Enum</code> = [OPEN_CV, PILLOW]</p>
 </blockquote>
 <p>Currently supported image loader libraries.</p>
 
@@ -119,11 +119,12 @@ nb_path: "annotation_viewer.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="show_annotated_images" class="doc_header"><code>show_annotated_images</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation_viewer.py#L38" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>show_annotated_images</code>(<strong><code>annotation_adapter</code></strong>, <strong><code>image_loader</code></strong>, <strong><code>max_width</code></strong>=<em><code>0</code></em>, <strong><code>max_height</code></strong>=<em><code>0</code></em>)</p>
+<h4 id="show_annotated_images" class="doc_header"><code>show_annotated_images</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation_viewer.py#L43" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>show_annotated_images</code>(<strong><code>annotation_adapter</code></strong>, <strong><code>subset_type</code></strong>, <strong><code>image_loader</code></strong>, <strong><code>max_width</code></strong>=<em><code>0</code></em>, <strong><code>max_height</code></strong>=<em><code>0</code></em>)</p>
 </blockquote>
 <p>Show images with corresponding annotations.
 Images are shown one at a time with switching by using the arrow left/right keys.
 <code>annotation_adapter</code>: The annotation adapter to use
+<code>subset_type</code>: The subset to load
 <code>image_loader</code>: The aimage loader library to use
 <code>max_width</code>: The maximum width to scale the image for visibility.
 <code>max_height</code>: The maximum height to scale the image for visibility.</p>
@@ -162,7 +163,7 @@ Images are shown one at a time with switching by using the arrow left/right keys
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation_viewer.py#L121" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/annotation_viewer.py#L128" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 <p>:param logging_level: The logging level to use.</p>
@@ -203,9 +204,10 @@ Images are shown one at a time with switching by using the arrow left/right keys
 <p>The following parameters are supported:</p>
 <ul>
 <li><code>-a</code>, <code>--annotation</code>: The annotation adapter to read the annotations (e.g.: <em>VIAAnnotationAdapter</em>)</li>
+<li><code>--image_loader</code>: The image library for reading the image, default is <code>Pillow</code></li>
+<li><code>--subset</code>: The image subset to read, default is <code>trainval</code> for reading collections.</li>
 <li><code>--max-width</code>: The maximum width to scale the image for visibility, default is no scale</li>
 <li><code>--max-height</code>: The maximum height to scale the image for visibility, default is no scale</li>
-<li><code>--image_loader</code>: The image library for reading the image, default is <code>Pillow</code></li>
 </ul>
 
 </div>
