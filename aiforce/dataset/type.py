@@ -4,8 +4,8 @@ __all__ = ['DatasetType', 'infer_dataset_type']
 
 
 # Cell
+import os
 from enum import Enum
-from os.path import dirname, basename
 
 
 # Cell
@@ -23,17 +23,17 @@ class DatasetType(Enum):
 
 
 # Cell
-def infer_dataset_type(category_file_path):
+def infer_dataset_type(path):
     """
     Try to infer the dataset type from the category file path.
-    `category_file_path`: the path of the categories file
+    `path`: the path to infer from
     return: the infered dataset type
-    raises: `ValueError` if unsupported type infered
+    raises: `ValueError` if infer failed
     """
-    dataset_type_from_path = None
-    try:
-        path = dirname(category_file_path)
-        dataset_type_from_path = basename(dirname(path))
-        return DatasetType(dataset_type_from_path)
-    except ValueError:
-        raise ValueError("Error, unsupported dataset type: {}".format(dataset_type_from_path))
+    path_elements = reversed(os.path.normpath(path).split(os.sep))
+    for elem in path_elements:
+        try:
+            return DatasetType(elem)
+        except ValueError:
+            pass
+    raise ValueError("Error, can not infer dataset type from path: {}".format(path))

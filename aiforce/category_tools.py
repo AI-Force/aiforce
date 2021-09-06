@@ -7,7 +7,7 @@ __all__ = ['DEFAULT_CATEGORIES_FILE', 'NOT_CATEGORIZED', 'BACKGROUND_CLASS', 'BA
 # Cell
 import argparse
 import logging
-from os.path import isfile
+import os
 from .dataset.type import DatasetType
 
 
@@ -36,7 +36,7 @@ def read_categories(categories_file=None, dataset_type=DatasetType.IMAGE_CLASSIF
     if categories_file is None:
         categories_file = DEFAULT_CATEGORIES_FILE
 
-    if not isfile(categories_file):
+    if not os.path.isfile(categories_file):
         logger.warning('Categories file not found at: {}'.format(categories_file))
         return []
     with open(categories_file) as f:
