@@ -198,6 +198,8 @@ class Dataset(ABC):
             train, val = self.split_train_val_data(list(self.annotations.keys()), self.split, self.seed)
         train_annotation_keys.extend(train)
         val_annotation_keys.extend(val)
+        # if test files exist
+        test_files = self.input_adapter.list_files(SubsetType.TEST)
 
         # if a sample data set should be created, create the splits
         if self.sample:
@@ -205,13 +207,11 @@ class Dataset(ABC):
             _, sample_val = self.split_train_val_data(val, self.sample, self.seed)
             sample_train_annotation_keys.extend(sample_train)
             sample_val_annotation_keys.extend(sample_val)
-
-        # if test files exist
-        test_files = self.input_adapter.list_files(SubsetType.TEST)
-        if test_files and self.sample:
-            _, sample_test_files = self.split_train_val_data(test_files, self.sample, self.seed)
-        else:
-            sample_test_files = None
+            # if test files exist
+            if test_files:
+                _, sample_test_files = self.split_train_val_data(test_files, self.sample, self.seed)
+            else:
+                sample_test_files = None
 
         # copy the annotations
         self.copy(train_annotation_keys, val_annotation_keys, test_files)
@@ -226,7 +226,7 @@ class Dataset(ABC):
                                                                                        int(self.sample * 100),
                                                                                        self.output_adapter.path))
             # create the sample data set folder
-            create_folder(self.output_adapter.path)
+            self.create_folders()
             # copy the sample data
             self.copy(sample_train_annotation_keys, sample_val_annotation_keys, sample_test_files)
 

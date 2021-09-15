@@ -62,7 +62,7 @@ class ImageSegmentationDataset(ImageObjectDetectionDataset):
 
         if self.generate_semantic_masks:
             # create semantic mask file folder and remove previous data if exist
-            semantic_mask_folder = create_folder(self.semantic_mask_folder, clear=True)
+            semantic_mask_folder = create_folder(join(self.output_adapter.path, self.SEMANTIC_MASK_FOLDER), clear=True)
             logger.info("Created semantic mask folder {}".format(semantic_mask_folder))
 
     def copy(self, train_annotation_keys, val_annotation_keys, test_files=None):
@@ -181,7 +181,8 @@ class ImageSegmentationDataset(ImageObjectDetectionDataset):
         from skimage import draw
 
         num_masks = len(annotation_keys)
-        logger.info('Start create {} segmentation masks in {}'.format(num_masks, self.semantic_mask_folder))
+        semantic_mask_folder = join(self.output_adapter.path, self.SEMANTIC_MASK_FOLDER)
+        logger.info('Start create {} segmentation masks in {}'.format(num_masks, semantic_mask_folder))
 
         # only the trainval images have annotation, not the test images
         for index, key in enumerate(annotation_keys):
@@ -218,9 +219,9 @@ class ImageSegmentationDataset(ImageObjectDetectionDataset):
 
             # save the semantic mask
             file_name = basename(annotation.file_path)
-            mask_path = join(self.semantic_mask_folder, splitext(file_name)[0] + '.png')
+            mask_path = join(semantic_mask_folder, splitext(file_name)[0] + '.png')
             write_mask(mask, mask_path, self.palette)
 
             logger.info('{} / {} - Created segmentation mask {}'.format(index + 1, num_masks, mask_path))
 
-        logger.info('Finish create {} segmentation masks in {}'.format(num_masks, self.semantic_mask_folder))
+        logger.info('Finish create {} segmentation masks in {}'.format(num_masks, semantic_mask_folder))
