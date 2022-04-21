@@ -121,11 +121,16 @@ def read_exif_metadata(fname):
     `fname`: the file path
     :return: The Pillow image, EXIF metadata as dictionary or None, if no EXIF data exist.
     """
-    image = PILImage.open(fname)
-    exif_data = None
-    if "exif" in image.info:
-        exif_data = piexif.load(image.info["exif"])
+    try:
+        image = PILImage.open(fname)
+        exif_data = None
+        if "exif" in image.info:
+            exif_data = piexif.load(image.info["exif"])
+    except Exception as e:
+        logger.error(f"Error reading EXIF information from file {fname}")
+        raise e
     return image, exif_data
+
 
 
 # Cell
@@ -138,9 +143,13 @@ def write_exif_metadata(image, exif_data, fname):
     :return: `True` if EXIF metadata saved, else `False`
     """
     if image and exif_data:
-        piexif.dump(exif_data)
-        exif_bytes = piexif.dump(exif_data)
-        image.save(fname, exif=exif_bytes)
+        try:
+            piexif.dump(exif_data)
+            exif_bytes = piexif.dump(exif_data)
+            image.save(fname, exif=exif_bytes)
+        except Exception as e:
+            logger.error(f"Error writing EXIF information for file {fname}")
+            raise e
         return True
     return False
 
@@ -245,4 +254,7 @@ if __name__ == '__main__' and '__file__' in globals():
     for file in files:
         _, w, h = get_image_size(file)
         _, orientation = get_image_orientation(file)
-        logger.info("Size: width: {}, height: {}, orientation: {}".format(w, h, orientation))
+        logger.info("File: {}, Size: width: {}, height: {}, orientation: {}".format(file, w, h, orientation))
+        image, exif_data, rotated = assign_exif_orientation(file)
+        if rotated:
+            write_exif_metadata(image, exif_data, file)
