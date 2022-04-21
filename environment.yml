@@ -9,11 +9,11 @@ dependencies:
   - jupyter_conda
   - nbdev
   - opencv>=4.1.2
+  - pandas
   - piexif
   - pillow
   - pip
   - python=3.7
-  - scikit-learn
   - scikit-image
   - shapely
   - pip:
