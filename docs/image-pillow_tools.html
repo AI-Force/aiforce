@@ -150,7 +150,77 @@ if size exceeded.
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_image_size" class="doc_header"><code>get_image_size</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L64" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_image_size</code>(<strong><code>fname</code></strong>)</p>
+<h4 id="load_image" class="doc_header"><code>load_image</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L64" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_image</code>(<strong><code>fname</code></strong>)</p>
+</blockquote>
+<p>Load an image using the Pillow library
+<code>fname</code>: the file path or BytesIO stream
+return: the Pillow image</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="load_from_base64" class="doc_header"><code>load_from_base64</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L74" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_from_base64</code>(<strong><code>img_b64</code></strong>)</p>
+</blockquote>
+<p>Load an image as base64 string using the Pillow library.
+Source code mainly taken from:
+<a href="https://jdhao.github.io/2020/03/17/base64_opencv_pil_image_conversion/">https://jdhao.github.io/2020/03/17/base64_opencv_pil_image_conversion/</a>
+<code>img_b64</code>: the image as base64 string
+return: the Pillow image</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="get_image_size" class="doc_header"><code>get_image_size</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L87" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_image_size</code>(<strong><code>fname</code></strong>)</p>
 </blockquote>
 <p>Calculates image size of a given image file path.
 <code>fname</code>: the file path
@@ -184,7 +254,7 @@ return: the Pillow image, image width and height</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_image_orientation" class="doc_header"><code>get_image_orientation</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L76" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_image_orientation</code>(<strong><code>fname</code></strong>)</p>
+<h4 id="get_image_orientation" class="doc_header"><code>get_image_orientation</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L99" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_image_orientation</code>(<strong><code>fname</code></strong>)</p>
 </blockquote>
 <p>Parses the EXIF orientation information from the image.
 <code>fname</code>: the file path
@@ -218,7 +288,7 @@ return: the Pillow image, image width and height</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="read_exif_metadata" class="doc_header"><code>read_exif_metadata</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L95" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_exif_metadata</code>(<strong><code>fname</code></strong>)</p>
+<h4 id="read_exif_metadata" class="doc_header"><code>read_exif_metadata</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L118" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>read_exif_metadata</code>(<strong><code>fname</code></strong>)</p>
 </blockquote>
 <p>Read the EXIF metadata information from the image.
 <code>fname</code>: the file path
@@ -252,7 +322,7 @@ return: the Pillow image, image width and height</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="write_exif_metadata" class="doc_header"><code>write_exif_metadata</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L109" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>write_exif_metadata</code>(<strong><code>image</code></strong>, <strong><code>exif_data</code></strong>, <strong><code>fname</code></strong>)</p>
+<h4 id="write_exif_metadata" class="doc_header"><code>write_exif_metadata</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L132" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>write_exif_metadata</code>(<strong><code>image</code></strong>, <strong><code>exif_data</code></strong>, <strong><code>fname</code></strong>)</p>
 </blockquote>
 <p>Write the EXIF metadata information to the image.
 <code>image</code>: the Pillow image to write the EXIF metadata to
@@ -288,7 +358,7 @@ return: the Pillow image, image width and height</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="assign_exif_orientation" class="doc_header"><code>assign_exif_orientation</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L126" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>assign_exif_orientation</code>(<strong><code>fname</code></strong>)</p>
+<h4 id="assign_exif_orientation" class="doc_header"><code>assign_exif_orientation</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L149" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>assign_exif_orientation</code>(<strong><code>fname</code></strong>)</p>
 </blockquote>
 <p>Parses the EXIF orientation metadata from the image,
 rotate the image accordingly and remove the image EXIF orientation metadata.
@@ -324,10 +394,12 @@ and <code>True</code> if image rotated, else <code>False</code></p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="convert_to_base64" class="doc_header"><code>convert_to_base64</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L166" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>convert_to_base64</code>(<strong><code>image</code></strong>, <strong><code>image_type</code></strong>=<em><code>'PNG'</code></em>)</p>
+<h4 id="convert_to_base64" class="doc_header"><code>convert_to_base64</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L189" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>convert_to_base64</code>(<strong><code>image</code></strong>, <strong><code>image_type</code></strong>=<em><code>'PNG'</code></em>)</p>
 </blockquote>
-<p>Converts the specified image into a base64 version of itself.</p>
-<p><code>image</code>: The image to transform as Pillow Image.
+<p>Converts the specified image into a base64 version of itself.
+Source code mainly taken from:
+<a href="https://jdhao.github.io/2020/03/17/base64_opencv_pil_image_conversion/">https://jdhao.github.io/2020/03/17/base64_opencv_pil_image_conversion/</a>
+<code>image</code>: The image to transform as Pillow Image.
 <code>image_type</code>: The image type.
 :return: The base64 encoded version of the image.</p>
 
@@ -359,7 +431,7 @@ and <code>True</code> if image rotated, else <code>False</code></p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="write_mask" class="doc_header"><code>write_mask</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L180" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>write_mask</code>(<strong><code>mask</code></strong>, <strong><code>file_path</code></strong>, <strong><code>palette</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="write_mask" class="doc_header"><code>write_mask</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L204" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>write_mask</code>(<strong><code>mask</code></strong>, <strong><code>file_path</code></strong>, <strong><code>palette</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Writes a mask as image.
 The image format is set by the file extension in file_path.</p>
@@ -401,7 +473,7 @@ The image format is set by the file extension in file_path.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L196" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="configure_logging" class="doc_header"><code>configure_logging</code><a href="https://github.com/AI-Force/aiforce/tree/master/aiforce/image/pillow_tools.py#L220" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_logging</code>(<strong><code>logging_level</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Configures logging for the system.</p>
 <p>:param logging_level: The logging level to use.</p>
