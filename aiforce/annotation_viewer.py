@@ -64,7 +64,7 @@ def show_annotated_images(annotation_adapter, subset_type, image_loader, max_wid
 
     logging.info("Load images with {}".format(image_loader))
 
-    index = 0
+    i = 0
     annotation_keys = list(annotations.keys())
 
     logging.info("Keys to use:")
@@ -75,9 +75,9 @@ def show_annotated_images(annotation_adapter, subset_type, image_loader, max_wid
     logging.info("Annotations to view: {}".format(len_annotations))
 
     while True:
-        annotation_id = annotation_keys[index]
+        annotation_id = annotation_keys[i]
         annotation = annotations[annotation_id]
-        logging.info("View Image {}/{}: {}".format(index + 1, len_annotations, annotation.file_path))
+        logging.info("View Image {}/{}: {}".format(i + 1, len_annotations, annotation.file_path))
         if image_loader == ImageLoader.PILLOW:
             img, width, height = pillow_tools.get_image_size(annotation.file_path)
             img = opencv_tools.from_pillow_image(img)
@@ -121,15 +121,15 @@ def show_annotated_images(annotation_adapter, subset_type, image_loader, max_wid
             img = opencv_tools.fit_to_max_size(img, max_width, max_height)
 
         cv2.imshow(WINDOW_NAME, img)
-        cv2.setWindowTitle(WINDOW_NAME, "Image {}/{}".format(index + 1, len_annotations))
+        cv2.setWindowTitle(WINDOW_NAME, "Image {}/{}".format(i + 1, len_annotations))
 
         k = cv2.waitKey(0)
         if k == ord('q'):    # 'q' key to stop
             break
         elif k == ord('b'):
-            index = max(0, index - 1)
+            i = max(0, i - 1)
         elif k == ord('n'):
-            index = min(len_annotations - 1, index + 1)
+            i = min(len_annotations - 1, i + 1)
 
     cv2.destroyAllWindows()
 
