@@ -89,6 +89,21 @@ class Region:
         self.rotation = rotation
         self.labels = [] if labels is None else labels
 
+    def is_normalized(self) -> bool:
+        return isinstance(self.radius_x, float) and isinstance(self.radius_y, float)
+
+    def normalize(self, width: int, height: int):
+        self.points_x = list(map(lambda x: float(x) / width, self.points_x))
+        self.points_y = list(map(lambda y: float(y) / height, self.points_y))
+        self.radius_x = float(self.radius_x) / width
+        self.radius_y = float(self.radius_y) / height
+
+    def denormalize(self, width, height):
+        self.points_x = list(map(lambda x: int(x * width), self.points_x))
+        self.points_y = list(map(lambda y: int(y * height), self.points_y))
+        self.radius_x = int(self.radius_x * width)
+        self.radius_y = int(self.radius_y * height)
+
 
 # Cell
 class Annotation:
