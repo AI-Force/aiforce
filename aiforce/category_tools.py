@@ -23,6 +23,16 @@ BACKGROUND_CLASS_CODE = 0
 logger = logging.getLogger(__name__)
 
 
+def labels_in_categories(labels, categories):
+    """
+    labels: the labels to verify
+    categories: the categories to verify against
+    return: True if labels in categories else False
+    """
+    len_labels = len(labels)
+    return len_labels and len(set(labels) & set(categories)) == len_labels
+
+
 # Cell
 def read_categories(categories_file=None, dataset_type=DatasetType.IMAGE_CLASSIFICATION):
     """
