@@ -92,10 +92,11 @@ class VIAAnnotationAdapter(AnnotationAdapter):
 
         return parser
 
-    def read_annotations(self, subset_type=SubsetType.TRAINVAL):
+    def read_annotations(self, categories, subset_type=SubsetType.TRAINVAL):
         """
         Reads a VIA annotations file.
         Supports JSON and CSV file format.
+        `categories`: the categories as list
         `subset_type`: the subset type to read
         return: the annotations as dictionary
         """
@@ -109,14 +110,19 @@ class VIAAnnotationAdapter(AnnotationAdapter):
 
         if file_extension.lower() == '.json':
             logger.info('Read VIA annotations in JSON format')
-            annotations = self._read_annotations_json(path, annotations_file_path)
+            annotations, skipped_annotations = self._read_annotations_json(path, annotations_file_path)
         elif file_extension.lower() == '.csv':
             logger.info('Read VIA annotations in CSV format')
-            annotations = self._read_annotations_csv(path, annotations_file_path)
+            annotations, skipped_annotations = self._read_annotations_csv(path, annotations_file_path)
         else:
             message = 'Unsupported annotation format at {}'.format(annotations_file_path)
             logger.error(message)
             raise ValueError(message)
+
+        logger.info('Finished read annotations')
+        logger.info('Annotations read: {}'.format(len(annotations)))
+        if skipped_annotations:
+            logger.info('Annotations skipped: {}'.format(len(skipped_annotations)))
 
         return annotations
 
@@ -164,12 +170,7 @@ class VIAAnnotationAdapter(AnnotationAdapter):
                     region.labels = [category] if category else []
                     annotation.regions.append(region)
 
-        logger.info('Finished read annotations')
-        logger.info('Annotations read: {}'.format(len(annotations)))
-        if skipped_annotations:
-            logger.info('Annotations skipped: {}'.format(len(skipped_annotations)))
-
-        return annotations
+        return annotations, skipped_annotations
 
     def _read_annotations_json(self, path, annotations_file_path):
         """
@@ -217,19 +218,15 @@ class VIAAnnotationAdapter(AnnotationAdapter):
                     region.labels = [category] if category else []
                     annotation.regions.append(region)
 
-        logger.info('Finished read annotations')
-        logger.info('Annotations read: {}'.format(len(annotations)))
-        if skipped_annotations:
-            logger.info('Annotations skipped: {}'.format(len(skipped_annotations)))
+        return annotations, skipped_annotations
 
-        return annotations
-
-    def write_annotations(self, annotations, subset_type=SubsetType.TRAINVAL):
+    def write_annotations(self, annotations, categories, subset_type=SubsetType.TRAINVAL):
         """
         Writes a VIA annotations file and copy the corresponding source files.
         Supports JSON and CSV file format.
         Format is inferred from the annotations_file setting.
         `annotations`: the annotations as dictionary
+        `categories`: the categories as list
         `subset_type`: the subset type to write
         return: a list of written target file paths
         """
@@ -244,14 +241,20 @@ class VIAAnnotationAdapter(AnnotationAdapter):
 
         if file_extension.lower() == '.json':
             logger.info('Write VIA annotations in JSON format')
-            copied_files = self._write_annotations_json(path, annotations_file_path, annotations)
+            copied_files, annotations, skipped_annotations = self._write_annotations_json(path, annotations_file_path, annotations)
         elif file_extension.lower() == '.csv':
             logger.info('Write VIA annotations in CSV format')
-            copied_files = self._write_annotations_csv(path, annotations_file_path, annotations)
+            copied_files, annotations, skipped_annotations = self._write_annotations_csv(path, annotations_file_path, annotations)
         else:
             message = 'Unsupported annotation format at {}'.format(annotations_file_path)
             logger.error(message)
             raise ValueError(message)
+
+        logger.info('Finished write annotations')
+        logger.info('Annotations written: {}'.format(len(annotations) - len(skipped_annotations)))
+        if skipped_annotations:
+            logger.info('Annotations skipped: {}'.format(len(skipped_annotations)))
+
         return copied_files
 
     def _write_annotations_csv(self, path, annotations_file_path, annotations):
@@ -304,11 +307,7 @@ class VIAAnnotationAdapter(AnnotationAdapter):
                 shutil.copy2(annotation.file_path, target_file)
                 copied_files.append(target_file)
 
-        logger.info('Finished write annotations')
-        logger.info('Annotations written: {}'.format(len(annotations) - len(skipped_annotations)))
-        if skipped_annotations:
-            logger.info('Annotations skipped: {}'.format(len(skipped_annotations)))
-        return copied_files
+        return copied_files, annotations, skipped_annotations
 
     def _write_annotations_json(self, path, annotations_file_path, annotations):
         """
@@ -372,7 +371,7 @@ class VIAAnnotationAdapter(AnnotationAdapter):
         logger.info('Annotations written: {}'.format(len(annotations) - len(skipped_annotations)))
         if skipped_annotations:
             logger.info('Annotations skipped: {}'.format(len(skipped_annotations)))
-        return copied_files
+        return copied_files, annotations, skipped_annotations
 
     def _annotation_file_name_suffix_handling(self, subset_type):
         """
