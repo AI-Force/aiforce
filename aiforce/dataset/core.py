@@ -29,7 +29,7 @@ class Dataset(ABC):
         self.seed = seed
         self.sample = sample
         self.categories = input_adapter.read_categories()
-        self.annotations = input_adapter.read_annotations(categories)
+        self.annotations = input_adapter.read_annotations(self.categories)
 
     @classmethod
     def argparse(cls, prefix=None):
