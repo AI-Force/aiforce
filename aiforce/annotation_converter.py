@@ -20,9 +20,9 @@ def convert(input_adapter: AnnotationAdapter, output_adapter: AnnotationAdapter)
     `output_adapter`: the output annotation adapter
     """
     categories = input_adapter.read_categories()
-    annotations = input_adapter.read_annotations(SubsetType.TRAINVAL)
+    annotations = input_adapter.read_annotations(categories, SubsetType.TRAINVAL)
     output_adapter.write_categories(categories)
-    output_adapter.write_annotations(annotations, SubsetType.TRAINVAL)
+    output_adapter.write_annotations(annotations, categories, SubsetType.TRAINVAL)
 
 
 # Cell

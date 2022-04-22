@@ -29,7 +29,7 @@ class Dataset(ABC):
         self.seed = seed
         self.sample = sample
         self.categories = input_adapter.read_categories()
-        self.annotations = input_adapter.read_annotations()
+        self.annotations = input_adapter.read_annotations(categories)
 
     @classmethod
     def argparse(cls, prefix=None):
@@ -102,10 +102,10 @@ class Dataset(ABC):
 
         logger.info('Write {} annotations to {}'.format(str(SubsetType.TRAIN), self.output_adapter.path))
         annotations_train = dict(zip(train_annotation_keys, [self.annotations[key] for key in train_annotation_keys]))
-        train_targets = self.output_adapter.write_annotations(annotations_train, SubsetType.TRAIN)
+        train_targets = self.output_adapter.write_annotations(annotations_train, self.categories, SubsetType.TRAIN)
         logger.info('Write {} annotations to {}'.format(str(SubsetType.VAL), self.output_adapter.path))
         annotations_val = dict(zip(val_annotation_keys, [self.annotations[key] for key in val_annotation_keys]))
-        val_targets = self.output_adapter.write_annotations(annotations_val, SubsetType.VAL)
+        val_targets = self.output_adapter.write_annotations(annotations_val, self.categories, SubsetType.VAL)
         logger.info('Write {} files to {}'.format(str(SubsetType.TEST), self.output_adapter.path))
         test_targets = self.output_adapter.write_files(test_files, SubsetType.TEST) if test_files else []
 

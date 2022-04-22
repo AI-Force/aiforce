@@ -51,7 +51,7 @@ def show_annotated_images(annotation_adapter, subset_type, image_loader, max_wid
     `max_height`: The maximum height to scale the image for visibility.
     """
     categories = annotation_adapter.read_categories()
-    annotations = annotation_adapter.read_annotations(subset_type)
+    annotations = annotation_adapter.read_annotations(categories, subset_type)
 
     if filter_names:
         annotations = annotation_filter(annotations, lambda _, anno: basename(anno.file_path) in filter_names)

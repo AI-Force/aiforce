@@ -56,9 +56,10 @@ class MultiCategoryAnnotationAdapter(AnnotationAdapter):
                             default=None)
         return parser
 
-    def read_annotations(self, subset_type=SubsetType.TRAINVAL):
+    def read_annotations(self, categories, subset_type=SubsetType.TRAINVAL):
         """
         Read annotations from a multi classification CSV annotations file.
+        `categories`: the categories as list
         `subset_type`: the subset type to read
         return: the annotations as dictionary
         """
@@ -97,10 +98,11 @@ class MultiCategoryAnnotationAdapter(AnnotationAdapter):
             logger.info('Annotations skipped: {}'.format(len(skipped_annotations)))
         return annotations
 
-    def write_annotations(self, annotations, subset_type=SubsetType.TRAINVAL):
+    def write_annotations(self, annotations, categories, subset_type=SubsetType.TRAINVAL):
         """
         Writes a multi classification CSV annotations file and copy the corresponding source files.
         `annotations`: the annotations as dictionary
+        `categories`: the categories as list
         `subset_type`: the subset type to write
         return: a list of written target file paths
         """
