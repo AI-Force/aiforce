@@ -21,26 +21,6 @@ from ..io.core import strip_path, scan_files, create_folder
 logger = logging.getLogger(__name__)
 
 
-def denormalize_value(value, metric):
-    """
-    Denormalize a bounding box value
-    `value`: the value to denormalize
-    `metric`: the metric to denormalize from
-    return: the denormalized value
-    """
-    return int(value * metric)
-
-
-def normalize_value(value, metric):
-    """
-    Normalize a bounding box value
-    `value`: the value to normalize
-    `metric`: the metric to normalize against
-    return: the normalized value
-    """
-    return float(value) / metric
-
-
 # Cell
 class SubsetType(Enum):
     """
@@ -70,20 +50,6 @@ class RegionShape(Enum):
 
     def __str__(self):
         return self.value
-
-
-# Cell
-def parse_region_shape(shape_str):
-    """
-    Try to parse the region shape from a string representation.
-    `shape_str`: the shape as string
-    return: the parsed RegionShape
-    raises: `ValueError` if unsupported shape parsed
-    """
-    try:
-        return RegionShape(shape_str)
-    except ValueError:
-        raise ValueError("Error, unsupported region shape: {}".format(shape_str))
 
 
 # Cell
@@ -150,6 +116,110 @@ class Annotation:
             for label in region.labels:
                 labels[label] = None
         return list(labels.keys())
+
+
+# Cell
+class AnnotationAdapter(ABC):
+    """
+    Abstract Base Adapter to inherit for writing custom adapters
+    """
+    DEFAULT_CATEGORIES_FILE = 'categories.txt'
+
+    def __init__(self, path, categories_file_name=None):
+        """
+        Base Adapter to read and write annotations.
+        `path`: the folder containing the annotations
+        `categories_file_name`: the name of the categories file
+        """
+        self.path = strip_path(path)
+        if categories_file_name is None:
+            self.categories_file_name = self.DEFAULT_CATEGORIES_FILE
+        else:
+            self.categories_file_name = categories_file_name
+
+    def list_files(self, subset_type=SubsetType.TRAINVAL):
+        """
+        List all physical files in a sub-set.
+        `subset_type`: the subset type to list
+        return: a list of file paths if subset type exist, else an empty list
+        """
+        path = join(self.path, str(subset_type))
+        return scan_files(path) if isdir(path) else []
+
+    def write_files(self, file_paths, subset_type=SubsetType.TRAINVAL):
+        """
+        Write physical files in a sub-set.
+        `file_paths`: a list of file paths to write
+        `subset_type`: the subset type to write into
+        return: a list of written target file paths
+        """
+        path = join(self.path, str(subset_type))
+        create_folder(path)
+        copied_files = []
+        for file_path in file_paths:
+            file_name = basename(file_path)
+            target_file = join(path, file_name)
+            shutil.copy2(file_path, target_file)
+            copied_files.append(target_file)
+        return copied_files
+
+    @abstractmethod
+    def read_annotations(self, categories, subset_type=SubsetType.TRAINVAL):
+        """
+        Read annotations.
+        `categories`: the categories as list
+        `subset_type`: the subset type to read
+        return: the annotations as dictionary
+        """
+        pass
+
+    def read_categories(self):
+        """
+        Read categories.
+        return: a list of category names
+        """
+        path = join(self.path, self.categories_file_name)
+        logger.info('Read categories from {}'.format(path))
+        return category_tools.read_categories(path)
+
+    @abstractmethod
+    def write_annotations(self, annotations, categories, subset_type=SubsetType.TRAINVAL):
+        """
+        Write annotations.
+        `annotations`: the annotations as dictionary
+        `categories`: the categories as list
+        `subset_type`: the subset type to write
+        return: a list of written target file paths
+        """
+        pass
+
+    def write_categories(self, categories):
+        """
+        Write categories.
+        `categories`: a list of category names
+        """
+        target_folder = create_folder(self.path)
+        path = join(target_folder, self.categories_file_name)
+        logger.info('Write categories to {}'.format(path))
+        category_tools.write_categories(categories, path)
+
+    @classmethod
+    def argparse(cls, prefix=None):
+        """
+        Returns the argument parser containing argument definition for command line use.
+        `prefix`: a parameter prefix to set, if needed
+        return: the argument parser
+        """
+        parser = argparse.ArgumentParser()
+        parser.add_argument(assign_arg_prefix('--path', prefix),
+                            dest="path",
+                            help="the folder containing the annotations.",
+                            required=True)
+        parser.add_argument(assign_arg_prefix('--categories_file_name', prefix),
+                            dest="categories_file_name",
+                            help="The name of the categories file.",
+                            default=None)
+        return parser
 
 
 # Cell
@@ -229,102 +299,34 @@ def region_bounding_box(region: Region):
 
 
 # Cell
-class AnnotationAdapter(ABC):
+def parse_region_shape(shape_str):
     """
-    Abstract Base Adapter to inherit for writing custom adapters
+    Try to parse the region shape from a string representation.
+    `shape_str`: the shape as string
+    return: the parsed RegionShape
+    raises: `ValueError` if unsupported shape parsed
     """
-    DEFAULT_CATEGORIES_FILE = 'categories.txt'
+    try:
+        return RegionShape(shape_str)
+    except ValueError:
+        raise ValueError("Error, unsupported region shape: {}".format(shape_str))
 
-    def __init__(self, path, categories_file_name=None):
-        """
-        Base Adapter to read and write annotations.
-        `path`: the folder containing the annotations
-        `categories_file_name`: the name of the categories file
-        """
-        self.path = strip_path(path)
-        if categories_file_name is None:
-            self.categories_file_name = self.DEFAULT_CATEGORIES_FILE
-        else:
-            self.categories_file_name = categories_file_name
 
-    def list_files(self, subset_type=SubsetType.TRAINVAL):
-        """
-        List all physical files in a sub-set.
-        `subset_type`: the subset type to list
-        return: a list of file paths if subset type exist, else an empty list
-        """
-        path = join(self.path, str(subset_type))
-        return scan_files(path) if isdir(path) else []
+def denormalize_value(value, metric):
+    """
+    Denormalize a value from 0 and 1
+    `value`: the value to denormalize
+    `metric`: the metric to denormalize from
+    return: the denormalized value
+    """
+    return int(value * metric)
 
-    def write_files(self, file_paths, subset_type=SubsetType.TRAINVAL):
-        """
-        Write physical files in a sub-set.
-        `file_paths`: a list of file paths to write
-        `subset_type`: the subset type to write into
-        return: a list of written target file paths
-        """
-        path = join(self.path, str(subset_type))
-        create_folder(path)
-        copied_files = []
-        for file_path in file_paths:
-            file_name = basename(file_path)
-            target_file = join(path, file_name)
-            shutil.copy2(file_path, target_file)
-            copied_files.append(target_file)
-        return copied_files
 
-    @abstractmethod
-    def read_annotations(self, subset_type=SubsetType.TRAINVAL):
-        """
-        Read annotations.
-        `subset_type`: the subset type to read
-        return: the annotations as dictionary
-        """
-        pass
-
-    def read_categories(self):
-        """
-        Read categories.
-        return: a list of category names
-        """
-        path = join(self.path, self.categories_file_name)
-        logger.info('Read categories from {}'.format(path))
-        return category_tools.read_categories(path)
-
-    @abstractmethod
-    def write_annotations(self, annotations, subset_type=SubsetType.TRAINVAL):
-        """
-        Write annotations.
-        `annotations`: the annotations as dictionary
-        `subset_type`: the subset type to write
-        return: a list of written target file paths
-        """
-        pass
-
-    def write_categories(self, categories):
-        """
-        Write categories.
-        `categories`: a list of category names
-        """
-        target_folder = create_folder(self.path)
-        path = join(target_folder, self.categories_file_name)
-        logger.info('Write categories to {}'.format(path))
-        category_tools.write_categories(categories, path)
-
-    @classmethod
-    def argparse(cls, prefix=None):
-        """
-        Returns the argument parser containing argument definition for command line use.
-        `prefix`: a parameter prefix to set, if needed
-        return: the argument parser
-        """
-        parser = argparse.ArgumentParser()
-        parser.add_argument(assign_arg_prefix('--path', prefix),
-                            dest="path",
-                            help="the folder containing the annotations.",
-                            required=True)
-        parser.add_argument(assign_arg_prefix('--categories_file_name', prefix),
-                            dest="categories_file_name",
-                            help="The name of the categories file.",
-                            default=None)
-        return parser
+def normalize_value(value, metric):
+    """
+    Normalize a value between 0 and 1
+    `value`: the value to normalize
+    `metric`: the metric to normalize against
+    return: the normalized value
+    """
+    return float(value) / metric
