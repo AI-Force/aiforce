@@ -294,7 +294,7 @@ class PascalVOCAnnotationAdapter(AnnotationAdapter):
             img, image_width, image_height = get_image_size(annotation.file_path)
 
             root = ET.Element('annotation')
-            ET.SubElement(root, "filename").text = file_name
+            ET.SubElement(root, "filename").text = image_name
             ET.SubElement(root, "folder").text = basename(self.path)
             size = ET.SubElement(root, "size")
             ET.SubElement(size, "depth").text = str(img.shape[-1]) if len(img.shape) == 3 else '1'
