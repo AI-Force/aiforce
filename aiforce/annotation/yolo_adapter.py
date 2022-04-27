@@ -82,7 +82,7 @@ class YOLOAnnotationAdapter(AnnotationAdapter):
                             default=None)
         parser.add_argument(assign_arg_prefix('--annotations_folder_name', prefix),
                             dest="annotations_folder_name",
-                            help="The name of the folder containing the mage annotations.",
+                            help="The name of the folder containing the image annotations.",
                             default=None)
         parser.add_argument(assign_arg_prefix('--annotation_format', prefix),
                             dest="annotation_format",

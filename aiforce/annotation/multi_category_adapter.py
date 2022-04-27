@@ -70,11 +70,11 @@ class MultiCategoryAnnotationAdapter(AnnotationAdapter):
         logger.info('Read annotations from {}'.format(annotations_file_path))
 
         annotations = {}
+        skipped_annotations = []
 
         with open(annotations_file_path, newline='') as csv_file:
             reader = csv.DictReader(csv_file)
 
-            skipped_annotations = []
             for row in reader:
                 file_path = join(path, row['image_name'])
                 if not isfile(file_path):

@@ -60,12 +60,12 @@ class FolderCategoryAnnotationAdapter(AnnotationAdapter):
         return: the annotations as dictionary
         """
         annotations = {}
+        skipped_annotations = []
         path = join(self.path, str(subset_type))
         logger.info('Read annotations from {}'.format(path))
 
         file_paths = scan_files(path)
 
-        skipped_annotations = []
         for file_path in file_paths:
             trimmed_path = self._trim_base_path(file_path, path)
             if trimmed_path not in annotations:

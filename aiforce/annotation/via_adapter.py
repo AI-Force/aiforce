@@ -134,6 +134,7 @@ class VIAAnnotationAdapter(AnnotationAdapter):
         return: the annotations as dictionary
         """
         annotations = {}
+        skipped_annotations = []
         with open(annotations_file_path, newline='') as csv_file:
             reader = csv.DictReader(csv_file)
 
@@ -146,7 +147,6 @@ class VIAAnnotationAdapter(AnnotationAdapter):
             logger.info('Use VIA version {}'.format(self.version))
 
             fieldnames = CSV_FIELDNAMES_V1 if self.version == 1 else CSV_FIELDNAMES_V2
-            skipped_annotations = []
             for row in reader:
                 file_path = join(path, row[fieldnames[0]])
                 if not isfile(file_path):
@@ -167,7 +167,7 @@ class VIAAnnotationAdapter(AnnotationAdapter):
                     category = None
                     if region_attributes and self.category_label_key in region_attributes:
                         category = region_attributes[self.category_label_key]
-                    region.labels = [category] if category else []
+                    region.labels = category.split(' ') if category else []
                     annotation.regions.append(region)
 
         return annotations, skipped_annotations
@@ -180,6 +180,7 @@ class VIAAnnotationAdapter(AnnotationAdapter):
         return: the annotations as dictionary
         """
         annotations = {}
+        skipped_annotations = []
         with open(annotations_file_path) as json_file:
             via_annotations = json.load(json_file)
 
@@ -192,7 +193,6 @@ class VIAAnnotationAdapter(AnnotationAdapter):
 
             logger.info('Use VIA version {}'.format(self.version))
 
-            skipped_annotations = []
             for data in via_annotations.values():
                 file_path = join(path, data['filename'])
                 if not isfile(file_path):
@@ -215,7 +215,7 @@ class VIAAnnotationAdapter(AnnotationAdapter):
                     category = None
                     if region_attributes and self.category_label_key in region_attributes:
                         category = region_attributes[self.category_label_key]
-                    region.labels = [category] if category else []
+                    region.labels = category.split(' ') if category else []
                     annotation.regions.append(region)
 
         return annotations, skipped_annotations
