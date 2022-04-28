@@ -2,6 +2,7 @@ import shutil
 import logging
 from os.path import join, splitext, basename, isfile
 from ..core import assign_arg_prefix
+from ..category_tools import equal_categories
 from .core import Annotation, AnnotationAdapter, Region, RegionShape, SubsetType
 from ..image.opencv_tools import get_image_size
 from ..io.core import create_folder
@@ -92,17 +93,20 @@ class PascalVOCAnnotationAdapter(AnnotationAdapter):
     Adapter to read and write annotations in the PascalVOC annotation.
     """
 
-    def __init__(self, path, categories_file_name=None, challenges=None, index_folder_name=None,
+    def __init__(self, path, categories_file_name=None, challenge=None, index_folder_name=None,
                  images_folder_name=None, annotations_folder_name=None):
         """
-        VIA Adapter to read and write annotations.
+        PascalVOC adapter to read and write annotations.
         `path`: the folder containing the annotations
-        `version`: the VIA version to use
         `categories_file_name`: the name of the categories file
+        `challenge`: the challenge to use, default to Main
+        `index_folder_name`: the name of the folder containing the index files, default to ImageSets
+        `images_folder_name`: the name of the folder containing the index files, default to JPEGImages
+        `annotations_folder_name`: the name of the folder containing the image annotations, default to Annotations
         """
         super().__init__(path, categories_file_name)
 
-        self.challenges = [DEFAULT_CHALLENGE] if challenges is None else challenges
+        self.challenge = DEFAULT_CHALLENGE if challenge is None else challenge
         self.index_folder_name = DEFAULT_INDEX_FOLDER if index_folder_name is None else index_folder_name
         self.images_folder_name = DEFAULT_IMAGES_FOLDER if images_folder_name is None else images_folder_name
         if annotations_folder_name is None:
@@ -118,10 +122,9 @@ class PascalVOCAnnotationAdapter(AnnotationAdapter):
         return: the argument parser
         """
         parser = super(PascalVOCAnnotationAdapter, cls).argparse(prefix=prefix)
-        parser.add_argument(assign_arg_prefix('--challenges', prefix),
-                            dest="challenges",
-                            nargs="+",
-                            help="The challenge annotations to read or write.",
+        parser.add_argument(assign_arg_prefix('--challenge', prefix),
+                            dest="challenge",
+                            help="The challenge to use for read or write annotations.",
                             choices=CHALLENGES,
                             default=None)
         parser.add_argument(assign_arg_prefix('--index_folder_name', prefix),
@@ -140,12 +143,25 @@ class PascalVOCAnnotationAdapter(AnnotationAdapter):
         return parser
 
     def read_categories(self):
+        """
+        Read categories.
+        return: a list of category names
+        """
         categories = super(PascalVOCAnnotationAdapter, self).read_categories()
         if len(categories) == 0:
-            for challenge in self.challenges:
-                categories.extend(DEFAULT_CATEGORIES[challenge])
-            logger.info(f"Use {len(categories)} default categories for the challenges: {','.join(self.challenges)}")
+            categories = DEFAULT_CATEGORIES[self.challenge]
+            logger.info(f"Use {len(categories)} default categories for the challenge {self.challenge}.")
         return categories
+
+    def write_categories(self, categories):
+        """
+        Write categories.
+        `categories`: a list of category names
+        """
+        if equal_categories(categories, DEFAULT_CATEGORIES[self.challenge]):
+            logger.info(f"Default categories used for the challenge {self.challenge}. Skip write categories.")
+        else:
+            super(PascalVOCAnnotationAdapter, self).write_categories(categories)
 
     def read_annotations(self, categories, subset_type=SubsetType.TRAINVAL):
         """
@@ -162,21 +178,20 @@ class PascalVOCAnnotationAdapter(AnnotationAdapter):
         logger.info(f'Read index from {index_path}')
         logger.info(f'Read file sources from {images_path}')
         logger.info(f'Read annotations from {annotations_path}')
-        for challenge in self.challenges:
-            logger.info(f'Read annotations for challenge: {challenge}')
-            index_file_path = join(index_path, challenge, f"{subset_type}.txt")
-            if challenge == 'Main':
-                annotations, skipped_annotations = self._read_annotations_main(index_file_path, annotations_path,
-                                                                               images_path)
-            else:
-                message = f'Unsupported challenge: {challenge}'
-                logger.error(message)
-                raise ValueError(message)
+        logger.info(f'Read annotations for challenge: {self.challenge}')
+        index_file_path = join(index_path, self.challenge, f"{subset_type}.txt")
+        if self.challenge == 'Main':
+            annotations, skipped_annotations = self._read_annotations_main(index_file_path, annotations_path,
+                                                                           images_path)
+        else:
+            message = f'Unsupported challenge: {self.challenge}'
+            logger.error(message)
+            raise ValueError(message)
 
-            logger.info(f'Finished read annotations for challenge: {challenge}')
-            logger.info(f'Annotations read: {len(annotations)}')
-            if skipped_annotations:
-                logger.info(f'Annotations skipped: {len(skipped_annotations)}')
+        logger.info(f'Finished read annotations for challenge: {self.challenge}')
+        logger.info(f'Annotations read: {len(annotations)}')
+        if skipped_annotations:
+            logger.info(f'Annotations skipped: {len(skipped_annotations)}')
 
         return annotations
 
@@ -243,24 +258,23 @@ class PascalVOCAnnotationAdapter(AnnotationAdapter):
         logger.info(f'Write annotations to {annotations_path}')
 
         copied_files = set()
-        for challenge in self.challenges:
-            logger.info(f'Write annotations for challenge: {challenge}')
-            challenge_index_path = create_folder(join(index_path, challenge))
-            index_file_path = join(challenge_index_path, f"{subset_type}.txt")
-            if challenge == 'Main':
-                challenge_copied_files, annotations, skipped_annotations = self._write_annotations_main(
-                    index_file_path, annotations_path, images_path, annotations)
-            else:
-                message = f'Unsupported challenge: {challenge}'
-                logger.error(message)
-                raise ValueError(message)
+        logger.info(f'Write annotations for challenge: {self.challenge}')
+        challenge_index_path = create_folder(join(index_path, self.challenge))
+        index_file_path = join(challenge_index_path, f"{subset_type}.txt")
+        if self.challenge == 'Main':
+            challenge_copied_files, annotations, skipped_annotations = self._write_annotations_main(
+                index_file_path, annotations_path, images_path, annotations)
+        else:
+            message = f'Unsupported challenge: {self.challenge}'
+            logger.error(message)
+            raise ValueError(message)
 
-            copied_files.update(challenge_copied_files)
+        copied_files.update(challenge_copied_files)
 
-            logger.info(f'Finished write annotations for challenge: {challenge}')
-            logger.info(f'Annotations written: {len(annotations) - len(skipped_annotations)}')
-            if skipped_annotations:
-                logger.info(f'Annotations skipped: {len(skipped_annotations)}')
+        logger.info(f'Finished write annotations for challenge: {self.challenge}')
+        logger.info(f'Annotations written: {len(annotations) - len(skipped_annotations)}')
+        if skipped_annotations:
+            logger.info(f'Annotations skipped: {len(skipped_annotations)}')
 
         return list(copied_files)
 
