@@ -24,12 +24,13 @@ logger = logging.getLogger(__name__)
 
 
 # Cell
-def scan_files(folder, file_extensions=None):
+def scan_files(folder, file_extensions=None, exclude=False):
     """
     Scan the folder for files and filter files by file extension.
     If the optional `file_extension` is not set, **.jpg** as file extension is used by default.
     `folder`: the folder to scan for files
     `file_extensions`: the allowed file extensions
+    `exclude`: True if exclude the allowed file extensions, else False
     return: the file path list
     """
     if file_extensions is None:
@@ -41,10 +42,10 @@ def scan_files(folder, file_extensions=None):
         for file in files:
             file_path = join(folder, file)
             filename, file_extension = splitext(file_path)
-            if isfile(file_path) and (file_extension in file_extensions):
+            if isfile(file_path) and (file not in FOLDER_FILTER) and (file_extension not in file_extensions) if exclude else (file_extension in file_extensions):
                 results.append(file_path)
             elif isdir(file_path):
-                results.extend(scan_files(file_path, file_extensions))
+                results.extend(scan_files(file_path, file_extensions, exclude))
     return results
 
 
