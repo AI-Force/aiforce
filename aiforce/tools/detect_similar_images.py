@@ -6,7 +6,7 @@ import os
 import pandas as pd
 import shutil
 from tqdm import tqdm
-from image.opencv_tools import get_image_size, caculate_ssim, calculate_psnr, resize_image
+from ..image.opencv_tools import get_image_size, caculate_ssim, calculate_psnr, resize_image
 
 DEFAULT_INDEX_FILE = "similarities.csv"
 INDEX_PAIR_COLUMN = "pair"
@@ -52,8 +52,8 @@ def create_similarity_index(file_a, file_b, mpsnr_thresh, mssim_thresh):
     img_b, w_b, h_b = get_image_size(file_b)
     min_height = min(h_a, h_b)
     min_width =  min(w_a, w_b)
-    img_a_r = resize_image(img_a, (min_width, min_height))
-    img_b_r = resize_image(img_b, (min_width, min_height))
+    img_a_r = resize_image(img_a, min_width, min_height)
+    img_b_r = resize_image(img_b, min_width, min_height)
     psnr = "" if mpsnr_thresh is None else calculate_psnr(img_a_r, img_b_r)
     mssism = "" if mssim_thresh is None else caculate_ssim(img_a_r, img_b_r)
     
