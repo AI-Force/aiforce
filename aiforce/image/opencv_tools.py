@@ -44,14 +44,18 @@ def fit_to_max_size(img, max_width, max_height):
     return img
 
 
+def resize_image(img, width, height):
+    return cv2.resize(img, (width, height))
+
+
 # Cell
-def load_image(fname):
+def load_image(fname, img_format=cv2.IMREAD_COLOR):
     """
     Load an image using the OpenCV library
     `fname`: the file path or BytesIO stream
     return: the Pillow image
     """
-    return cv2.imread(fname)
+    return cv2.imread(fname, img_format)
 
 
 # Cell
@@ -67,13 +71,13 @@ def load_from_base64(img_b64, img_format=cv2.IMREAD_COLOR):
 
 
 # Cell
-def get_image_size(fname):
+def get_image_size(fname, img_format=cv2.IMREAD_COLOR):
     """
     Calculates image size of a given image file.
     `fname`: the file path
     return: the OpenCV image, image width and height
     """
-    img = load_image(fname)
+    img = load_image(fname, img_format)
     h, w = img.shape[:2]
     return img, w, h
 
@@ -101,3 +105,13 @@ def convert_to_base64(image, image_type="PNG"):
     _, img_arr = cv2.imencode(f'.{image_type.lower()}', image)  # im_arr: image in Numpy one-dim array format.
     img_bytes = img_arr.tobytes()
     return base64.b64encode(img_bytes)
+
+
+def calculate_psnr(i1, i2):
+    psnr, _ = cv2.quality.QualityPSNR_compute(i1, i2)
+    return (psnr[0], psnr[1], psnr[2], (psnr[0] + psnr[1] + psnr[2]) / 3)
+
+
+def caculate_ssim(i1, i2):
+    ssim, _ = cv2.quality.QualitySSIM_compute(i1, i2)
+    return (ssim[0], ssim[1], ssim[2], (ssim[0] + ssim[1] + ssim[2]) / 3)
