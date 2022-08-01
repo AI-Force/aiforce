@@ -128,7 +128,7 @@ if __name__ == '__main__':
     parser.add_argument("-i", "--input_dir", help="source directory",
                         type=str, default="input")
     parser.add_argument("-o", "--output_dir", help="target directory",
-                        type=str, default="input")
+                        type=str, default="output")
     parser.add_argument("-s", "--similarity_index", help="file containing already calculated similarities",
                         type=str, default=None)
     parser.add_argument("-p", "--mpsnr", help="PSNR mean threshold to filter similar frames",
