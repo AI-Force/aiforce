@@ -52,7 +52,7 @@ class FolderCategoryAnnotationAdapter(AnnotationAdapter):
                             default=None)
         return parser
 
-    def read_annotations(self, categories, subset_type=SubsetType.TRAINVAL):
+    def read_annotations(self, categories, subset_type=SubsetType.NONE):
         """
         Read annotations from folder structure representing the categories.
         `categories`: the categories as list
@@ -89,7 +89,7 @@ class FolderCategoryAnnotationAdapter(AnnotationAdapter):
             logger.info('Annotations skipped: {}'.format(len(skipped_annotations)))
         return annotations
 
-    def write_annotations(self, annotations, categories, subset_type=SubsetType.TRAINVAL):
+    def write_annotations(self, annotations, categories, subset_type=SubsetType.NONE):
         """
         Write annotations to folder structure representing the categories.
         `annotations`: the annotations as dictionary

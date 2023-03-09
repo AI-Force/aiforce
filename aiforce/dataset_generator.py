@@ -26,8 +26,6 @@ def configure_logging(logging_level=logging.INFO):
     """
     Configures logging for the system.
     """
-    logging.basicConfig(level=logging_level)
-
     log_memory_handler = MemoryHandler(1, flushLevel=logging_level)
     log_memory_handler.setLevel(logging_level)
 

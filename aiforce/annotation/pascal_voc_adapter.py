@@ -163,7 +163,7 @@ class PascalVOCAnnotationAdapter(AnnotationAdapter):
         else:
             super(PascalVOCAnnotationAdapter, self).write_categories(categories)
 
-    def read_annotations(self, categories, subset_type=SubsetType.TRAINVAL):
+    def read_annotations(self, categories, subset_type=SubsetType.NONE):
         """
         Reads Pascal VOC annotations.
         Supports all challenge formats.
@@ -174,12 +174,13 @@ class PascalVOCAnnotationAdapter(AnnotationAdapter):
         index_path = join(self.path, self.index_folder_name)
         annotations_path = join(self.path, self.annotations_folder_name)
         images_path = join(self.path, self.images_folder_name)
+        index_file_name = "index.txt" if subset_type == SubsetType.NONE else f"{subset_type}.txt"
 
         logger.info(f'Read index from {index_path}')
         logger.info(f'Read file sources from {images_path}')
         logger.info(f'Read annotations from {annotations_path}')
         logger.info(f'Read annotations for challenge: {self.challenge}')
-        index_file_path = join(index_path, self.challenge, f"{subset_type}.txt")
+        index_file_path = join(index_path, self.challenge, index_file_name)
         if self.challenge == 'Main':
             annotations, skipped_annotations = self._read_annotations_main(index_file_path, annotations_path,
                                                                            images_path)
@@ -240,7 +241,7 @@ class PascalVOCAnnotationAdapter(AnnotationAdapter):
 
         return annotations, skipped_annotations
 
-    def write_annotations(self, annotations, categories, subset_type=SubsetType.TRAINVAL):
+    def write_annotations(self, annotations, categories, subset_type=SubsetType.NONE):
         """
         Writes Pascal VOC annotations.
         Supports all challenge formats.
@@ -252,6 +253,7 @@ class PascalVOCAnnotationAdapter(AnnotationAdapter):
         index_path = create_folder(join(self.path, self.index_folder_name))
         annotations_path = create_folder(join(self.path, self.annotations_folder_name))
         images_path = create_folder(join(self.path, self.images_folder_name))
+        index_file_name = "index.txt" if subset_type == SubsetType.NONE else f"{subset_type}.txt"
 
         logger.info(f'Write index to {index_path}')
         logger.info(f'Write file sources to {images_path}')
@@ -260,7 +262,7 @@ class PascalVOCAnnotationAdapter(AnnotationAdapter):
         copied_files = set()
         logger.info(f'Write annotations for challenge: {self.challenge}')
         challenge_index_path = create_folder(join(index_path, self.challenge))
-        index_file_path = join(challenge_index_path, f"{subset_type}.txt")
+        index_file_path = join(challenge_index_path, index_file_name)
         if self.challenge == 'Main':
             challenge_copied_files, annotations, skipped_annotations = self._write_annotations_main(
                 index_file_path, annotations_path, images_path, annotations)

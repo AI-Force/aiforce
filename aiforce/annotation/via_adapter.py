@@ -92,7 +92,7 @@ class VIAAnnotationAdapter(AnnotationAdapter):
 
         return parser
 
-    def read_annotations(self, categories, subset_type=SubsetType.TRAINVAL):
+    def read_annotations(self, categories, subset_type=SubsetType.NONE):
         """
         Reads a VIA annotations file.
         Supports JSON and CSV file format.
@@ -220,7 +220,7 @@ class VIAAnnotationAdapter(AnnotationAdapter):
 
         return annotations, skipped_annotations
 
-    def write_annotations(self, annotations, categories, subset_type=SubsetType.TRAINVAL):
+    def write_annotations(self, annotations, categories, subset_type=SubsetType.NONE):
         """
         Writes a VIA annotations file and copy the corresponding source files.
         Supports JSON and CSV file format.

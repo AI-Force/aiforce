@@ -103,22 +103,22 @@ class YOLOAnnotationAdapter(AnnotationAdapter):
                             default=SEPARATION_STRATEGIES[0])
         return parser
 
-    def read_annotations(self, categories, subset_type=SubsetType.TRAINVAL):
+    def read_annotations(self, categories, subset_type=SubsetType.NONE):
         """
         Reads YOLO annotations.
         `categories`: the categories as list
         `subset_type`: the subset type to read
         return: the annotations as dictionary
         """
-        annotations_path = join(self.path, self.annotations_folder_name, str(subset_type))
-        images_path = join(self.path, self.images_folder_name, str(subset_type))
+        annotations_path = join(self.path, self.annotations_folder_name)
+        images_path = join(self.path, self.images_folder_name)
 
         logger.info('Read images from {}'.format(images_path))
         logger.info('Read annotations from {}'.format(annotations_path))
 
         if self.separation_strategy == SEPARATION_FILE_NAME:
             annotations, skipped_annotations = self._read_annotations_by_file_name_separation(
-                annotations_path, images_path, categories)
+                subset_type, annotations_path, images_path, categories)
         else:
             annotations, skipped_annotations = self._read_annotations_by_sub_type_separation(
                 subset_type, annotations_path, images_path, categories)
@@ -141,7 +141,7 @@ class YOLOAnnotationAdapter(AnnotationAdapter):
             index_data = yaml.safe_load(file)
             return index_data["names"]
 
-    def write_annotations(self, annotations, categories, subset_type=SubsetType.TRAINVAL):
+    def write_annotations(self, annotations, categories, subset_type=SubsetType.NONE):
         """
         Writes YOLO annotations to the annotations folder and copy the corresponding source files.
         `annotations`: the annotations as dictionary
@@ -149,15 +149,15 @@ class YOLOAnnotationAdapter(AnnotationAdapter):
         `subset_type`: the subset type to write
         return: a list of written target file paths
         """
-        annotations_path = create_folder(join(self.path, self.annotations_folder_name, str(subset_type)))
-        images_path = create_folder(join(self.path, self.images_folder_name, str(subset_type)))
+        annotations_path = create_folder(join(self.path, self.annotations_folder_name))
+        images_path = create_folder(join(self.path, self.images_folder_name))
 
         logger.info('Write images to {}'.format(images_path))
         logger.info('Write annotations to {}'.format(annotations_path))
 
         if self.separation_strategy == SEPARATION_FILE_NAME:
             copied_files, skipped_annotations = self._write_annotations_by_file_name_separation(
-                annotations, annotations_path, images_path, categories)
+                annotations, subset_type, annotations_path, images_path, categories)
         else:
             copied_files, skipped_annotations = self._write_annotations_by_subset_type_separation(
                 annotations, subset_type, annotations_path, images_path, categories)
@@ -173,7 +173,6 @@ class YOLOAnnotationAdapter(AnnotationAdapter):
         Write categories.
         `categories`: a list of category names
         """
-
         categories_str = map(lambda c: f"'{c}'", categories)
         index_data = [
             f"path: {self.path}",
@@ -190,17 +189,19 @@ class YOLOAnnotationAdapter(AnnotationAdapter):
             file.write('\n'.join(index_data) + '\n')
 
     @classmethod
-    def _read_annotations_by_file_name_separation(cls, annotations_path, images_path, categories):
+    def _read_annotations_by_file_name_separation(cls, subset_type, annotations_path, images_path, categories):
         annotations = {}
         skipped_annotations = []
-        annotation_files = scan_files(annotations_path, file_extensions='.txt')
+        annotations_subset_path = join(annotations_path, str(subset_type))
+        images_subset_path = join(images_path, str(subset_type))
+        annotation_files = scan_files(annotations_subset_path, file_extensions='.txt')
         categories_len = len(categories)
 
         for annotation_file in annotation_files:
             with open(annotation_file, newline='') as csv_file:
                 file_name, _ = splitext(basename(annotation_file))
                 image_name = f"{file_name}.jpg"
-                file_path = join(images_path, image_name)
+                file_path = join(images_subset_path, image_name)
 
                 if not isfile(file_path):
                     logger.warning("{}: Source file not found, skip annotation.".format(file_path))
@@ -242,7 +243,8 @@ class YOLOAnnotationAdapter(AnnotationAdapter):
         annotations = {}
         skipped_annotations = []
         categories_len = len(categories)
-        annotation_file = join(annotations_path, f"{subset_type}.txt")
+        annotation_file_name = "labels.txt" if subset_type == SubsetType.NONE else f"{subset_type}.txt"
+        annotation_file = join(annotations_path, annotation_file_name)
         with open(annotation_file, newline='') as txt_file:
             for line in txt_file:
                 image_name, *annotation_list = line.strip().split(' ')
@@ -274,15 +276,16 @@ class YOLOAnnotationAdapter(AnnotationAdapter):
         return annotations, skipped_annotations
 
     @classmethod
-    def _write_annotations_by_file_name_separation(cls, annotations, annotations_path, images_path, categories):
+    def _write_annotations_by_file_name_separation(cls, annotations, subset_type, annotations_path, images_path, categories):
         copied_files = []
         skipped_annotations = []
-
+        annotations_subset_path = create_folder(join(annotations_path, str(subset_type)))
+        images_subset_path = create_folder(join(images_path, str(subset_type)))
         for annotation in annotations.values():
             image_name = basename(annotation.file_path)
             file_name, _ = splitext(image_name)
-            annotations_file = join(annotations_path, f'{file_name}.txt')
-            target_file = join(images_path, image_name)
+            annotations_file = join(annotations_subset_path, f'{file_name}.txt')
+            target_file = join(images_subset_path, image_name)
 
             if not isfile(annotation.file_path):
                 logger.warning("{}: Source file not found, skip annotation.".format(annotation.file_path))
@@ -344,7 +347,8 @@ class YOLOAnnotationAdapter(AnnotationAdapter):
                                                      categories):
         copied_files = []
         skipped_annotations = []
-        annotation_file = join(annotations_path, f"{subset_type}.txt")
+        annotation_file_name = "labels.txt" if subset_type == SubsetType.NONE else f"{subset_type}.txt"
+        annotation_file = join(annotations_path, annotation_file_name)
         with open(annotation_file, "w", newline='') as txt_file:
             for annotation in annotations.values():
                 image_name = basename(annotation.file_path)

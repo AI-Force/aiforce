@@ -26,6 +26,7 @@ class SubsetType(Enum):
     """
     The annotation subset type
     """
+    NONE = ''
     TRAINVAL = 'trainval'
     TRAIN = 'train'
     VAL = 'val'
@@ -104,7 +105,7 @@ class Annotation:
     def __init__(self, annotation_id=None, file_path=None, regions=None):
         self.annotation_id = annotation_id
         self.file_path = file_path
-        self.regions: [Region] = [] if regions is None else regions
+        self.regions: list[Region] = [] if regions is None else regions
 
     def labels(self):
         """
@@ -164,7 +165,7 @@ class AnnotationAdapter(ABC):
         return copied_files
 
     @abstractmethod
-    def read_annotations(self, categories, subset_type=SubsetType.TRAINVAL):
+    def read_annotations(self, categories, subset_type=SubsetType.NONE):
         """
         Read annotations.
         `categories`: the categories as list
@@ -183,7 +184,7 @@ class AnnotationAdapter(ABC):
         return category_tools.read_categories(path)
 
     @abstractmethod
-    def write_annotations(self, annotations, categories, subset_type=SubsetType.TRAINVAL):
+    def write_annotations(self, annotations, categories, subset_type=SubsetType.NONE):
         """
         Write annotations.
         `annotations`: the annotations as dictionary
